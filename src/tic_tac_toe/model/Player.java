@@ -19,9 +19,6 @@ public class Player {
         this.username = username;
     }
     
-////  rehanmm
-    
-    // 2
     public String getUsername() {
         return username;
     }
