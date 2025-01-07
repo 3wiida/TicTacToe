@@ -24,6 +24,9 @@ public class Tic_tac_toe extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
+        
+        
+        
         primaryStage.show();
     }
    
