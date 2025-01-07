@@ -10,7 +10,7 @@
         <URL value="@invitationpopup.css" />
     </stylesheets>
    <children>
-      <Label fx:id="requestlbl" layoutX="7.0" layoutY="14.0" text="PlayerX wansts to play with you " />
+      <Label fx:id="requestlbl" alignment="CENTER" layoutX="2.0" layoutY="35.0" prefHeight="38.0" prefWidth="494.0" text="PlayerX wansts to play with you " />
       <Button fx:id="cancelBtn" layoutX="339.0" layoutY="132.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" text="Cancel" />
       <Button fx:id="confirmBtn" layoutX="41.0" layoutY="132.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" text="Confirm" />
    </children>
