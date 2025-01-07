@@ -1,4 +1,9 @@
-package tic_tac_toe.view.login;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package tic_tac_toe.view.register;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,32 +14,37 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
 
 /**
  * FXML Controller class
  *
  * @author Khaled Mustafa
  */
-public class LoginScreenController implements Initializable {
+public class RegisterScreenController implements Initializable {
 
     @FXML
-    private Label lblLogin;
-
+    private Label lblSignUp;
     @FXML
     private TextField txtFieldUserName;
-
     @FXML
     private TextField txtFieldUserPassword;
-
     @FXML
-    private Button btnLogin;
-  
+    private Button btnSignUp;
+    @FXML
+    private TextField txtFieldConfirmPassword;
+
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // TODO
         tooltip();
     }    
-        
+
+    @FXML
+    private void SignUpClicked(ActionEvent event) {
+    }
     
     private void tooltip(){
         Tooltip userTip = new Tooltip("Please Enter Your Name");
@@ -42,11 +52,9 @@ public class LoginScreenController implements Initializable {
         
         Tooltip passwordTip = new Tooltip("Please Enter Your Password");
         txtFieldUserPassword.setTooltip(passwordTip);
+        
+        Tooltip confirmPasswordTip = new Tooltip("Please Enter Your Password");
+        txtFieldUserPassword.setTooltip(confirmPasswordTip);
     }
-    @FXML
-    void LoginClicked(ActionEvent event) {
-
-    }
-   
     
 }
