@@ -1,0 +1,37 @@
+root{
+    -fx-background-color: #D9D9D9;
+}
+Label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c; 
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+    -fx-alignment: center;
+}
+
+Button {
+    -fx-background-color: #1A1B49;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
+
+Button:hover {
+    -fx-background-color: #ADBBC4;
+}
+
+
+MediaView {
+    -fx-border-color: #ecf0f1;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
+
+ImageView {
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
