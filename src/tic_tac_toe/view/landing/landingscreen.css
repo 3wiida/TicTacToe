@@ -1,0 +1,47 @@
+/*
+ * Empty Stylesheet file.
+ */
+/* Written by Khaled Mustafa */
+
+
+/*   
+btnOffline btnSignUp  btnExit  lblLanding
+
+*/
+.root {
+    -fx-font-family: "Arial, sans-serif";
+    -fx-alignment: center;
+}
+
+#btnOffline, 
+#btnSignUp, 
+#btnExit{
+    -fx-pref-width: 300px;
+    -fx-pref-height: 50px;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+#btnOffline{
+    -fx-background-color: #FCD015;
+}
+
+#btnExit{
+    -fx-background-color: #F17D5D;
+}
+
+#btnSignUp{
+    -fx-background-color: #6FF15B;
+}
+
+#lblLanding {
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 50px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
+}

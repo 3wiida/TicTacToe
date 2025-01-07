@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="602.0" stylesheets="@LoginScreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.login.LoginScreenController">
+<AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="602.0" stylesheets="@registerscreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.register.RegisterScreenController">
    <children>
       <StackPane prefHeight="386.0" prefWidth="562.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ImageView fitHeight="501.0" fitWidth="675.0" pickOnBounds="true" preserveRatio="true">
@@ -17,18 +17,19 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="100.0" fitWidth="110.0" layoutX="288.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="86.0" fitWidth="145.0" layoutX="288.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/logo.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblLogin" layoutX="250.0" layoutY="126.0" prefHeight="70.0" prefWidth="200.0" text="LOGIN" textAlignment="RIGHT">
+      <Label fx:id="lblSignUp" layoutX="224.0" layoutY="112.0" prefHeight="70.0" prefWidth="227.0" text="SIGN UP" textAlignment="RIGHT">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldUserName" layoutX="200.0" layoutY="214.0" promptText="Username" />
-      <TextField fx:id="txtFieldUserPassword" layoutX="200.0" layoutY="285.0" promptText="Password" />
-      <Button fx:id="btnLogin" layoutX="250.0" layoutY="348.0" mnemonicParsing="false" onAction="#LoginClicked" text="LOGIN" />
+      <TextField fx:id="txtFieldUserName" layoutX="187.0" layoutY="191.0" promptText="Username" />
+      <TextField fx:id="txtFieldUserPassword" layoutX="188.0" layoutY="262.0" promptText="Password" />
+      <Button fx:id="btnSignUp" layoutX="238.0" layoutY="395.0" mnemonicParsing="false" onAction="#SignUpClicked" text="SIGN UP" />
+      <TextField fx:id="txtFieldConfirmPassword" layoutX="188.0" layoutY="330.0" promptText="Confirm Password" />
    </children>
 </AnchorPane>
