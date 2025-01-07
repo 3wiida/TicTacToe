@@ -1,0 +1,34 @@
+.root {
+    -fx-font-family: "Arial, sans-serif";
+    -fx-alignment: center;
+}
+
+#availableLbl {
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 50px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
+}
+
+
+#backBtn {
+    -fx-background-color: #1A1B49;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    /*-fx-padding: 10 20;*/
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
+#ReloadBtn {
+    -fx-background-color: #1D9E78;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    /*-fx-padding: 10 20;*/
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
