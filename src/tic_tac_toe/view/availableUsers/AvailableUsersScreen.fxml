@@ -71,9 +71,9 @@
                      <image>
                         <Image url="@../../assets/maleAvatar.png" />
                      </image></ImageView>
-                  <Label fx:id="lbl3" text="Khalid" textFill="WHITE">
+                  <Label fx:id="lbl3" prefHeight="33.0" prefWidth="100.0" text="Khalid" textFill="WHITE">
                      <HBox.margin>
-                        <Insets right="185.0" />
+                        <Insets right="147.0" />
                      </HBox.margin>
                      <padding>
                         <Insets right="150.0" />
