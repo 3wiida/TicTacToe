@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.offline.offline_main.OfflineScreenController">
+   <children>
+      <ImageView fitHeight="450.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../assets/background.png" />
+         </image>
+      </ImageView>
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" orientation="VERTICAL" prefHeight="420.0" prefWidth="600.0" vgap="24.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../assets/logo.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="withComputerBtn" mnemonicParsing="false" onAction="#onPlayWithComputerClicked" prefHeight="47.0" prefWidth="254.0" styleClass="mainBtn" text="With Computer" textAlignment="CENTER" />
+            <Button fx:id="withFriendBtn" mnemonicParsing="false" onAction="#onPlayWithFriendClicked" prefHeight="47.0" prefWidth="254.0" styleClass="mainBtn" text="With Friend" textAlignment="CENTER" />
+            <Button fx:id="backBtn" mnemonicParsing="false" onAction="#onBackClicked" prefHeight="47.0" prefWidth="254.0" text="Back" textAlignment="CENTER" />
+         </children>
+         <padding>
+            <Insets top="24.0" />
+         </padding>
+      </FlowPane>
+   </children>
+</StackPane>

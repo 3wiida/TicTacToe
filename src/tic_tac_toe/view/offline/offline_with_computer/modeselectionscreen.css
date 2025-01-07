@@ -1,0 +1,53 @@
+#selectModeTxt{
+    -fx-fill: #FFFFFF;
+    -fx-font-family: "Poppins";
+    -fx-font-size: 46px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+}
+
+#easyBtn {
+    -fx-background-color: #5DFF4B;
+    -fx-text-fill: #FFFFFF;
+    -fx-text-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-background-radius: 12px;
+}
+
+#mediumBtn {
+    -fx-background-color: #FCD015;
+    -fx-text-fill: #FFFFFF;
+    -fx-text-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-background-radius: 12px;
+}
+
+#hardBtn {
+    -fx-background-color: #F17D5D;
+    -fx-text-fill: #FFFFFF;
+    -fx-text-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-background-radius: 12px;
+}
+
+
+#easyBtn:hover {
+    -fx-background-color: #9EFF93;
+}
+
+#mediumBtn:hover {
+    -fx-background-color: #FFE576;
+}
+
+#hardBtn:hover{
+    -fx-background-color: #F4AB97;
+}
+
+#backBtn:hover{
+    -fx-background-color: #F4AB97;
+}
+
+
