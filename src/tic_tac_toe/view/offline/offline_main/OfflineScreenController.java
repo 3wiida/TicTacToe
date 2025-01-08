@@ -18,9 +18,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
@@ -78,12 +80,21 @@ public class OfflineScreenController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.MULTIPLAYER_NAMES_POPUP_ROUTE));
             Parent root = loader.load();
+            root.setStyle(
+                "-fx-background-radius: 15; " +
+                "-fx-background-color: white; " + 
+                "-fx-border-radius: 15; " +
+                "-fx-border-color: lightgray; " +
+                "-fx-border-width: 2;"
+            );
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
             MultiplayerNamesPopupController controller = loader.getController();
             
             Stage multiplayerNamesPopup = new Stage();
             multiplayerNamesPopup.setTitle("Enter Players Names");
             multiplayerNamesPopup.initModality(Modality.APPLICATION_MODAL);
+            multiplayerNamesPopup.initStyle(StageStyle.TRANSPARENT);
             multiplayerNamesPopup.setScene(scene);
             multiplayerNamesPopup.showAndWait();
            
