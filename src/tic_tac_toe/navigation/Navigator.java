@@ -50,25 +50,13 @@ public class Navigator {
     
     
    public static void navigateToAskLoginOrSignupPopup(Event event) throws IOException {
-    FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.POPUP_Login_OR_SIGNUP_ROUTE));
-    Parent root = loader.load();
-    Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
     
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
-}   
+    }   
     public static void navigateToOfflineScreen(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setOnShown(eventShown -> {
-        double centerX = stage.getX() + (stage.getWidth() / 2) ;
-        double centerY = stage.getY() + (stage.getHeight() / 2);
-        stage.setX(centerX);
-        stage.setY(centerY);
-    });
         stage.show();
     }
     

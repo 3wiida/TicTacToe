@@ -22,10 +22,8 @@ import tic_tac_toe.navigation.ScreensRoutes;
  * @author 3wiida
  */
 public class Tic_tac_toe extends Application {
-    
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
         //root.getStylesheets().add(getClass().getResource("/tic_tac_toe/view/offline/offline_main/offlinescreen.css").toString());
         Scene scene = new Scene(root, 860, 600);

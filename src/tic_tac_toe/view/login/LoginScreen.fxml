@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -8,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="860.0" stylesheets="@LoginScreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.login.LoginScreenController">
    <children>
-      <ImageView fitHeight="600.0" fitWidth="860.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="600.0" fitWidth="860.0" pickOnBounds="true">
          <image>
             <Image url="@../../assets/background.png" />
          </image>
@@ -18,13 +19,19 @@
             <Image url="@../../assets/logo.png" />
          </image>
       </ImageView>
-      <TextField fx:id="txtFieldUserName" layoutX="234.0" layoutY="329.0" promptText="Username" />
-      <TextField fx:id="txtFieldUserPassword" layoutX="234.0" layoutY="402.0" promptText="Password" />
-      <Button fx:id="btnLogin" layoutX="309.0" layoutY="478.0" mnemonicParsing="false" onAction="#LoginClicked" text="LOGIN" />
-      <ImageView fitHeight="355.0" fitWidth="300.0" layoutX="259.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="txtFieldUserName" layoutX="245.0" layoutY="370.0" promptText="Username" />
+      <TextField fx:id="txtFieldUserPassword" layoutX="245.0" layoutY="442.0" promptText="Password" />
+      <Button fx:id="btnLogin" layoutX="320.0" layoutY="513.0" mnemonicParsing="false" onAction="#LoginClicked" text="LOGIN" />
+      <ImageView fitHeight="262.0" fitWidth="237.0" layoutX="291.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../assets/login%20(1).png" />
+            <Image url="@../../assets/login%20(2).png" />
          </image>
       </ImageView>
+      <ImageView fx:id="backPhoto" fitHeight="65.0" fitWidth="61.0" layoutX="14.0" layoutY="18.0" onMouseClicked="#photoClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/ic_back.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="lblLogin" layoutX="325.0" layoutY="278.0" text="LOGIN" />
    </children>
 </AnchorPane>

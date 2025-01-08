@@ -19,6 +19,9 @@
     -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
 }
 
+#backPhoto{
+    -fx-cursor: hand;
+}
 #registerBtn:hover, 
 #loginBtn:hover{
     -fx-background-color: #507a96;
