@@ -32,4 +32,19 @@ public class ScreensRoutes {
     public static final String POPUP_GAME_STATUS_ROUTE = "/tic_tac_toe/view/popups/popupgamestatus/PopUpGame.fxml";
     public static final String  POPUP_Login_OR_SIGNUP_ROUTE  = "/tic_tac_toe/view/popups/choose_login_signup/LoginOrRegisterPopup.fxml";
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+   public static final String RECORDS_SCREEN_ROUTE = "/tic_tac_toe/view/records/Records.fxml";
+
 }
