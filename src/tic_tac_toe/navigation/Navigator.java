@@ -25,6 +25,10 @@ public class Navigator {
 
    // public static void navigateToOfflineScreen(ActionEvent event) throws IOException { }
     
+ /*   public static void navigateToLandingScreen(Event event) throws IOException{
+        //TODO
+    }
+   */ 
     public static void navigateToLandingScreen(Event event) throws IOException{
         //TODO
     }
@@ -58,5 +62,7 @@ public class Navigator {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
 }
