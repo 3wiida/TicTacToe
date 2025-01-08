@@ -13,6 +13,10 @@ public class ScreensRoutes {
     
     /* Landing Screen */
     public static final String LANDING_SCREEN_ROUTE = "/tic_tac_toe/view/landing/LandingScreen.fxml";
+    public static final String AVAILABLE_USERS_SCREEN_ROUTE = "/tic_tac_toe/view/availableUsers/AvailableUsers.fxml";
+    public static final String WAITING_POPUP_SCREEN_ROUTE = "/tic_tac_toe/view/popups/waitingRequestpopup/WaitingRequestPopup.fxml";
+    public static final String INVTATION_POPUP_SCREEN_ROUTE = "/tic_tac_toe/view/popups/invitationpopup/InvitationPopup.fxml";
+    public static final String SERVER_CONNECTION_POPUP_SCREEN_ROUTE = "/tic_tac_toe/view/popups/serverConnectionpopup/ServerConnectionPopup.fxml";
     
     /* Login and Register Screens */
     public static final String LOGIN_SCREEN = "/tic_tac_toe/view/login/LoginScreen.fxml";

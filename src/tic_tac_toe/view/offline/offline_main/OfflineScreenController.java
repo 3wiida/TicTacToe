@@ -18,9 +18,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
@@ -39,6 +39,8 @@ public class OfflineScreenController implements Initializable {
     private Button withFriendBtn;
     @FXML
     private Button backBtn;
+    @FXML
+    private Text offlineModeTxt;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
