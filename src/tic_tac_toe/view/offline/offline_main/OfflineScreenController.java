@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +22,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.view.popups.multiplayer_names_popup.MultiplayerNamesPopupController;
 
 /**
@@ -42,8 +46,12 @@ public class OfflineScreenController implements Initializable {
     }    
     
     @FXML
-    public void onPlayWithComputerClicked(){
-        
+    public void onPlayWithComputerClicked(ActionEvent event){
+        try {
+            Navigator.navigateToModeSelectionScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OfflineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @FXML
@@ -56,18 +64,21 @@ public class OfflineScreenController implements Initializable {
     }
     
     @FXML
-    public void onBackClicked(){
-        
+    public void onBackClicked(Event event){
+        try {
+            Navigator.navigateToLandingScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OfflineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private Pair<String, String> showNamesPopup(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tic_tac_toe/view/popups/multiplayer_names_popup/MultiplayerNamesPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.MULTIPLAYER_NAMES_POPUP_ROUTE));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             MultiplayerNamesPopupController controller = loader.getController();
             
-            scene.getStylesheets().add(getClass().getResource("/tic_tac_toe/view/popups/multiplayer_names_popup/multiplayernamespopup.css").toExternalForm());
             Stage multiplayerNamesPopup = new Stage();
             multiplayerNamesPopup.setTitle("Enter Players Names");
             multiplayerNamesPopup.initModality(Modality.APPLICATION_MODAL);
