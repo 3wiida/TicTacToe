@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import tic_tac_toe.navigation.Navigator;
@@ -26,6 +27,10 @@ public class AvailableUsersController implements Initializable {
     private Button reloadBtn; 
     @FXML
     private ListView<HBox> usersListView; 
+    @FXML
+    private Button backBtn;
+  
+
 
     /**
      * Initializes the controller class.
