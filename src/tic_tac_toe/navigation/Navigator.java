@@ -68,6 +68,16 @@ public class Navigator {
         stage.setScene(scene);
         stage.show();
     }
+    /* Mouse Clicked */
+    public static void navigateToOfflineScreen(Event event) throws IOException{
+
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
     public static void navigateToWaitingPopup(String fxmlPath, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
         Parent root = loader.load();
