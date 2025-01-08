@@ -44,7 +44,6 @@ public class ModeSelectionScreenController implements Initializable {
            modeAvatar.setImage(new Image("/tic_tac_toe/assets/easy_avatar.png"));
        });
        
-       
        mediumBtn.setOnMouseEntered(event->{
            modeAvatar.setImage(new Image("/tic_tac_toe/assets/medium_avatar.png"));
        });

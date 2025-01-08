@@ -1,3 +1,4 @@
+/* 
 .mainBtn{
     -fx-background-color: #FCD015;
     -fx-text-fill: #FFFFFF;
@@ -22,4 +23,23 @@
 
 #backBtn:hover{
     -fx-background-color: #F4AB97;
+}
+*/ 
+
+#withComputerBtn, 
+#withFriendBtn, 
+#backBtn{
+    -fx-pref-width: 300px;
+    -fx-pref-height: 50px;
+    -fx-border-radius: 25px;
+    -fx-background-radius: 25px;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-color: #1A1B49;
+}
+
+#withComputerBtn:hover, #withFriendBtn:hover, #backBtn:hover{
+    -fx-background-color: #507a96;
 }

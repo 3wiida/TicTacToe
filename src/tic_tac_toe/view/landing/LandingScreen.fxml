@@ -13,14 +13,14 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="86.0" fitWidth="145.0" layoutX="288.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="138.0" fitWidth="156.0" layoutX="682.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnOffline" layoutX="194.0" layoutY="202.0" mnemonicParsing="false" onAction="#OffilneClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY OFFLINE" />
-      <Button fx:id="btnSignUp" layoutX="194.0" layoutY="282.0" mnemonicParsing="false" onAction="#SignUpClicked" prefHeight="45.0" prefWidth="230.0" text="SIGN UP" />
-      <Button fx:id="btnExit" layoutX="194.0" layoutY="361.0" mnemonicParsing="false" onAction="#ExitClicked" prefHeight="45.0" prefWidth="230.0" text="EXIT" />
-      <Label fx:id="lblLanding" layoutX="189.0" layoutY="110.0" text="Tic Tac Toe" />
+      <Button fx:id="btnOffline" layoutX="279.0" layoutY="264.0" mnemonicParsing="false" onAction="#OffilneClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY OFFLINE" />
+      <Button fx:id="btnSignUp" layoutX="279.0" layoutY="355.0" mnemonicParsing="false" onAction="#SignUpClicked" prefHeight="45.0" prefWidth="230.0" text="SIGN UP" />
+      <Button fx:id="btnExit" layoutX="279.0" layoutY="444.0" mnemonicParsing="false" onAction="#ExitClicked" prefHeight="45.0" prefWidth="230.0" text="EXIT" />
+      <Label fx:id="lblLanding" layoutX="233.0" layoutY="116.0" prefHeight="148.0" prefWidth="412.0" text="Tic Tac Toe" />
    </children>
 </AnchorPane>

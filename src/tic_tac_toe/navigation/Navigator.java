@@ -13,7 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
  *
@@ -22,14 +25,50 @@ import javafx.stage.Stage;
 public class Navigator {
     
     public static void navigateToLandingScreen(Event event) throws IOException{
-        //TODO
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+        Stage stage = ((Stage)((Node)event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     
+    public static void navigateToLoginScreen(Event event) throws IOException{
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LOGIN_SCREEN));
+        Stage stage = ((Stage)((Node)event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    public static void navigateToSignupScreen(Event event) throws IOException{
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.REGISTER_SCREEN));
+        Stage stage = ((Stage)((Node)event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    
+   public static void navigateToAskLoginOrSignupPopup(Event event) throws IOException {
+    FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.POPUP_Login_OR_SIGNUP_ROUTE));
+    Parent root = loader.load();
+    Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
+    
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+}   
     public static void navigateToOfflineScreen(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setOnShown(eventShown -> {
+        double centerX = stage.getX() + (stage.getWidth() / 2) ;
+        double centerY = stage.getY() + (stage.getHeight() / 2);
+        stage.setX(centerX);
+        stage.setY(centerY);
+    });
         stage.show();
     }
     
