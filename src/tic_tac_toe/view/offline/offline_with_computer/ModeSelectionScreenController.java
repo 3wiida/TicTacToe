@@ -1,7 +1,11 @@
 package tic_tac_toe.view.offline.offline_with_computer;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import tic_tac_toe.navigation.Navigator;
 
 /**
  * FXML Controller class
@@ -47,6 +52,7 @@ public class ModeSelectionScreenController implements Initializable {
        hardBtn.setOnMouseEntered(event->{
            modeAvatar.setImage(new Image("/tic_tac_toe/assets/hard_avatar.png"));
        });
+       
     }
     
     @FXML
@@ -66,8 +72,12 @@ public class ModeSelectionScreenController implements Initializable {
     }
 
     @FXML
-    private void onBackClicked(MouseEvent event) {
-        System.out.println("Back Clicked");
+    private void onBackClicked(Event event) {
+        try {
+            Navigator.navigateToLandingScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(ModeSelectionScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
