@@ -14,6 +14,7 @@ public class Player {
     private String score;
     private StatusEnum status;
     private GenderEnum gender;
+    public static boolean isOnline = false;
 
     public Player(String username) {
         this.username = username;

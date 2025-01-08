@@ -66,3 +66,7 @@
     -fx-padding: 5px;
     -fx-background-radius: 5px;
 }
+
+#backPhoto{
+   -fx-cursor: hand;
+}
