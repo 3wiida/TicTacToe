@@ -1,9 +1,17 @@
-#headerTxt{
+/*#headerTxt{
     -fx-fill: #FFFFFF;
     -fx-font-family: "Poppins";
     -fx-font-size: 46px;
     -fx-text-fill: white;
     -fx-font-weight: bold; 
+}*/
+
+#headerTxt{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 50px;
+    -fx-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
 }
 
 #cancelBtn {
