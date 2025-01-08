@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -29,7 +30,11 @@ public class WaitingRequestPopupController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+        cancelBtn.setOnAction(event -> {
+          
+            Stage stage = (Stage) cancelBtn.getScene().getWindow();
+            stage.close();
+        });
+    }   
     
 }
