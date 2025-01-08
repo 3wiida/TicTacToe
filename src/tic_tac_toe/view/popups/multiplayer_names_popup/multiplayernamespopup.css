@@ -9,19 +9,19 @@
 #cancelBtn {
     -fx-background-color: #F17D5D;
     -fx-text-fill: #FFFFFF;
-    -fx-text-size: 26px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
-    -fx-background-radius: 12px;
+    -fx-background-radius: 25px;
 }
 
 #playBtn {
     -fx-background-color: #5DFF4B;
     -fx-text-fill: #FFFFFF;
-    -fx-text-size: 26px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
-    -fx-background-radius: 12px;
+    -fx-background-radius: 25px;
 }
 
 #cancelBtn:hover {
