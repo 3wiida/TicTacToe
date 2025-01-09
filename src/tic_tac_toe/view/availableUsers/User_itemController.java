@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tic_tac_toe.navigation.Navigator;
@@ -26,6 +27,8 @@ public class User_itemController implements Initializable {
     private Label userNameLabel;
     @FXML
     private Button inviteUserButton;
+    @FXML
+    private HBox hbox;
 
     /**
      * Initializes the controller class.

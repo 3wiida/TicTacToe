@@ -21,6 +21,7 @@
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-background-radius: 25px;
+    -fx-cursor: hand;
 }
 
 #playBtn {
@@ -30,6 +31,7 @@
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-background-radius: 25px;
+    -fx-cursor: hand;
 }
 
 #cancelBtn:hover {

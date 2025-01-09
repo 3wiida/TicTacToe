@@ -3,7 +3,7 @@
     -fx-alignment: center;
 }
 
-#availableLbl {
+#recordsLbl {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 50px;
     -fx-text-fill: white;
@@ -24,21 +24,8 @@
 }#backBtn:hover {
     -fx-background-color: #507a96;
 }
-#reloadBtn {
-    -fx-background-color: #1D9E78;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    /*-fx-padding: 10 20;*/
-    -fx-background-radius: 20px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
-}#reloadBtn:hover {
-    -fx-background-color: #2AB28E;
-}
 
-
-#usersListView{
+#RecordsListView{
     
     -fx-background-color: #F88480; 
     -fx-background-radius: 15;    
@@ -46,8 +33,4 @@
     -fx-border-color: transparent; 
     -fx-padding: 10;   
     
-}
-
-#usersListView .list-cell{
-    -fx-background-color: transparent;
 }

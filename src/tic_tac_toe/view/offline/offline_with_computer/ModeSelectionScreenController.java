@@ -87,7 +87,7 @@ public class ModeSelectionScreenController implements Initializable {
     @FXML
     private void onBackClicked(Event event) {
         try {
-            Navigator.navigateToLandingScreen(event);
+            Navigator.navigateToOfflineScreen(event);
         } catch (IOException ex) {
             Logger.getLogger(ModeSelectionScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

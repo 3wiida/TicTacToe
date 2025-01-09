@@ -71,6 +71,14 @@ public class Navigator {
         controller.setGameMode(gameMode);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+    }
+    /* Mouse Clicked */
+    public static void navigateToOfflineScreen(Event event) throws IOException{
+
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
     }
     

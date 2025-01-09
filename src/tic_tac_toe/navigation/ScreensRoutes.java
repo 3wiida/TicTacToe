@@ -34,4 +34,19 @@ public class ScreensRoutes {
     
     public static final String GAME_BOARD_SCREEN_ROUTE = "/tic_tac_toe/view/gameBoard/gameBoardFXML.fxml";
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+   public static final String RECORDS_SCREEN_ROUTE = "/tic_tac_toe/view/records/Records.fxml";
+
 }
