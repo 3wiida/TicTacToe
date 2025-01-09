@@ -17,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import tic_tac_toe.model.GameModeEnum;
+import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
 import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
@@ -25,13 +27,6 @@ import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupControlle
  */
 public class Navigator {
 
-
-   // public static void navigateToOfflineScreen(ActionEvent event) throws IOException { }
-    
- /*   public static void navigateToLandingScreen(Event event) throws IOException{
-        //TODO
-    }
-   */ 
     public static void navigateToLandingScreen(Event event) throws IOException{
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
         Stage stage = ((Stage)((Node)event.getSource()).getScene().getWindow());
@@ -57,17 +52,28 @@ public class Navigator {
     }
     
     
-   public static void navigateToAskLoginOrSignupPopup(Event event) throws IOException {
+    public static void navigateToAskLoginOrSignupPopup(Event event) throws IOException {
     
     }   
+   
     public static void navigateToOfflineScreen(ActionEvent event) throws IOException{
-
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
+    
+    public static void naviagteToGameBoardScreen(ActionEvent event, GameModeEnum gameMode) throws IOException{
+        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
+        Parent root = loader.load();
+        GameBoardFXMLController controller = loader.getController();
+        controller.setGameMode(gameMode);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    
     public static void navigateToWaitingPopup(String fxmlPath, String title) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
         Parent root = loader.load();

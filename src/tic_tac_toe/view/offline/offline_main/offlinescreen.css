@@ -1,4 +1,4 @@
-/* 
+
 .mainBtn{
     -fx-background-color: #FCD015;
     -fx-text-fill: #FFFFFF;
@@ -32,8 +32,9 @@
 #backBtn:hover{
     -fx-background-color: #F4AB97;
 }
-*/ 
 
+
+/*
 #withComputerBtn, 
 #withFriendBtn, 
 #backBtn{
@@ -50,4 +51,4 @@
 
 #withComputerBtn:hover, #withFriendBtn:hover, #backBtn:hover{
     -fx-background-color: #507a96;
-}
+}*/

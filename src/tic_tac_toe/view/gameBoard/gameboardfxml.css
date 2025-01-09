@@ -1,0 +1,21 @@
+/*
+ * Empty Stylesheet file.
+ */
+.recordGameButton{
+    -fx-background-color: black;
+    -fx-background-radius: 15; 
+    -fx-border-radius: 15;
+    -fx-padding: 10;
+}
+
+.exitGameButton{
+    -fx-background-color: black;
+    -fx-background-radius: 15; 
+    -fx-border-radius: 15;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-padding: 10;
+}
+.mainFxmlClass {
+
+}

@@ -17,8 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -32,15 +30,6 @@ import tic_tac_toe.view.popups.multiplayer_names_popup.MultiplayerNamesPopupCont
  * @author 3wiida
  */
 public class OfflineScreenController implements Initializable {
-
-    @FXML
-    private Button withComputerBtn;
-    @FXML
-    private Button withFriendBtn;
-    @FXML
-    private Button backBtn;
-    @FXML
-    private Text offlineModeTxt;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

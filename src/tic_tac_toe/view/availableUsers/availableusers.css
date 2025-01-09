@@ -42,3 +42,7 @@
     -fx-padding: 10;   
     
 }
+
+#usersListView .list-cell{
+    -fx-background-color: transparent;
+}
