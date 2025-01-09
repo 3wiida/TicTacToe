@@ -33,11 +33,8 @@ public class LandingScreenController {
 
     @FXML
     private Button btnExit;
-    
-
     @FXML
     private Label lblLanding;
-    
     @FXML
     void ExitClicked(ActionEvent event) {
         Platform.exit();
@@ -55,7 +52,6 @@ public class LandingScreenController {
     void SignUpClicked(ActionEvent event) {
         showPopup(event);
     }
-    
     private  void showPopup(ActionEvent event){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_Login_OR_SIGNUP_ROUTE));
@@ -90,6 +86,4 @@ public class LandingScreenController {
         }
     }
     
-    
-
 }

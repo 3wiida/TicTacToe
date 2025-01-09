@@ -7,7 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
@@ -17,6 +19,9 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.navigation.ScreensRoutes;
+import tic_tac_toe.view.landing.LandingScreenController;
+import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
  * FXML Controller class
@@ -46,12 +51,18 @@ public class LoginScreenController implements Initializable {
     
     @FXML
     void LoginClicked(ActionEvent event) {
-        if(!txtFieldUserName.getText().trim().isEmpty() && !txtFieldUserPassword.getText().trim().isEmpty()){
+        if(!txtFieldUserName.getText().isEmpty() && !txtFieldUserPassword.getText().isEmpty()){
            if(txtFieldUserName.getText().matches(regex) && txtFieldUserPassword.getText().matches(regex)){
-               System.err.println("Login Done");
-               /* 
-                    Send data to server 
-               */
+               try {
+                   System.err.println("Login Done");
+                   
+                   /*
+                   Send data to server
+                   */
+                   Navigator.navigateToOnlineScreen(event);
+               } catch (IOException ex) {
+                   Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+               }
            }
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
