@@ -28,6 +28,10 @@ public class OnlineScreenController implements Initializable {
     private Button btnExit;
     @FXML
     private Label lblLanding;
+    @FXML
+    private Label profileName;
+    @FXML
+    private Button profile;
 
     /**
      * Initializes the controller class.
@@ -49,4 +53,7 @@ public class OnlineScreenController implements Initializable {
     private void ExitClicked(ActionEvent event) {
     }
     
+    public void setProfileName(String userName){
+        profileName.setText(userName);
+    }
 }

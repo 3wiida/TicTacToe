@@ -22,7 +22,7 @@
       <Button fx:id="btnOnline" layoutX="279.0" layoutY="421.0" mnemonicParsing="false" onAction="#onlineClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY ONLINE" />
       <Button fx:id="btnExit" layoutX="279.0" layoutY="507.0" mnemonicParsing="false" onAction="#ExitClicked" prefHeight="45.0" prefWidth="230.0" text="EXIT" />
       <Label fx:id="lblLanding" layoutX="233.0" layoutY="197.0" prefHeight="148.0" prefWidth="412.0" stylesheets="@onlinescreen.css" text="Tic Tac Toe" />
-      <Label fx:id="profileName" layoutX="31.0" layoutY="152.0" />
+      <Label fx:id="profileName" layoutX="72.0" layoutY="152.0" />
       <ImageView fitHeight="138.0" fitWidth="87.0" layoutX="81.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/maleAvatar.png" />
