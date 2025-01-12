@@ -37,32 +37,43 @@ public class RegisterScreenController implements Initializable {
     @FXML
     private Button btnSignUp;
     @FXML
-    private TextField txtFieldConfirmPassword;
-    @FXML
     private ImageView backPhoto;
+    @FXML
+    private TextField txtFieldFullName;
 
-    /**
-     * Initializes the controller class.
-     */
+    String regex = "^[a-zA-Z0-9]+$"; 
+    String fullNameregex = "^[a-zA-Z]+$";
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
         tooltip();
     }    
 
     @FXML
-    private void SignUpClicked(ActionEvent event) {
-    }
-    
+    private void SignUpClicked(ActionEvent event){
+        if(!txtFieldFullName.getText().trim().isEmpty() && !txtFieldUserPassword.getText().trim().isEmpty() && !txtFieldUserName.getText().trim().isEmpty()){
+            if(txtFieldUserName.getText().matches(regex) && txtFieldFullName.getText().matches(fullNameregex)){
+                System.err.println("Valid");
+                
+                /* Send data to sever to store in data base*/
+                
+                
+            }else{
+                System.out.println("Invalid UserName or fullname");
+            }
+            }else{
+                System.out.println("fill all information");
+            }
+        }
     private void tooltip(){
-        Tooltip userTip = new Tooltip("Please Enter Your Name");
+        Tooltip userTip = new Tooltip("Please Enter Your User Name");
         txtFieldUserName.setTooltip(userTip);
         
         Tooltip passwordTip = new Tooltip("Please Enter Your Password");
         txtFieldUserPassword.setTooltip(passwordTip);
         
-        Tooltip confirmPasswordTip = new Tooltip("Please Enter Same Password");
-        txtFieldConfirmPassword.setTooltip(confirmPasswordTip);
+        Tooltip FullName = new Tooltip("Please Enter Your Full Name");
+        txtFieldFullName.setTooltip(FullName);
     }
 
     @FXML

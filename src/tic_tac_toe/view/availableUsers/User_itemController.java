@@ -45,15 +45,11 @@ public class User_itemController implements Initializable {
     public void setInviteButtonAction(Runnable action) {
         inviteUserButton.setOnAction(event -> {
             try {
-
-                Navigator.navigateToWaitingPopup(ScreensRoutes.WAITING_POPUP_SCREEN_ROUTE, "Waiting Request");
-                action.run();
+                Navigator.navigateToWaitingPopup(event);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
-    
-
 
 }

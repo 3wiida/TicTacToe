@@ -25,10 +25,10 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldUserName" layoutX="271.0" layoutY="308.0" promptText="Username" />
-      <TextField fx:id="txtFieldUserPassword" layoutX="271.0" layoutY="381.0" promptText="Password" />
+      <TextField fx:id="txtFieldFullName" layoutX="271.0" layoutY="308.0" promptText="Full Name" />
+      <TextField fx:id="txtFieldUserName" layoutX="271.0" layoutY="381.0" promptText="User Name" />
       <Button fx:id="btnSignUp" layoutX="321.0" layoutY="526.0" mnemonicParsing="false" onAction="#SignUpClicked" text="SIGN UP" />
-      <TextField fx:id="txtFieldConfirmPassword" layoutX="271.0" layoutY="450.0" promptText="Confirm Password" />
+      <TextField fx:id="txtFieldUserPassword" layoutX="271.0" layoutY="450.0" promptText="Password" />
       <ImageView fitHeight="217.0" fitWidth="347.0" layoutX="312.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/signUp.png" />

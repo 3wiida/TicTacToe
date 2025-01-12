@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tic_tac_toe.model.GameModeEnum;
 import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
+import tic_tac_toe.view.onlineScreen.OnlineScreenController;
 import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
@@ -103,7 +104,14 @@ public class Navigator {
         stage.setScene(scene);
         stage.show();
     }
-
-
+    
+    public static  void navigateToOnlineScreen(ActionEvent event) throws  IOException{
+        FXMLLoader Loader = new  FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
+        Parent root = Loader.load();
+        Stage stage = ((Stage)((Node) event.getSource()).getScene().getWindow());        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

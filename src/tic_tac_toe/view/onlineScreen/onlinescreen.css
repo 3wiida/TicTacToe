@@ -1,21 +1,13 @@
-/*
- * Empty Stylesheet file.
- */
-/* Written by Khaled Mustafa */
 
-
-/*   
-btnOffline btnSignUp  btnExit  lblLanding
-
-*/
 .root {
     -fx-font-family: "Arial, sans-serif";
     -fx-alignment: center;
 }
 
-#btnOffline, 
-#btnSignUp, 
-#btnExit{
+#btnWithPC, 
+#btnOnline, 
+#btnExit
+{
     -fx-pref-width: 300px;
     -fx-pref-height: 50px;
     -fx-border-radius: 25px;
@@ -28,18 +20,16 @@ btnOffline btnSignUp  btnExit  lblLanding
 }
 
 #profile{
-    -fx-pref-width: 300px;
     -fx-pref-height: 50px;
     -fx-border-radius: 25px;
     -fx-background-radius: 25px;
     -fx-font-size: 25px;
     -fx-font-weight: bold;
-    -fx-text-fill: transparent;
+    -fx-text-fill: white;
     -fx-cursor: hand;
-    -fx-background-color: transparent;
+    -fx-background-color: #1A1B49;
 }
-
-#btnOffline:hover, #btnExit:hover, #btnSignUp:hover{
+#btnWithPC:hover, #btnOnline:hover, #btnExit:hover, #profile:hover{
     -fx-background-color: #507a96;
 }
 
@@ -48,6 +38,14 @@ btnOffline btnSignUp  btnExit  lblLanding
 #lblLanding {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 60px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
+}
+
+#profileName{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 24px;
     -fx-text-fill: white;
     -fx-font-weight: bold; 
     -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
