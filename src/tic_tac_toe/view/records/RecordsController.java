@@ -14,9 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.view.landing.LandingScreenController;
+import tic_tac_toe.view.login.LoginScreenController;
 
 /**
  * FXML Controller class
@@ -26,9 +30,11 @@ import tic_tac_toe.view.landing.LandingScreenController;
 public class RecordsController implements Initializable {
 
     @FXML
-    private Button backBtn;
+    private ImageView backBtn;
     @FXML
     private ListView<?> RecordsListView;
+    @FXML
+    private Label recordsLbl;
 
     /**
      * Initializes the controller class.
@@ -38,14 +44,16 @@ public class RecordsController implements Initializable {
         // TODO
     }    
 
-   
-       @FXML
-    void BackClicked(ActionEvent event) {
+  
+
+        @FXML
+    private void photoClicked(MouseEvent event) {
         try {
-            Navigator.navigateToOfflineScreen(event);
+            Navigator.navigateToLandingScreen(event);
         } catch (IOException ex) {
-            Logger.getLogger(LandingScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }  
+    
     
 }

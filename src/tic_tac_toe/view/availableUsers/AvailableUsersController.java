@@ -6,15 +6,20 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.view.landing.LandingScreenController;
+import tic_tac_toe.view.login.LoginScreenController;
+import tic_tac_toe.view.offline.offline_with_computer.ModeSelectionScreenController;
 
 /**
  * FXML Controller class
@@ -28,7 +33,9 @@ public class AvailableUsersController implements Initializable {
     @FXML
     private ListView<HBox> usersListView; 
     @FXML
-    private Button backBtn;
+    private Label availableLbl;
+    @FXML
+    private ImageView backBtn;
   
 
 
@@ -41,6 +48,7 @@ public class AvailableUsersController implements Initializable {
             /* هنجيب داتا من السيرفر */
             addUser("User " + (usersListView.getItems().size() + 1));
         });
+        
     }
 
     private void addUser(String userName) {
@@ -66,17 +74,14 @@ public class AvailableUsersController implements Initializable {
             e.printStackTrace();
         }
     }
-    
-    
-    @FXML
-    void BackClicked(ActionEvent event) {
+
+      @FXML
+    private void photoClicked(MouseEvent event) {
         try {
-            Navigator.navigateToOfflineScreen(event);
+            Navigator.navigateToLandingScreen(event);
         } catch (IOException ex) {
-            Logger.getLogger(LandingScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    
+    }  
     
 }
