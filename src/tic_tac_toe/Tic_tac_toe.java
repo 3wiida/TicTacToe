@@ -21,11 +21,13 @@ public class Tic_tac_toe extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.AVAILABLE_USERS_SCREEN_ROUTE));
+        Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
 
         Scene scene = new Scene(root, 860, 600);
+        primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
+        
         primaryStage.show();
     }
 

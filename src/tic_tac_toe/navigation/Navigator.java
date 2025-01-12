@@ -13,14 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tic_tac_toe.model.GameModeEnum;
 import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
-import tic_tac_toe.view.onlineScreen.OnlineScreenController;
-import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
  *
@@ -93,6 +89,7 @@ public class Navigator {
         popupStage.show();
     }
 
+
     public static void navigateToModeSelectionScreen(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.MODE_SELECTION_SCREEN));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -147,5 +144,9 @@ public class Navigator {
         popupStage.setScene(scene);
         popupStage.show();
     }
+
+
+
+    
 
 }
