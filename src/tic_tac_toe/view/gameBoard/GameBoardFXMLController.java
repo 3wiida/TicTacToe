@@ -94,10 +94,28 @@ public class GameBoardFXMLController implements Initializable {
     private Game game;
     
     private GameModeEnum gameMode;
+    private ComputerMove computer;
     
     public void setGameMode(GameModeEnum mode){
         gameMode = mode;
+        switch(gameMode){
+            case COMPUTER_EASY:{
+                computer = new EasyComputerModeController();
+                break;
+            }
+            
+            case COMPUTER_HARD : {
+                computer = new HardComputerModeController();
+                break;
+            }
+            
+            default:{
+                computer = new EasyComputerModeController();
+                break;
+            }
+        }
     }
+    
     
     /**
      * Initializes the controller class.
@@ -178,28 +196,7 @@ public class GameBoardFXMLController implements Initializable {
     }
     
     private void makeComputerMove(char currentPlayer){
-        ComputerMove computer;
-        Pair<Integer,Integer> move = null;
-        switch(gameMode){
-            case COMPUTER_EASY:{
-                computer = new EasyComputerModeController();
-                move = computer.move(game.getBoard());
-                break;
-            }
-            
-            case COMPUTER_HARD : {
-                computer = new HardComputerModeController();
-                move = computer.move(game.getBoard(),0,false);
-                break;
-            }
-            
-            default:{
-                computer = new EasyComputerModeController();
-                break;
-            }
-        }
-        
-        
+        Pair<Integer,Integer> move = computer.move(game.getBoard());
         if (game.makeMove(move.getKey(), move.getValue())) {
             if (currentPlayer == 'X') {
                 imageArray[move.getKey()][move.getValue()].setImage(new Image(ImageRoutes.xImage));

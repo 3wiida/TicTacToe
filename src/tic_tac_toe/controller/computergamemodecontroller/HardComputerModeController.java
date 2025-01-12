@@ -12,106 +12,93 @@ import tic_tac_toe.model.ComputerMove;
  *
  * @author 3wiida
  */
-public class HardComputerModeController implements ComputerMove{
-    
-    private final char ai = 'X';
-    private final char human = 'O';
+public class HardComputerModeController implements ComputerMove {
+
+    private final char computerPlayer = 'O';
+    private final char humanPlayer = 'X';
 
     @Override
-    public Pair<Integer,Integer> move(char[][] board,int depth, boolean isMaxPlayer) {
-        int bestMoveRate =  Integer.MIN_VALUE;
-        Pair<Integer,Integer> result = null;
-        
-        for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                if(board[i][j] == '\0'){
-                    board[i][j] = ai;
-                    int moveRate = minMax(board, 0, true);
+    public Pair<Integer, Integer> move(char[][] board) {
+        int bestMoveRate = Integer.MIN_VALUE;
+        Pair<Integer, Integer> result = null;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == '\0') {
+                    board[i][j] = computerPlayer;
+                    int moveRate = miniMax(board, 0, false);
                     board[i][j] = '\0';
-                    
-                    if(moveRate > bestMoveRate){
-                        result = new Pair<>(i,j);
+                    if (moveRate > bestMoveRate) {
+                        result = new Pair<>(i, j);
                         bestMoveRate = moveRate;
                     }
                 }
             }
         }
-        
+
         return result;
     }
-    
-    private boolean hasMoreMoves(char[][] board){
-        for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                if(board[i][j] == '\0') return true;
+
+    private boolean hasMoreMoves(char[][] board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == '\0') return true;
             }
         }
         return false;
     }
 
-    
-    private int evaluateTerminatingState(char[][] board){
-        for(int row=0 ; row<3; row++){
-            if(board[row][0] == board[row][1] && board[row][1] == board[row][2]){
-                if(board[row][0] == ai){
-                    return 1;
-                }
-                return -1;
+    private int evaluateTerminatingState(char[][] board) {
+        for (int row = 0; row < 3; row++) {
+            if (board[row][0] == board[row][1] && board[row][1] == board[row][2] && board[row][0] != '\0') {
+                return board[row][0] == computerPlayer ? 10 : -10;
             }
         }
-        
-        for(int col=0; col<3; col++){
-            if(board[0][col] == board[1][col] && board[1][col] == board[2][col]){
-                if(board[col][0] == ai){
-                    return 1;
-                }
-                return -1;
+
+        for (int col = 0; col < 3; col++) {
+            if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[0][col] != '\0') {
+                return board[0][col] == computerPlayer ? 10 : -10;
             }
         }
-        
-        if(board[0][0] == board[1][1] && board[1][1] == board[2][2]){
-            if(board[0][0] == ai){
-                    return 1;
-            }
-            return -1;
+
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '\0') {
+            return board[0][0] == computerPlayer ? 10 : -10;
         }
-        
-        if(board[0][2] == board[1][1] && board[1][1] == board[2][0]){
-            if(board[0][2] == ai){
-                    return 1;
-            }
-            return -1;
+
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '\0') {
+            return board[0][2] == computerPlayer ? 10 : -10;
         }
-        
+
         return 0;
     }
-    
-    private int minMax(char[][] board, int depth, boolean isMaxPlayer){
+
+    private int miniMax(char[][] board, int depth, boolean isMaxPlayer) {
         int stateValue = evaluateTerminatingState(board);
-        
-        if(stateValue == 1 || stateValue == -1) return stateValue;
-        
-        if(!hasMoreMoves(board)) return 0;
-        
-        if(isMaxPlayer){
+
+        if (stateValue == 10) return stateValue - depth;
+        if (stateValue == -10) return stateValue + depth;
+
+        if (!hasMoreMoves(board)) return 0;
+
+        if (isMaxPlayer) {
             int bestScore = Integer.MIN_VALUE;
-            for(int i=0; i<3; i++){
-                for(int j=0; j<3; j++){
-                    if(board[i][j] == '\0'){
-                        board[i][j] = ai;
-                        bestScore = Math.max(bestScore, minMax(board, depth+1, !isMaxPlayer));
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j] == '\0') {
+                        board[i][j] = computerPlayer;
+                        bestScore = Math.max(bestScore, miniMax(board, depth + 1, false));
                         board[i][j] = '\0';
                     }
                 }
             }
             return bestScore;
-        }else{
+        } else {
             int bestScore = Integer.MAX_VALUE;
-            for(int i=0; i<3; i++){
-                for(int j=0; j<3; j++){
-                    if(board[i][j] == '\0'){
-                        board[i][j] = human;
-                        bestScore = Math.min(bestScore, minMax(board, depth+1, !isMaxPlayer));
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[i][j] == '\0') {
+                        board[i][j] = humanPlayer;
+                        bestScore = Math.min(bestScore, miniMax(board, depth + 1, true));
                         board[i][j] = '\0';
                     }
                 }
@@ -119,5 +106,4 @@ public class HardComputerModeController implements ComputerMove{
             return bestScore;
         }
     }
-    
 }

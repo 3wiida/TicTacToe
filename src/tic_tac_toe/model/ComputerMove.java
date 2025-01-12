@@ -12,11 +12,5 @@ import javafx.util.Pair;
  * @author 3wiida
  */
 public interface ComputerMove {
-    default public Pair<Integer,Integer> move(char[][] board){
-        return null;
-    }
-    
-    default public Pair<Integer,Integer> move(char[][] board,int depth, boolean isMaxPlayer){
-        return null;
-    }
+    public Pair<Integer,Integer> move(char[][] board);
 }
