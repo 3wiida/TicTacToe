@@ -83,17 +83,17 @@ public class Navigator {
         stage.show();
     }
     
-    public static void navigateToWaitingPopup(String fxmlPath, String title) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage popupStage = new Stage();
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle(title);
-        popupStage.setScene(scene);
-
-        popupStage.show();
-    }
+public static void navigateToWaitingPopup(Event event) throws IOException {
+    String fxmlPath = ScreensRoutes.WAITING_POPUP_SCREEN_ROUTE;                
+    String title = "Waiting Request";
+    FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
+    Parent root = loader.load();
+    Scene scene = new Scene(root);  Stage popupStage = new Stage();
+    popupStage.initModality(Modality.APPLICATION_MODAL);
+    popupStage.setTitle(title);  
+    popupStage.setScene(scene);
+    popupStage.show();
+}
 
 
     
