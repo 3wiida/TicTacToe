@@ -8,8 +8,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -19,8 +17,6 @@ import javafx.stage.Stage;
  */
 public class MultiplayerNamesPopupController implements Initializable {
 
-    @FXML
-    private Text headerTxt;
     @FXML
     private Button playBtn;
     @FXML
@@ -62,8 +58,19 @@ public class MultiplayerNamesPopupController implements Initializable {
             }
         );
         
-        cancelBtn.setOnAction(event->{onCancelClicked(event);});
-        playBtn.setOnAction(event->{onPlayClicked(event);});
+        cancelBtn.setOnAction(
+                event->{
+                    playerOneTextField.clear();
+                    playerTwoTextField.clear();
+                    onCancelClicked(event);
+                }
+        );
+        
+        playBtn.setOnAction(
+                event->{
+                    onPlayClicked(event);
+                }
+        );
     }    
     
     public String getPlayerOneName() {

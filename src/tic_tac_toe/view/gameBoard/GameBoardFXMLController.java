@@ -18,17 +18,20 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
 import tic_tac_toe.controller.computergamemodecontroller.EasyComputerModeController;
 import tic_tac_toe.controller.computergamemodecontroller.HardComputerModeController;
+import tic_tac_toe.controller.computergamemodecontroller.MediumComputerModeController;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
 import tic_tac_toe.model.GameModeEnum;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_EASY;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_HARD;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_MEDIUM;
+import static tic_tac_toe.model.GameModeEnum.MULIPLAYER_OFFLINE;
+import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.utils.ImageRoutes;
 
@@ -40,11 +43,7 @@ import tic_tac_toe.utils.ImageRoutes;
 public class GameBoardFXMLController implements Initializable {
 
     @FXML
-    private ImageView player1Image;
-    @FXML
     private GridPane gridPane;
-    @FXML
-    private ImageView player2Image;
     @FXML
     private ImageView imageCell00;
     @FXML
@@ -81,8 +80,14 @@ public class GameBoardFXMLController implements Initializable {
     private Button buttonCell21;
     @FXML
     private Button buttonCell22;
-    
-    
+    @FXML
+    private ImageView player1Image;
+    @FXML
+    private ImageView player2Image;
+    @FXML
+    private Label playerOneTV;
+    @FXML
+    private Label playerTwoTV;
     @FXML
     private Label player1Score;
     @FXML
@@ -93,33 +98,12 @@ public class GameBoardFXMLController implements Initializable {
 
     private Game game;
     
+    private Player playerOne;
+    private Player playerTwo;
+    
     private GameModeEnum gameMode;
     private ComputerMove computer;
     
-    public void setGameMode(GameModeEnum mode){
-        gameMode = mode;
-        switch(gameMode){
-            case COMPUTER_EASY:{
-                computer = new EasyComputerModeController();
-                break;
-            }
-            
-            case COMPUTER_HARD : {
-                computer = new HardComputerModeController();
-                break;
-            }
-            
-            default:{
-                computer = new EasyComputerModeController();
-                break;
-            }
-        }
-    }
-    
-    
-    /**
-     * Initializes the controller class.
-     */
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -137,6 +121,33 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell20, buttonCell21, buttonCell22}
         };
     }    
+    
+    public void setGameMode(GameModeEnum mode){
+        gameMode = mode;
+        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+            computer = ComputerPlayerFactory.createCmputer(gameMode);
+            setupBoardForComputerGame();
+        }else if(gameMode == MULIPLAYER_OFFLINE){
+            setupBoardForOfflineMultiplayerGame();
+        }
+    }
+    
+    private void setupBoardForOfflineMultiplayerGame(){
+        playerOneTV.setText(playerOne.getUsername());
+        playerTwoTV.setText(playerTwo.getUsername());
+    }
+    
+    private void setupBoardForComputerGame(){
+        playerOneTV.setText("You");
+        playerTwoTV.setText("Computer");
+        player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
+    }
+    
+    public void setPlayersNames(String playerOneName, String playerTwoName){
+        playerOne = new Player(playerOneName);
+        playerTwo = new Player(playerTwoName);
+    }
+    
     
     @FXML
     private void handleCellClick(ActionEvent event) {
@@ -158,8 +169,21 @@ public class GameBoardFXMLController implements Initializable {
 
         char currentPlayer = game.getCurrentPlayer();
         
+        commitMove(currentPlayer, row, col);
         
-        if (game.makeMove(row, col)) {
+        currentPlayer = game.getCurrentPlayer();
+        
+        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+            if(game.getGameCounter()<9){
+                Pair<Integer,Integer> move = computer.move(game.getBoard());
+                commitMove(currentPlayer, move.getKey(), move.getValue());
+            }
+        }
+        
+    }
+ 
+    private void commitMove(char currentPlayer, int row, int col){
+         if (game.makeMove(row, col)) {
             if (currentPlayer == 'X') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.xImage));
             } else if (currentPlayer == 'O') {
@@ -184,45 +208,6 @@ public class GameBoardFXMLController implements Initializable {
                 pause.play();
             }
         }
-        
-        currentPlayer = game.getCurrentPlayer();
-        
-        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-            if(game.getGameCounter()<9){
-                makeComputerMove(currentPlayer);
-            }
-        }
-        
-    }
-    
-    private void makeComputerMove(char currentPlayer){
-        Pair<Integer,Integer> move = computer.move(game.getBoard());
-        if (game.makeMove(move.getKey(), move.getValue())) {
-            if (currentPlayer == 'X') {
-                imageArray[move.getKey()][move.getValue()].setImage(new Image(ImageRoutes.xImage));
-            } else if (currentPlayer == 'O') {
-                imageArray[move.getKey()][move.getValue()].setImage(new Image(ImageRoutes.oImage));
-            }
-            if (game.isGameOver()) {
-                System.out.println("Player " + currentPlayer + " wins!");
-                disableBoard();
-                enableWinningCells();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            } else if (game.getGameCounter() == 9) {
-                System.out.println("players draw");
-                disableBoard();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            }
-        }
-        
     }
     
     private void disableBoard() {

@@ -68,7 +68,22 @@ public class Navigator {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-    /* Mouse Clicked */
+    
+    public static void naviagteToGameBoardScreen(
+            ActionEvent event, 
+            GameModeEnum gameMode, 
+            String playerOneName, 
+            String playerTwoName
+    ) throws IOException{
+        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
+        Parent root = loader.load();
+        GameBoardFXMLController controller = loader.getController();
+        controller.setPlayersNames(playerOneName, playerTwoName);
+        controller.setGameMode(gameMode);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
+   
     public static void navigateToOfflineScreen(Event event) throws IOException{
 
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));

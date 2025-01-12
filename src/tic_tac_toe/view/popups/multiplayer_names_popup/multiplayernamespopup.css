@@ -1,17 +1,16 @@
-/*#headerTxt{
-    -fx-fill: #FFFFFF;
-    -fx-font-family: "Poppins";
-    -fx-font-size: 46px;
-    -fx-text-fill: white;
-    -fx-font-weight: bold; 
-}*/
+.mainFxmlClass{
+    -fx-background-radius: 15;
+    -fx-background-color: white;
+    -fx-border-radius: 15;
+    -fx-border-color: lightgray;
+    -fx-border-width: 2;
+}
 
 #headerTxt{
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 50px;
-    -fx-fill: white;
+    -fx-fill: #1A1B49;
     -fx-font-weight: bold; 
-    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
 }
 
 #cancelBtn {
@@ -19,19 +18,21 @@
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-font-family: "Poppins";
+    -fx-font-family: "Comic Sans MS";
     -fx-background-radius: 25px;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.5, 2, 2);
 }
 
 #playBtn {
-    -fx-background-color: #5DFF4B;
+    -fx-background-color: #1A1B49;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-font-family: "Poppins";
+    -fx-font-family: "Comic Sans MS";
     -fx-background-radius: 25px;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.5, 2, 2);
 }
 
 #cancelBtn:hover {
@@ -39,5 +40,5 @@
 }
 
 #playBtn:hover {
-    -fx-background-color: #9EFF93;
+    -fx-background-color: #507a96;
 }
