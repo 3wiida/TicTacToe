@@ -24,8 +24,10 @@ public class Tic_tac_toe extends Application {
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
 
         Scene scene = new Scene(root, 860, 600);
+        primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
+        
         primaryStage.show();
     }
 
