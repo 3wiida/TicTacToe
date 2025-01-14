@@ -37,7 +37,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <Label text="Khaled">
+            <Label fx:id="playerOneTV" text="Khaled">
                <font>
                   <Font size="48.0" />
                </font>
@@ -102,7 +102,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <Label text="Khaled">
+            <Label fx:id="playerTwoTV" text="Khaled">
                <font>
                   <Font size="48.0" />
                </font>

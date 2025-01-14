@@ -15,7 +15,7 @@
       </ImageView>
       <ImageView fitHeight="138.0" fitWidth="156.0" layoutX="335.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../assets/logo.png" />
+            <Image url="@../../assets/images/logo.png" />
          </image>
       </ImageView>
       <Button fx:id="btnOffline" layoutX="279.0" layoutY="283.0" mnemonicParsing="false" onAction="#OffilneClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY OFFLINE" />

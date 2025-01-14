@@ -18,7 +18,7 @@
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../assets/logo.png" />
+                  <Image url="@../../../assets/images/logo.png" />
                </image>
             </ImageView>
             <Text fx:id="offlineModeTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Offline Mode" />

@@ -9,10 +9,11 @@ package tic_tac_toe.utils;
  * @author omarabdelaziz
  */
 public class ImageRoutes {
-    public static final String xImage = "/tic_tac_toe/assets/X.png";
-    public static final String oImage = "/tic_tac_toe/assets/O.png";
-    public static final String EASY_AVATAR = "/tic_tac_toe/assets/easy_avatar.png";
-    public static final String MEDIUM_AVATAR = "/tic_tac_toe/assets/medium_avatar.png";
-    public static final String HARD_AVATAR = "/tic_tac_toe/assets/hard_avatar.png";
+    public static final String xImage = "/tic_tac_toe/assets/images/X.png";
+    public static final String oImage = "/tic_tac_toe/assets/images/O.png";
+    public static final String EASY_AVATAR = "/tic_tac_toe/assets/images/easy_avatar.png";
+    public static final String MEDIUM_AVATAR = "/tic_tac_toe/assets/images/medium_avatar.png";
+    public static final String HARD_AVATAR = "/tic_tac_toe/assets/images/hard_avatar.png";
+    public static final String COMPUTER_AVATAR = "/tic_tac_toe/assets/images/computer_avatar.png";
 
 }

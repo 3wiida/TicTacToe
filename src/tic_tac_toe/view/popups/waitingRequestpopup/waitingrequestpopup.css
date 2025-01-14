@@ -1,19 +1,13 @@
 root{
     -fx-background-color: #D9D9D9;
+     -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
+     -fx-border-radius: 20; 
+     -fx-background-radius: 20;
+    -fx-padding: 10;
+    -fx-border-width: 2;
 }
-/*
-#cancelBtn {
-    -fx-pref-width: 100px;
-    -fx-pref-height: 50px;
-    -fx-background-color: #D02823;
-    -fx-border-radius: 25px;
-    -fx-background-radius: 25px;
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-cursor: hand;
-}
-*/
+
+
 #cancelBtn {
     -fx-background-color: #D02823;
     -fx-text-fill: white;
@@ -37,4 +31,3 @@ root{
 
     
 }
-
