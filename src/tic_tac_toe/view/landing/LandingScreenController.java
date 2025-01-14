@@ -63,7 +63,7 @@ public class LandingScreenController {
                 "-fx-border-color: lightgray; " +
                 "-fx-border-width: 2;"
             );
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root,600,200);
             scene.setFill(Color.TRANSPARENT);
             LoginOrRegisterPopupController controller = loader.getController();
             Stage  LoginOrRegisterPopup = new Stage();

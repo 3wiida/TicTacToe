@@ -15,11 +15,6 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="105.0" fitWidth="117.0" layoutX="729.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/logo.png" />
-         </image>
-      </ImageView>
       <Label fx:id="lblSignUp" layoutX="308.0" layoutY="231.0" prefHeight="70.0" prefWidth="227.0" text="SIGN UP" textAlignment="RIGHT">
          <font>
             <Font size="24.0" />

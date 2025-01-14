@@ -16,7 +16,6 @@ public class Game {
     private int player2Score;
     private int gameCounter;
     private WinningLaneEnum winningLane;
-    
     public Game() {
         board = new char[3][3];
         currentPlayer = 'X';

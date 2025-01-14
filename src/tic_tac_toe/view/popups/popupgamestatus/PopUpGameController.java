@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -35,8 +36,8 @@ public class PopUpGameController implements Initializable {
         Media media = new Media(getClass().getResource("/tic_tac_toe/assets/tempVideo.mp4").toExternalForm());
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
+        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.seconds(1)));
         mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setMute(false);
     }    
 
     @FXML

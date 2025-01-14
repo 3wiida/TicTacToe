@@ -2,10 +2,11 @@ root{
     -fx-background-color: #D9D9D9;
 }
 Label {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #e74c3c; 
-    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
     -fx-alignment: center;
 }
 

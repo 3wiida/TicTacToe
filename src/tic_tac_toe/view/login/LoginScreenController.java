@@ -59,11 +59,16 @@ public class LoginScreenController implements Initializable {
     void LoginClicked(ActionEvent event) {
         Pair<String, String> userData = getUserData();
         if(!userData.getKey().isEmpty() && !userData.getValue().isEmpty()){
-            System.err.println("Login Done");
-            System.err.println(userData.getKey());
-            System.out.println(userData.getValue());
-            /* Network code  */
-            transferUserNameToOnlineScreen(userData.getKey(), event);
+            try {
+                System.err.println("Login Done");
+                System.err.println(userData.getKey());
+                System.out.println(userData.getValue());
+                /* Network code  */
+                Navigator.navigateToOnlineScreen(event);
+              //  transferUserNameToOnlineScreen(userData.getKey(), event);
+            } catch (IOException ex) {
+                Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else{
             showerrorAlert();
         }
