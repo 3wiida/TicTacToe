@@ -172,14 +172,14 @@ public class GameBoardFXMLController implements Initializable {
         commitMove(currentPlayer, row, col);
         
         currentPlayer = game.getCurrentPlayer();
-        
-        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-            if(game.getGameCounter()<9){
-                Pair<Integer,Integer> move = computer.move(game.getBoard());
-                commitMove(currentPlayer, move.getKey(), move.getValue());
+        if(game.makeMove(row, col)){
+            if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+                if(game.getGameCounter()<9){
+                    Pair<Integer,Integer> move = computer.move(game.getBoard());
+                    commitMove(currentPlayer, move.getKey(), move.getValue());
+                }
             }
         }
-        
     }
  
     private void commitMove(char currentPlayer, int row, int col){
