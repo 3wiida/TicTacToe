@@ -139,7 +139,7 @@ public class GameBoardFXMLController implements Initializable {
     
     private void setupBoardForComputerGame(){
         playerOneTV.setText("You");
-        playerTwoTV.setText("Computer");
+        playerTwoTV.setText("PC");
         player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
     }
     
