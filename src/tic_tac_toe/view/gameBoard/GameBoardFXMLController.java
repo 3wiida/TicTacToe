@@ -4,8 +4,11 @@
  */
 package tic_tac_toe.view.gameBoard;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +36,7 @@ import static tic_tac_toe.model.GameModeEnum.COMPUTER_MEDIUM;
 import static tic_tac_toe.model.GameModeEnum.MULIPLAYER_OFFLINE;
 import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
+import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.utils.ImageRoutes;
 
 /**
@@ -172,14 +176,14 @@ public class GameBoardFXMLController implements Initializable {
         commitMove(currentPlayer, row, col);
         
         currentPlayer = game.getCurrentPlayer();
-        if(game.makeMove(row, col)){
+        
             if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
                 if(game.getGameCounter()<9){
                     Pair<Integer,Integer> move = computer.move(game.getBoard());
                     commitMove(currentPlayer, move.getKey(), move.getValue());
                 }
             }
-        }
+        
     }
  
     private void commitMove(char currentPlayer, int row, int col){
@@ -190,7 +194,6 @@ public class GameBoardFXMLController implements Initializable {
                 imageArray[row][col].setImage(new Image(ImageRoutes.oImage));
             }
             if (game.isGameOver()) {
-                System.out.println("Player " + currentPlayer + " wins!");
                 disableBoard();
                 enableWinningCells();
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -199,7 +202,6 @@ public class GameBoardFXMLController implements Initializable {
                 });
                 pause.play();
             } else if (game.getGameCounter() == 9) {
-                System.out.println("players draw");
                 disableBoard();
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
                 pause.setOnFinished(e -> {
@@ -272,7 +274,6 @@ public class GameBoardFXMLController implements Initializable {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
                 ((ImageView) node).setImage(null);
-                
                 node.setDisable(false);
             }
         }
@@ -288,6 +289,11 @@ public class GameBoardFXMLController implements Initializable {
 
     @FXML
     private void onClickExitGame(ActionEvent event) {
+        try {
+            Navigator.navigateToLandingScreen(event);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
 }
