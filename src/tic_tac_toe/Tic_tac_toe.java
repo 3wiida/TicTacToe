@@ -23,7 +23,7 @@ public class Tic_tac_toe extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
 
-        Scene scene = new Scene(root, 860, 600);
+        Scene scene = new Scene(root);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
