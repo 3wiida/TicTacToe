@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,11 +23,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
-import tic_tac_toe.view.landing.LandingScreenController;
 import tic_tac_toe.view.onlineScreen.OnlineScreenController;
-import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 
 /**
  * FXML Controller class
@@ -60,10 +61,13 @@ public class LoginScreenController implements Initializable {
         Pair<String, String> userData = getUserData();
         if(!userData.getKey().isEmpty() && !userData.getValue().isEmpty()){
             try {
-                System.err.println("Login Done");
-                System.err.println(userData.getKey());
-                System.out.println(userData.getValue());
+//                System.err.println("Login Done");
+//                System.err.println(userData.getKey());
+//                System.out.println(userData.getValue());
                 /* Network code  */
+                
+                
+              
                 Navigator.navigateToOnlineScreen(event);
               //  transferUserNameToOnlineScreen(userData.getKey(), event);
             } catch (IOException ex) {

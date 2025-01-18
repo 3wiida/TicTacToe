@@ -7,8 +7,6 @@ package tic_tac_toe.view.gameBoard;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,9 +22,6 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
-import tic_tac_toe.controller.computergamemodecontroller.EasyComputerModeController;
-import tic_tac_toe.controller.computergamemodecontroller.HardComputerModeController;
-import tic_tac_toe.controller.computergamemodecontroller.MediumComputerModeController;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
 import tic_tac_toe.model.GameModeEnum;
@@ -156,7 +151,7 @@ public class GameBoardFXMLController implements Initializable {
     
     private void setupBoardForComputerGame(){
         playerOneTV.setText("You");
-        playerTwoTV.setText("Computer");
+        playerTwoTV.setText("PC");
         player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
     }
     
