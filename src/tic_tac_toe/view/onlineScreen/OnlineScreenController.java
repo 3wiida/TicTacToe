@@ -17,7 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import tic_tac_toe.navigation.Navigator;
-import tic_tac_toe.view.login.LoginScreenController;
 
 /**
  * FXML Controller class
@@ -72,6 +71,7 @@ public class OnlineScreenController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(OnlineScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     @FXML
