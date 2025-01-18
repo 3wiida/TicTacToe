@@ -21,7 +21,7 @@ import tic_tac_toe.navigation.Navigator;
 /**
  * FXML Controller class
  *
- * @author yasse
+ * @author Khaled
  */
 public class OnlineScreenController implements Initializable {
 
@@ -62,6 +62,7 @@ public class OnlineScreenController implements Initializable {
     @FXML
     private void onOnlineClicked(ActionEvent event) {
         /* navigate to available users Screen */
+        
     }
 
     @FXML
