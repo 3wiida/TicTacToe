@@ -29,6 +29,7 @@ import static tic_tac_toe.model.GameModeEnum.COMPUTER_EASY;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_HARD;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_MEDIUM;
 import static tic_tac_toe.model.GameModeEnum.MULIPLAYER_OFFLINE;
+import static tic_tac_toe.model.GameModeEnum.MULTIPLAYER_ONLINE;
 import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.navigation.Navigator;
@@ -123,12 +124,24 @@ public class GameBoardFXMLController implements Initializable {
     
     public void setGameMode(GameModeEnum mode){
         gameMode = mode;
-        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-            computer = ComputerPlayerFactory.createCmputer(gameMode);
-            setupBoardForComputerGame();
-        }else if(gameMode == MULIPLAYER_OFFLINE){
-            setupBoardForOfflineMultiplayerGame();
-        }
+        if(null != gameMode){
+            switch (gameMode) {
+                case COMPUTER_EASY:
+                case COMPUTER_MEDIUM:
+                case COMPUTER_HARD:
+                    computer = ComputerPlayerFactory.createCmputer(gameMode);
+                    setupBoardForComputerGame();
+                    break;
+                case MULIPLAYER_OFFLINE:
+                    setupBoardForOfflineMultiplayerGame();
+                    break;
+                case MULTIPLAYER_ONLINE:
+                    setupBoardForOnlieMultiplayerGame();
+                    break;
+                default:
+                    break;
+            }
+        }    
     }
     
     private void setupBoardForOfflineMultiplayerGame(){
@@ -140,6 +153,10 @@ public class GameBoardFXMLController implements Initializable {
         playerOneTV.setText("You");
         playerTwoTV.setText("PC");
         player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
+    }
+    
+    private void setupBoardForOnlieMultiplayerGame(){
+        
     }
     
     public void setPlayersNames(String playerOneName, String playerTwoName){
@@ -290,5 +307,6 @@ public class GameBoardFXMLController implements Initializable {
             ex.printStackTrace();
         }
     }
+    
     
 }

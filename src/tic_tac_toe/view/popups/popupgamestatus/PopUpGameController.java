@@ -12,6 +12,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import tic_tac_toe.navigation.Navigator;
 
 /**
  * FXML Controller class
@@ -41,7 +42,7 @@ public class PopUpGameController implements Initializable {
     }    
 
     @FXML
-    private void newGameClicked(ActionEvent event) {
+    private void newGameClicked(ActionEvent event) { 
     }
 
     @FXML
