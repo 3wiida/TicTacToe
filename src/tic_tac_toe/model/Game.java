@@ -67,7 +67,9 @@ public class Game {
                 } else{
                     player2Score++;
                 }
-            } else{
+            }else if(isDraw()){
+                gameOver = true;
+            }else{
                 switchPlayer();
             }
             return true;
@@ -132,6 +134,10 @@ public class Game {
         return firstPlace && secondPlace && thirdPlace;
     }
     
+    private boolean isDraw() {
+        return gameCounter == 9 && !gameOver;
+    }
+    
     public void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -142,5 +148,7 @@ public class Game {
         gameOver = false;
         gameCounter = 0;
     }
+      
 }
+    
 
