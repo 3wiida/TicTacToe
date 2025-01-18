@@ -105,6 +105,7 @@ public class GameBoardFXMLController implements Initializable {
     private ComputerMove computer;
     
     
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         game = new Game();
@@ -120,6 +121,8 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
+        
+        
     }    
     
     public void setGameMode(GameModeEnum mode){
@@ -182,20 +185,18 @@ public class GameBoardFXMLController implements Initializable {
         else if (clickedButton == buttonCell20) { row = 2; col = 0; }
         else if (clickedButton == buttonCell21) { row = 2; col = 1; }
         else if (clickedButton == buttonCell22) { row = 2; col = 2; }
-
-        char currentPlayer = game.getCurrentPlayer();
         
-        commitMove(currentPlayer, row, col);
-        
-        currentPlayer = game.getCurrentPlayer();
-        
+        if(isEmptyCell(row, col)){
+            char currentPlayer = game.getCurrentPlayer();
+            commitMove(currentPlayer, row, col);
+            currentPlayer = game.getCurrentPlayer();
             if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
                 if(game.getGameCounter()<9){
                     Pair<Integer,Integer> move = computer.move(game.getBoard());
                     commitMove(currentPlayer, move.getKey(), move.getValue());
                 }
             }
-        
+        }
     }
  
     private void commitMove(char currentPlayer, int row, int col){
@@ -222,6 +223,10 @@ public class GameBoardFXMLController implements Initializable {
                 pause.play();
             }
         }
+    }
+    
+    private boolean isEmptyCell(int row, int col){
+        return game.getBoard()[row][col] == '\0';
     }
     
     private void disableBoard() {

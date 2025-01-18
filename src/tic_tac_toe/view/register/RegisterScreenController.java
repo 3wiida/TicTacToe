@@ -10,15 +10,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
+import tic_tac_toe.model.StatusEnum;
 import tic_tac_toe.navigation.Navigator;
 
 /**
@@ -29,57 +32,117 @@ import tic_tac_toe.navigation.Navigator;
 public class RegisterScreenController implements Initializable {
 
     @FXML
-    private Label lblSignUp;
+    private TextField usernameTF;
     @FXML
-    private TextField txtFieldUserName;
+    private TextField passwordTF;
     @FXML
-    private TextField txtFieldUserPassword;
-    @FXML
-    private Button btnSignUp;
-    @FXML
-    private ImageView backPhoto;
-    @FXML
-    private TextField txtFieldFullName;
+    private TextField confirmPasswordTF;
 
-    String regex = "^[a-zA-Z0-9]+$"; 
-    String fullNameregex = "^[a-zA-Z]+$";
+    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        tooltip();
+        ClientSocket.initConnection("127.0.0.1");
     }    
 
     @FXML
-    private void SignUpClicked(ActionEvent event){
-        if(!txtFieldFullName.getText().trim().isEmpty() && !txtFieldUserPassword.getText().trim().isEmpty() && !txtFieldUserName.getText().trim().isEmpty()){
-            if(txtFieldUserName.getText().matches(regex) && txtFieldFullName.getText().matches(fullNameregex)){
-                System.err.println("Valid");
-                
-                /* Send data to sever to store in data base*/
-                
-                
-            }else{
-                System.out.println("Invalid UserName or fullname");
-            }
-            }else{
-                System.out.println("fill all information");
-            }
+    private void onSignUpClicked(ActionEvent event) {
+        String username = usernameTF.getText();
+        String password = passwordTF.getText();
+        String confirmPassword = confirmPasswordTF.getText();
+        String error = validateUserInput(username, password, confirmPassword);
+        
+        if(error == null){
+            sendRegisterRequest(username, password);
+            handleRegisterResponse(event);
+        }else{
+            showErrorAlert(error);
         }
-    private void tooltip(){
-        Tooltip userTip = new Tooltip("Please Enter Your User Name");
-        txtFieldUserName.setTooltip(userTip);
         
-        Tooltip passwordTip = new Tooltip("Please Enter Your Password");
-        txtFieldUserPassword.setTooltip(passwordTip);
-        
-        Tooltip FullName = new Tooltip("Please Enter Your Full Name");
-        txtFieldFullName.setTooltip(FullName);
     }
 
     @FXML
-    private void photoClicked(MouseEvent event) {
+    private void onBackClicked(Event event) {
         try {
             Navigator.navigateToLandingScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(RegisterScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private String validateUserInput(String username, String password, String confirmPassword){
+        if(username.isEmpty() || password.isEmpty()){
+            return "Username or password can't be empty";
+        }
+        
+        if(password.length() < 8){
+            return "Password should be 8 digits at least";
+        }
+        
+        if(!password.equals(confirmPassword)){
+            return "Password and confirm password should be identical";
+        }
+        
+        return null;
+    }
+    
+    private void sendRegisterRequest(String username, String password){
+        JSONObject registerRequest = new JSONObject();
+        registerRequest.put("type", "register");
+        registerRequest.put("username", username);
+        registerRequest.put("password", password);
+        ClientSocket.sendRequest(registerRequest);
+    }
+    
+    private void handleRegisterResponse(ActionEvent event){
+        new Thread(
+            ()->{
+                JSONObject registerResponse = ClientSocket.recieveResponse();
+                boolean isOk = registerResponse.getBoolean("isOk");
+                Platform.runLater(
+                    ()->{
+                        if(isOk){
+                            String username = registerResponse.getString("username");
+                            CurrentPlayer.initPlayer(username, 0, StatusEnum.AVAILABLE);
+                            navigateToOnlineScreen(event);
+                        }else{
+                            String error = registerResponse.getString("error");
+                            showErrorAlert(error);
+                        }
+                    }
+                );
+            }
+        ).start();
+    }
+    
+    private void showErrorAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Signup Error");
+        alert.setContentText(message);
+            
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle(
+            "-fx-background-color: #ffcccc;" + 
+            "-fx-border-color: #ff0000;" +    
+            "-fx-border-width: 2px;" +       
+            "-fx-padding: 10px;"             
+        );
+        dialogPane.lookup(".header-panel").setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: #800000;" 
+        );
+        dialogPane.lookup(".content").setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-text-fill: #333333;" 
+        );
+        
+        alert.showAndWait();
+    }
+    
+    private void navigateToOnlineScreen(ActionEvent event){
+        try {
+            Navigator.navigateToOnlineScreen(event);
         } catch (IOException ex) {
             Logger.getLogger(RegisterScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

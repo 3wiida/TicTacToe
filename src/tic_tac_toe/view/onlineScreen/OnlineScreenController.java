@@ -57,16 +57,30 @@ public class OnlineScreenController implements Initializable {
  
     @FXML
     private void onOfflineClicked(ActionEvent event) {
+        try {
+            Navigator.navigateToOfflineScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OnlineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
     private void onOnlineClicked(ActionEvent event) {
-        /* navigate to available users Screen */
+        try {
+            Navigator.navigateToAvailableUsersScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OnlineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
     @FXML
     private void onProfileClicked(ActionEvent event) {
+        try {
+            Navigator.navigateToProfileScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OnlineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

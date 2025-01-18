@@ -112,7 +112,7 @@ public class Navigator {
         stage.show();
     }
 
-    public static void navigateToOnlineScreen(ActionEvent event) throws IOException {
+    public static void navigateToOnlineScreen(Event event) throws IOException {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
         Parent root = Loader.load();
         Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
@@ -160,7 +160,14 @@ public class Navigator {
     }
 
 
-
+    public static void navigateToProfileScreen(Event event) throws IOException{
+        FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.PROFILE_SCREEN_ROUTE));
+        Parent root = Loader.load();
+        Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
     
 
 }

@@ -11,15 +11,21 @@ package tic_tac_toe.model;
  */
 public class Player {
     private String username;
-    private String score;
+    private int score;
     private StatusEnum status;
     private GenderEnum gender;
     public static boolean isOnline = false;
-
+    
     public Player(String username) {
         this.username = username;
     }
-    
+
+    public Player(String username, int score, StatusEnum status) {
+        this.username = username;
+        this.score = score;
+        this.status = status;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -28,11 +34,11 @@ public class Player {
         this.username = username;
     }
 
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
