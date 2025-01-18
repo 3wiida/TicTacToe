@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.view.login.LoginScreenController;
 
 /**
  * FXML Controller class
@@ -61,6 +62,12 @@ public class OnlineScreenController implements Initializable {
 
     @FXML
     private void onOnlineClicked(ActionEvent event) {
+         try {
+            Navigator.navigateToAvailableUsersScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         /* navigate to available users Screen */
         
     }
