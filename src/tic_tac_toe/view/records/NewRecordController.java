@@ -26,16 +26,20 @@ public class NewRecordController implements Initializable {
     private Label userNamLabel;
     @FXML
     private Button watchButton;
+    private String recordName;
 
     public NewRecordController(String recordName) {
-        userNamLabel.setText(recordName);
+        System.out.println(recordName);
+        this.recordName = recordName;
     }
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        userNamLabel.setText(recordName);
     }    
     
     
