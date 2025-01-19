@@ -7,7 +7,11 @@ package tic_tac_toe.view.records;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -16,6 +20,16 @@ import javafx.fxml.Initializable;
  */
 public class NewRecordController implements Initializable {
 
+    @FXML
+    private HBox hbox;
+    @FXML
+    private Label userNamLabel;
+    @FXML
+    private Button watchButton;
+
+    public NewRecordController(String recordName) {
+        userNamLabel.setText(recordName);
+    }
     /**
      * Initializes the controller class.
      */
@@ -23,5 +37,6 @@ public class NewRecordController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
     
 }

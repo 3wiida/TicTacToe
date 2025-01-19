@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import tic_tac_toe.model.RecordsScanner;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.view.landing.LandingScreenController;
 import tic_tac_toe.view.login.LoginScreenController;
@@ -32,16 +34,20 @@ public class RecordsController implements Initializable {
     @FXML
     private ImageView backBtn;
     @FXML
-    private ListView<?> RecordsListView;
+    private ListView<NewRecordController> RecordsListView;
     @FXML
     private Label recordsLbl;
 
     /**
      * Initializes the controller class.
      */
+    
+    ObservableList<String> fileList = RecordsScanner.getRecordedGameFiles();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        for (String file : fileList) {
+            RecordsListView.getItems().add(new NewRecordController(file));
+        }
     }    
 
   

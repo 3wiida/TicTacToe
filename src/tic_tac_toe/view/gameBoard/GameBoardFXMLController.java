@@ -6,12 +6,15 @@ package tic_tac_toe.view.gameBoard;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,9 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,8 +37,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import sun.net.www.content.audio.x_aiff;
-import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
@@ -47,12 +46,13 @@ import static tic_tac_toe.model.GameModeEnum.COMPUTER_HARD;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_MEDIUM;
 import static tic_tac_toe.model.GameModeEnum.MULIPLAYER_OFFLINE;
 import static tic_tac_toe.model.GameModeEnum.MULTIPLAYER_ONLINE;
+import tic_tac_toe.model.GameMove;
+import tic_tac_toe.model.GameRecorder;
 import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.utils.ImageRoutes;
-import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
 import tic_tac_toe.view.popups.popupgamestatus.PopUpGameController;
 
 /**
@@ -128,7 +128,13 @@ public class GameBoardFXMLController implements Initializable {
     private AnchorPane boardAnchorPane;
     
     private int winner;
-    Line line;
+    private Line line;
+    private GameRecorder gameRecorder = new GameRecorder();
+    private boolean isGameRecording = false;
+    @FXML
+    private Button recordGameBtn;
+    
+    private String fileName;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -165,6 +171,9 @@ public class GameBoardFXMLController implements Initializable {
                 case MULTIPLAYER_ONLINE:
                     setupBoardForOnlieMultiplayerGame();
                     break;
+                case REPLAY_GAME:
+                    setupBoardForReplayGame();
+                    break;
                 default:
                     break;
             }
@@ -174,6 +183,12 @@ public class GameBoardFXMLController implements Initializable {
     private void setupBoardForOfflineMultiplayerGame(){
         playerOneTV.setText(playerOne.getUsername());
         playerTwoTV.setText(playerTwo.getUsername());
+    }  
+    
+    private void setupBoardForReplayGame(){
+        playerOneTV.setText(playerOne.getUsername());
+        playerTwoTV.setText(playerTwo.getUsername());
+        replaySavedGame(fileName);
     }
     
     private void setupBoardForComputerGame(){
@@ -191,6 +206,9 @@ public class GameBoardFXMLController implements Initializable {
         playerTwo = new Player(playerTwoName);
     }
     
+    public void setFileNameForGameReplay(String fileName){
+        this.fileName = fileName;
+    }
     
     @FXML
     private void handleCellClick(ActionEvent event) {
@@ -225,22 +243,30 @@ public class GameBoardFXMLController implements Initializable {
  
     private void commitMove(char currentPlayer, int row, int col){
          if (game.makeMove(row, col)) {
+            gameRecorder.recordMove(row, col, currentPlayer);
             if (currentPlayer == 'X') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.xImage));
             } else if (currentPlayer == 'O') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.oImage));
             }
+            
             if (game.isGameOver() && !game.getDidDraw()) {
                 if (currentPlayer == 'X') {
                     winner = 1;
                 } else if (currentPlayer == 'O'){
                     winner = 2;
                 }
+                if (isGameRecording) {
+                    recordGame();
+                }
                 disableBoard();
                 drawWinningLine();
                 
             } else if (game.getDidDraw()) {
                 winner = 0;
+                if (isGameRecording) {
+                    recordGame();
+                }
                 disableBoard();
                 showRematchPopup();
             }
@@ -253,7 +279,7 @@ public class GameBoardFXMLController implements Initializable {
     
     private void disableBoard() {
         for (Node node : gridPane.getChildren()) {
-            if (node instanceof ImageView) {
+            if (node instanceof Button) {
                 node.setDisable(true);
             }
         }
@@ -365,24 +391,49 @@ public class GameBoardFXMLController implements Initializable {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
                 ((ImageView) node).setImage(null);
+            }
+            else if (node instanceof Button) {
                 node.setDisable(false);
             }
         }
+        
         if (line != null) {
             boardAnchorPane.getChildren().remove(line);
             line = null;
         }
+        
         player1Score.setText(""+game.getPlayer1Score());
         player2Score.setText(""+game.getPlayer2Score());
         winner = Integer.MAX_VALUE;
-
+        if (!gameRecorder.isEmpty()) {
+            gameRecorder = null;
+            gameRecorder = new GameRecorder();
+        }
+        
+        if (isGameRecording) {
+            onClickRecordGame(new ActionEvent());
+        }
         game.resetBoard();
     }
     
     @FXML
     private void onClickRecordGame(ActionEvent event) {
+        isGameRecording = (isGameRecording == false) ? true : false;
+        if (isGameRecording) {
+            recordGameBtn.setStyle("-fx-background-color: red;");
+        } else {
+            recordGameBtn.setStyle("-fx-background-color: black;");
+        }
     }
-
+    
+    private  void recordGame(){
+        String p1Name = playerOne.getUsername();
+        String p2Name = playerTwo.getUsername();
+        
+        gameRecorder.setPlayers(p1Name, p2Name);
+      
+        gameRecorder.saveGameToFile(p1Name + "Vs" + p2Name + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)+ LocalDateTime.now().getSecond() + ".json");
+    }
     @FXML
     private void onClickExitGame(ActionEvent event) {
         try {
@@ -392,5 +443,31 @@ public class GameBoardFXMLController implements Initializable {
         }
     }
     
+    
+    private void replaySavedGame(String fileName) {
+        recordGameBtn.setDisable(true);
+        recordGameBtn.setOpacity(0);
+        disableBoard();
+
+        List<GameMove> replayedMoves = gameRecorder.replayGameFromFile(fileName);
+
+        Timeline timeline = new Timeline();
+        int[] index = {0};
+
+        for (GameMove replayedMove : replayedMoves) {
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(index[0]), event -> {
+                char player = replayedMove.getPlayer();
+                int row = replayedMove.getRow();
+                int col = replayedMove.getCol();
+
+                commitMove(player, row, col);
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            index[0]++;
+        }
+
+        timeline.play();
+    }
+
     
 }
