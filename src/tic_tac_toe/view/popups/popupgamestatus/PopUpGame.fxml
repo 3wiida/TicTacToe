@@ -18,9 +18,9 @@
             <Image url="@../../../assets/background.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblStatus" layoutX="123.0" layoutY="34.0" prefHeight="35.0" prefWidth="354.0" text="OOPS! YOU LOSE!" />
-      <Button fx:id="btnNewGame" layoutX="37.0" layoutY="316.0" mnemonicParsing="false" onAction="#newGameClicked" text="NEW GAME" />
-      <Button fx:id="btnPlayAgain" layoutX="414.0" layoutY="316.0" mnemonicParsing="false" onAction="#playAgainClicked" text="PLAY AGAIN" />
+      <Label fx:id="lblStatus" layoutX="3.0" layoutY="14.0" prefHeight="65.0" prefWidth="590.0" text="OOPS! YOU LOSE!" textAlignment="CENTER" />
+      <Button fx:id="btnClosePopup" layoutX="37.0" layoutY="316.0" mnemonicParsing="false" onAction="#closePopupBtnHandler" text="Close Popup" />
+      <Button fx:id="btnPlayAgain" layoutX="414.0" layoutY="316.0" mnemonicParsing="false" text="PLAY AGAIN" />
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="400.0" layoutX="100.0" layoutY="100.0" preserveRatio="false" />
    </children>
 </AnchorPane>
