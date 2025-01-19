@@ -7,20 +7,37 @@ package tic_tac_toe.view.gameBoard;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import sun.net.www.content.audio.x_aiff;
+import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
@@ -33,7 +50,10 @@ import static tic_tac_toe.model.GameModeEnum.MULTIPLAYER_ONLINE;
 import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.utils.ImageRoutes;
+import tic_tac_toe.view.popups.choose_login_signup.LoginOrRegisterPopupController;
+import tic_tac_toe.view.popups.popupgamestatus.PopUpGameController;
 
 /**
  * FXML Controller class
@@ -98,13 +118,17 @@ public class GameBoardFXMLController implements Initializable {
 
     private Game game;
     
+    private char currentPlayer;
     private Player playerOne;
     private Player playerTwo;
     
     private GameModeEnum gameMode;
     private ComputerMove computer;
+    @FXML
+    private AnchorPane boardAnchorPane;
     
-    
+    private int winner;
+    Line line;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -187,7 +211,7 @@ public class GameBoardFXMLController implements Initializable {
         else if (clickedButton == buttonCell22) { row = 2; col = 2; }
         
         if(isEmptyCell(row, col)){
-            char currentPlayer = game.getCurrentPlayer();
+            currentPlayer = game.getCurrentPlayer();
             commitMove(currentPlayer, row, col);
             currentPlayer = game.getCurrentPlayer();
             if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
@@ -206,21 +230,19 @@ public class GameBoardFXMLController implements Initializable {
             } else if (currentPlayer == 'O') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.oImage));
             }
-            if (game.isGameOver()) {
+            if (game.isGameOver() && !game.getDidDraw()) {
+                if (currentPlayer == 'X') {
+                    winner = 1;
+                } else if (currentPlayer == 'O'){
+                    winner = 2;
+                }
                 disableBoard();
-                enableWinningCells();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            } else if (game.getGameCounter() == 9) {
+                drawWinningLine();
+                
+            } else if (game.getDidDraw()) {
+                winner = 0;
                 disableBoard();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
+                showRematchPopup();
             }
         }
     }
@@ -237,7 +259,9 @@ public class GameBoardFXMLController implements Initializable {
         }
     }
     
-     private void enableWinningCells() {
+     private void drawWinningLine() {
+        double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+        Button currentButton;
         boolean colWinning = game.getWinningLane() == WinningLaneEnum.first_column
                 || game.getWinningLane() == WinningLaneEnum.second_column
                 || game.getWinningLane() == WinningLaneEnum.third_column;
@@ -247,46 +271,96 @@ public class GameBoardFXMLController implements Initializable {
                 || game.getWinningLane() == WinningLaneEnum.third_row;
         
         if (colWinning ) {
-            System.out.println("col winning" + game.getWinningLane().getCode());
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][game.getWinningLane().getCode()].setDisable(false);
-            }
+            System.out.println("col winning " + game.getWinningLane().getCode());
+            currentButton = buttonsArray[0][game.getWinningLane().getCode()];
+            x1 = currentButton.getLayoutX() + currentButton.getWidth()/2;
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][game.getWinningLane().getCode()];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth()/2;
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
         else if (rowWinning) {
-            System.out.println("row winning" + game.getWinningLane().getCode());
-            for (int i = 0; i < 3; i++) {
-                imageArray[game.getWinningLane().getCode()][i].setDisable(false);
-            }
+            System.out.println("row winning " + game.getWinningLane().getCode());
+            currentButton = buttonsArray[game.getWinningLane().getCode()][0];
+            x1 = currentButton.getLayoutX();
+            y1 = currentButton.getLayoutY() + currentButton.getHeight()/2;
+            currentButton = buttonsArray[game.getWinningLane().getCode()][2];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight()/2; 
         }
         else if (game.getWinningLane() == WinningLaneEnum.first_diagonal) {
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][i].setDisable(false);
-            }
+            currentButton = buttonsArray[0][0];
+            x1 = currentButton.getLayoutX();
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][2];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
         else if (game.getWinningLane() == WinningLaneEnum.second_diagonal) {
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][2-i].setDisable(false);
-            }
+            currentButton = buttonsArray[0][2];
+            x1 = currentButton.getLayoutX() + currentButton.getWidth();
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][0];
+            x2 = currentButton.getLayoutX();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
-    }
-     private void showRematchPopup() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Rematch");
-        alert.setHeaderText("Game Over");
-        alert.setContentText("Do you want to play a rematch?");
+        line = new Line(x1, y1, x1, y1);
+        line.setStroke(Color.BLACK);
+        line.setStrokeWidth(5.0);
+        line.setOpacity(0);
+        boardAnchorPane.getChildren().add(line);
         
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-        alert.show();
-        alert.setOnHidden(dialogEvent -> {
-            if (alert.getResult() == ButtonType.YES) {
-                resetGameBoard();
-            } else {
-                System.out.println("No rematch. Game ended.");
-            }
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endXProperty(), x2)),
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endYProperty(), y2)),
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.opacityProperty(), 1))
+        );
+        timeline.setOnFinished(e -> {
+            showRematchPopup();
         });
+        timeline.play();
     }
      
+    private void showRematchPopup() {
+       Platform.runLater(() -> {
+           try {
+               FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_GAME_STATUS_ROUTE));
+               Parent root = loader.load();
+               Scene scene = new Scene(root,600,400);
+               scene.setFill(Color.TRANSPARENT);
+
+               Stage  gameStatusPopup = new Stage();
+               gameStatusPopup.initModality(Modality.APPLICATION_MODAL);
+               gameStatusPopup.setScene(scene);
+               gameStatusPopup.initStyle(StageStyle.TRANSPARENT);
+
+               PopUpGameController controller = loader.getController();
+
+               controller.setPopupStage(gameStatusPopup);
+               controller.setPlayAgainBtnFunc(() -> {
+                   resetGameBoard();
+               });
+               String msg = "";
+               switch (winner){
+                   case 0:
+                       msg = "Draw, play again and fight to win"; 
+                       break;
+                   case 1:
+                       msg = "You Won, Congratulations"; 
+                       break;
+                   case 2:
+                       msg = "unfortunately you lost, Better luck next Time <3 ";
+                       break;
+               }
+               controller.setPopupStatusMsg(msg);
+               gameStatusPopup.showAndWait();
+
+           } catch (IOException ex) {
+               Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       });
+   }
+
     private void resetGameBoard() {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
@@ -294,8 +368,13 @@ public class GameBoardFXMLController implements Initializable {
                 node.setDisable(false);
             }
         }
+        if (line != null) {
+            boardAnchorPane.getChildren().remove(line);
+            line = null;
+        }
         player1Score.setText(""+game.getPlayer1Score());
         player2Score.setText(""+game.getPlayer2Score());
+        winner = Integer.MAX_VALUE;
 
         game.resetBoard();
     }

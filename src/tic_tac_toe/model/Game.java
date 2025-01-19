@@ -16,10 +16,12 @@ public class Game {
     private int player2Score;
     private int gameCounter;
     private WinningLaneEnum winningLane;
+    private boolean didDraw;
     public Game() {
         board = new char[3][3];
         currentPlayer = 'X';
         gameOver = false;
+        didDraw = false;
         gameCounter = 0;
         player1Score = 0;
         player2Score = 0;
@@ -37,7 +39,9 @@ public class Game {
     public boolean isGameOver() {
         return gameOver;
     }
-
+    public boolean getDidDraw(){
+        return didDraw;
+    }
     public int getPlayer1Score() {
         return player1Score;
     }
@@ -91,10 +95,16 @@ public class Game {
         boolean thirdPlace = board[row][2] == currentPlayer;
         if (firstPlace && secondPlace && thirdPlace){
             switch (row) {
-                case 0 : winningLane = WinningLaneEnum.first_row;
-                case 1 : winningLane = WinningLaneEnum.second_row;
-                case 2 : winningLane = WinningLaneEnum.third_row;
-            }
+                case 0 : 
+                    winningLane = WinningLaneEnum.first_row;
+                    break;
+                case 1 : 
+                    winningLane = WinningLaneEnum.second_row;
+                    break;
+                case 2 : 
+                    winningLane = WinningLaneEnum.third_row;
+                    break;
+            }   
         }
         return firstPlace && secondPlace && thirdPlace;
     }
@@ -105,9 +115,15 @@ public class Game {
         boolean thirdPlace = board[2][col] == currentPlayer;
         if (firstPlace && secondPlace && thirdPlace){
             switch (col) {
-                case 0 : winningLane = WinningLaneEnum.first_column;
-                case 1 : winningLane = WinningLaneEnum.second_column;
-                case 2 : winningLane = WinningLaneEnum.third_column;
+                case 0 : 
+                    winningLane = WinningLaneEnum.first_column;
+                    break;
+                case 1 : 
+                    winningLane = WinningLaneEnum.second_column;
+                    break;
+                case 2 : 
+                    winningLane = WinningLaneEnum.third_column;
+                    break;
             }
         }
         return firstPlace && secondPlace && thirdPlace;
@@ -135,7 +151,11 @@ public class Game {
     }
     
     private boolean isDraw() {
-        return gameCounter == 9 && !gameOver;
+        if (gameCounter == 9 && !gameOver){
+            didDraw = true;
+            return true;
+        }
+        return false;
     }
     
     public void resetBoard() {
@@ -146,6 +166,7 @@ public class Game {
         }
         currentPlayer = 'X';
         gameOver = false;
+        didDraw = false;
         gameCounter = 0;
     }
       
