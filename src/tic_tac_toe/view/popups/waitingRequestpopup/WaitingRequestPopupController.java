@@ -25,7 +25,7 @@ public class WaitingRequestPopupController implements Initializable {
     @FXML
     private Label waitinglbl;
     @FXML
-    private Button cancelBtn;
+    public Button cancelBtn;
 
     /**
      * Initializes the controller class.
@@ -33,7 +33,6 @@ public class WaitingRequestPopupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cancelBtn.setOnAction(event -> {
-          
             Stage stage = (Stage) cancelBtn.getScene().getWindow();
             stage.close();
         });
