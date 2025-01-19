@@ -49,7 +49,7 @@ public class RecordsController implements Initializable {
         @FXML
     private void photoClicked(MouseEvent event) {
         try {
-            Navigator.navigateToLandingScreen(event);
+            Navigator.navigateToProfileScreen(event);
         } catch (IOException ex) {
             Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -25,11 +25,16 @@ import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
 public class Navigator {
 
     public static void navigateToLandingScreen(Event event) throws IOException {
-        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
-        Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        if (event.getSource() instanceof Node) {
+            Node sourceNode = (Node) event.getSource();
+            Stage stage = (Stage) sourceNode.getScene().getWindow();
+            Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }else{
+            System.out.println("Can't navigate to landing screen");
+        }
     }
 
     public static void navigateToLoginScreen(Event event) throws IOException {
@@ -112,7 +117,7 @@ public class Navigator {
         stage.show();
     }
 
-    public static void navigateToOnlineScreen(ActionEvent event) throws IOException {
+    public static void navigateToOnlineScreen(Event event) throws IOException {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
         Parent root = Loader.load();
         Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
@@ -160,7 +165,14 @@ public class Navigator {
     }
 
 
-
+    public static void navigateToProfileScreen(Event event) throws IOException{
+        FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.PROFILE_SCREEN_ROUTE));
+        Parent root = Loader.load();
+        Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
     
 
 }

@@ -24,6 +24,8 @@ public class ScreensRoutes {
     public static final String OFFLINE_SCREEN_ROUTE = "/tic_tac_toe/view/offline/offline_main/OfflineScreen.fxml";
     public static final String MODE_SELECTION_SCREEN = "/tic_tac_toe/view/offline/offline_with_computer/ModeSelectionScreen.fxml";
     
+    /* Profile Screen */
+    public static final String PROFILE_SCREEN_ROUTE = "/tic_tac_toe/view/profile/ProfileScreen.fxml";
     
     /* Popup Screens */
     public static final String MULTIPLAYER_NAMES_POPUP_ROUTE = "/tic_tac_toe/view/popups/multiplayer_names_popup/MultiplayerNamesPopup.fxml";
