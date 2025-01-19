@@ -3,18 +3,16 @@ package tic_tac_toe.view.availableUsers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.navigation.Navigator;
-import tic_tac_toe.navigation.ScreensRoutes;
 
 /**
  * FXML Controller class
@@ -24,11 +22,12 @@ import tic_tac_toe.navigation.ScreensRoutes;
 public class User_itemController implements Initializable {
 
     @FXML
-    private Label userNameLabel;
-    @FXML
-    private Button inviteUserButton;
+    public Label userNameLabel;
     @FXML
     private HBox hbox;
+    @FXML
+    public Button inviteBtn;
+    
 
     /**
      * Initializes the controller class.
@@ -41,15 +40,13 @@ public class User_itemController implements Initializable {
     public void setUserName(String userName) {
         userNameLabel.setText(userName);
     }
+    
 
-    public void setInviteButtonAction(Runnable action) {
-        inviteUserButton.setOnAction(event -> {
-            try {
-                Navigator.navigateToWaitingPopup(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    @FXML
+    private void onInviteClicked(ActionEvent event) {
+        
     }
-
+    
+    
+    
 }

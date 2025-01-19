@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tic_tac_toe.model.GameModeEnum;
+import tic_tac_toe.model.Player;
 import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
 
 /**
@@ -88,6 +89,21 @@ public class Navigator {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
+    
+    public static void naviagteToGameBoardScreen(
+            Node node, 
+            GameModeEnum gameMode, 
+            Player opponent,
+            boolean isHosting
+    ) throws IOException{
+        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
+        Parent root = loader.load();
+        GameBoardFXMLController controller = loader.getController();
+        controller.setOnlineParameters(opponent, isHosting);
+        controller.setGameMode(gameMode);
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
    
     public static void navigateToOfflineScreen(Event event) throws IOException{
 
@@ -98,7 +114,7 @@ public class Navigator {
         stage.show();
     }
 
-    public static void navigateToWaitingPopup(Event event) throws IOException {
+    public static Stage navigateToWaitingPopup(Event event) throws IOException {
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.WAITING_POPUP_ROUTE));
         Scene scene = new Scene(root);
         Stage popupStage = new Stage();
@@ -106,6 +122,7 @@ public class Navigator {
         popupStage.initStyle(StageStyle.UNDECORATED);
         popupStage.setScene(scene);
         popupStage.show();
+        return popupStage;
     }
 
 

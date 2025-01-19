@@ -10,6 +10,7 @@ package tic_tac_toe.model;
  * @author 3wiida
  */
 public class Player {
+    private String id;
     private String username;
     private int score;
     private StatusEnum status;
@@ -20,12 +21,33 @@ public class Player {
         this.username = username;
     }
 
+    public Player(String id, String username, int score, StatusEnum status) {
+        this.id = id;
+        this.username = username;
+        this.score = score;
+        this.status = status;
+    }
+
+    public Player(String id, String username, int score) {
+        this.id = id;
+        this.username = username;
+        this.score = score;
+    }
+
     public Player(String username, int score, StatusEnum status) {
         this.username = username;
         this.score = score;
         this.status = status;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
     public String getUsername() {
         return username;
     }

@@ -103,7 +103,8 @@ public class RegisterScreenController implements Initializable {
                     ()->{
                         if(isOk){
                             String username = registerResponse.getString("username");
-                            CurrentPlayer.initPlayer(username, 0, StatusEnum.AVAILABLE);
+                            String id = registerResponse.getString("id");
+                            CurrentPlayer.initPlayer(id,username, 0, StatusEnum.AVAILABLE);
                             navigateToOnlineScreen(event);
                         }else{
                             String error = registerResponse.getString("error");

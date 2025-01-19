@@ -136,6 +136,10 @@ public class GameBoardFXMLController implements Initializable {
     
     private String fileName;
     
+    /* online parameters */
+    private boolean isHosting;
+    private Player opponent;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         game = new Game();
@@ -151,9 +155,14 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
-        
-        
+
     }    
+    
+    public void setOnlineParameters(Player opponent, boolean isHosting){
+        this.opponent = opponent;
+        this.isHosting = isHosting;
+        this.gameMode = MULTIPLAYER_ONLINE;
+    }
     
     public void setGameMode(GameModeEnum mode){
         gameMode = mode;

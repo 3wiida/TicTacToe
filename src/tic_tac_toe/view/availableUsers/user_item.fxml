@@ -15,7 +15,7 @@
             <Insets right="450.0" top="6.0" />
          </padding>
       </Label>
-      <Button fx:id="inviteUserButton" layoutX="1.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="104.0" text="Invite">
+      <Button id="inviteUserButton" fx:id="inviteBtn" layoutX="1.0" mnemonicParsing="false" onAction="#onInviteClicked" prefHeight="39.0" prefWidth="104.0" text="Invite">
          <HBox.margin>
             <Insets top="-4.0" />
          </HBox.margin>

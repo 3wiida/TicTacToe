@@ -15,9 +15,9 @@ import tic_tac_toe.model.StatusEnum;
 public class CurrentPlayer {
     private static Player player;
     
-    public static void initPlayer(String username, int score, StatusEnum status){
+    public static void initPlayer(String id, String username, int score, StatusEnum status){
         if(player == null){
-            player = new Player(username,score,status);
+            player = new Player(id, username,score,status);
         }
     }
     
