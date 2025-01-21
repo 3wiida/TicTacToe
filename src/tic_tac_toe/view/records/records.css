@@ -16,6 +16,7 @@
 #RecordsListView{
     
     -fx-background-color: #F88480; 
+    -fx-control-inner-background: transparent;
     -fx-background-radius: 15;    
     -fx-border-radius: 15;        
     -fx-border-color: transparent; 

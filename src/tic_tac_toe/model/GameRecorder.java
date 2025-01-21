@@ -39,6 +39,14 @@ public class GameRecorder {
         this.playerTwoName = playerTwoName;
     }
 
+    public String getPlayerOneName() {
+        return playerOneName;
+    }
+
+    public String getPlayerTwoName() {
+        return playerTwoName;
+    }
+
     public void recordMove(int row, int col, char player) {
         recordedMoves.add(new GameMove(row, col, player));
     }
@@ -71,10 +79,11 @@ public class GameRecorder {
             e.printStackTrace();
         }
     }
-
     public List<GameMove> replayGameFromFile(String fileName) {
         List<GameMove> replayedMoves = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        File file = new File("records/" + fileName);
+            System.out.println("records/" + fileName);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             StringBuilder jsonContent = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -82,13 +91,18 @@ public class GameRecorder {
             }
 
             JSONObject gameData = new JSONObject(jsonContent.toString());
+            playerOneName = gameData.getString("playerOneName");
+            playerTwoName = gameData.getString("playerTwoName");
+            
             JSONArray movesArray = gameData.getJSONArray("moves");
 
             for (int i = 0; i < movesArray.length(); i++) {
                 JSONObject moveObject = movesArray.getJSONObject(i);
                 int row = moveObject.getInt("row");
                 int col = moveObject.getInt("col");
-                char player = moveObject.getString("player").charAt(0);
+                int playerInt = moveObject.getInt("player");
+                char player = (char) playerInt;
+//                char player = moveObject.getString("player").charAt(0);
                 replayedMoves.add(new GameMove(row, col, player));
             }
         } catch (IOException e) {
