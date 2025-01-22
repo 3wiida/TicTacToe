@@ -10,8 +10,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.navigation.ScreensRoutes;
 
 /**
@@ -24,13 +26,24 @@ public class Tic_tac_toe extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root,860,600);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
         
         primaryStage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        if(CurrentPlayer.getPlayer() != null){
+            JSONObject logutRequest = new JSONObject();
+            logutRequest.put("type", "logout");
+            ClientSocket.sendRequest(logutRequest);
+        } 
+    }
+    
+    
 
     /**
      * @param args the command line arguments

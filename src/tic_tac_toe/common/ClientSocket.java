@@ -29,13 +29,21 @@ public class ClientSocket {
                 clientSocket = new Socket(ip,5005);
                 dis = new DataInputStream(clientSocket.getInputStream());
                 ps = new PrintStream(clientSocket.getOutputStream());
+                System.out.println("conection success");
                 return true;
             } catch (IOException ex) {
-                Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Can't connect to the server");
                 return false;
             }
         }
         return true;
+    }
+    
+    public static boolean isServerConnected(){
+        if(clientSocket != null){
+            return clientSocket.isConnected();
+        }
+        return false;
     }
     
     public static void sendRequest(JSONObject msg){

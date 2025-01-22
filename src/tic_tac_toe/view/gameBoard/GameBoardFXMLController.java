@@ -434,8 +434,16 @@ public class GameBoardFXMLController implements Initializable {
     }
     
     private  void recordGame(){
-        String p1Name = playerOne.getUsername();
-        String p2Name = playerTwo.getUsername();
+        String p1Name;
+        String p2Name;
+        if(gameMode==COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+            p1Name = "You";
+            p2Name = "PC";
+        }else{
+            p2Name = playerTwo.getUsername();
+            p1Name = playerOne.getUsername();
+        }
+        
         
         gameRecorder.setPlayers(p1Name, p2Name);
       
