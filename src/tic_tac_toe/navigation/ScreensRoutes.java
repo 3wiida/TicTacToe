@@ -42,6 +42,7 @@ public class ScreensRoutes {
     public static final String INVTATION_POPUP_ROUTE = "/tic_tac_toe/view/popups/invitationpopup/InvitationPopup.fxml";
     public static final String SERVER_CONNECTION_POPUP_ROUTE = "/tic_tac_toe/view/popups/serverConnectionpopup/ServerConnectionPopup.fxml";
 
+    public static final String SERVER_SHUTDOWN_POPUP_ROUTE = "/tic_tac_toe/view/popups/serverShutDownpopup/ServerShutDownpopup.fxml";
 
 
 

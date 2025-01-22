@@ -201,5 +201,16 @@ public class Navigator {
         stage.show();
     }
     
+      public static Stage navigateToServerShutdownScreen() throws IOException {
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.SERVER_SHUTDOWN_POPUP_ROUTE));
+        Scene scene = new Scene(root);
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.setScene(scene);
+        popupStage.show();
+        return popupStage;
+    }
+    
 
 }
