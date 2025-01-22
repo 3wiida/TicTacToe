@@ -28,7 +28,7 @@ public class Tic_tac_toe extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
-        
+
         primaryStage.show();
     }
 
