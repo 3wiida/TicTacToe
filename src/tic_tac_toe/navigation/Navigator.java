@@ -75,6 +75,16 @@ public class Navigator {
         stage.setScene(new Scene(root));
     }
     
+     public static void naviagteToGameBoardScreen(ActionEvent event, GameModeEnum gameMode, String recordName) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
+        Parent root = loader.load();
+        GameBoardFXMLController controller = loader.getController();
+        controller.setFileNameForGameReplay(recordName);
+        controller.setGameMode(gameMode);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
+     
     public static void naviagteToGameBoardScreen(
             ActionEvent event, 
             GameModeEnum gameMode, 

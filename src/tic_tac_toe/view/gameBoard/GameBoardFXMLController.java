@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -112,27 +111,25 @@ public class GameBoardFXMLController implements Initializable {
     private Label player1Score;
     @FXML
     private Label player2Score;
-
+    @FXML
+    private AnchorPane boardAnchorPane;
+    @FXML
+    private Button recordGameBtn;
+    
     private Button[][] buttonsArray;
     private ImageView[][] imageArray;
 
     private Game game;
-    
     private char currentPlayer;
     private Player playerOne;
     private Player playerTwo;
-    
     private GameModeEnum gameMode;
     private ComputerMove computer;
-    @FXML
-    private AnchorPane boardAnchorPane;
-    
     private int winner;
     private Line line;
     private GameRecorder gameRecorder = new GameRecorder();
     private boolean isGameRecording = false;
-    @FXML
-    private Button recordGameBtn;
+    
     
     private String fileName;
     
@@ -181,7 +178,7 @@ public class GameBoardFXMLController implements Initializable {
                     setupBoardForOnlieMultiplayerGame();
                     break;
                 case REPLAY_GAME:
-                    setupBoardForReplayGame();
+                    replaySavedGame();
                     break;
                 default:
                     break;
@@ -194,11 +191,6 @@ public class GameBoardFXMLController implements Initializable {
         playerTwoTV.setText(playerTwo.getUsername());
     }  
     
-    private void setupBoardForReplayGame(){
-        playerOneTV.setText(playerOne.getUsername());
-        playerTwoTV.setText(playerTwo.getUsername());
-        replaySavedGame(fileName);
-    }
     
     private void setupBoardForComputerGame(){
         playerOneTV.setText("You");
@@ -252,7 +244,9 @@ public class GameBoardFXMLController implements Initializable {
  
     private void commitMove(char currentPlayer, int row, int col){
          if (game.makeMove(row, col)) {
-            gameRecorder.recordMove(row, col, currentPlayer);
+            if (gameMode != GameModeEnum.REPLAY_GAME) {
+                gameRecorder.recordMove(row, col, currentPlayer);
+            }
             if (currentPlayer == 'X') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.xImage));
             } else if (currentPlayer == 'O') {
@@ -277,7 +271,9 @@ public class GameBoardFXMLController implements Initializable {
                     recordGame();
                 }
                 disableBoard();
-                showRematchPopup();
+                if (gameMode != GameModeEnum.REPLAY_GAME) {
+                    showRematchPopup();
+                }
             }
         }
     }
@@ -351,7 +347,9 @@ public class GameBoardFXMLController implements Initializable {
             new KeyFrame(Duration.seconds(0.5), new KeyValue(line.opacityProperty(), 1))
         );
         timeline.setOnFinished(e -> {
-            showRematchPopup();
+            if (gameMode != GameModeEnum.REPLAY_GAME) {
+                showRematchPopup();
+            }
         });
         timeline.play();
     }
@@ -453,13 +451,17 @@ public class GameBoardFXMLController implements Initializable {
     }
     
     
-    private void replaySavedGame(String fileName) {
+    private void replaySavedGame() {
+       
         recordGameBtn.setDisable(true);
         recordGameBtn.setOpacity(0);
         disableBoard();
-
+        
         List<GameMove> replayedMoves = gameRecorder.replayGameFromFile(fileName);
-
+        setPlayersNames(gameRecorder.getPlayerOneName(), gameRecorder.getPlayerTwoName());
+        playerOneTV.setText(playerOne.getUsername());
+        playerTwoTV.setText(playerTwo.getUsername());
+        
         Timeline timeline = new Timeline();
         int[] index = {0};
 
@@ -474,9 +476,6 @@ public class GameBoardFXMLController implements Initializable {
             timeline.getKeyFrames().add(keyFrame);
             index[0]++;
         }
-
         timeline.play();
     }
-
-    
 }
