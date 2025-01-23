@@ -156,6 +156,7 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell20, buttonCell21, buttonCell22}
         };
         if(gameMode == MULTIPLAYER_ONLINE){
+            System.out.println("game mode is online");
             recieveMessagesFromServer();
         } 
 
@@ -181,6 +182,7 @@ public class GameBoardFXMLController implements Initializable {
                     setupBoardForOfflineMultiplayerGame();
                     break;
                 case MULTIPLAYER_ONLINE:
+                    recieveMessagesFromServer();
                     setupBoardForOnlieMultiplayerGame();
                     break;
                 case REPLAY_GAME:
@@ -219,42 +221,45 @@ public class GameBoardFXMLController implements Initializable {
     
     @FXML
     private void handleCellClick(ActionEvent event) {
+        if(gameMode == MULTIPLAYER_ONLINE && isHosting){
+            
         
-        Button clickedButton = (Button) event.getSource();
+            Button clickedButton = (Button) event.getSource();
 
-        int row = -1;
-        int col = -1;
+            int row = -1;
+            int col = -1;
 
-        if (clickedButton == buttonCell00) { row = 0; col = 0; }
-        else if (clickedButton == buttonCell01) { row = 0; col = 1; }
-        else if (clickedButton == buttonCell02) { row = 0; col = 2; }
-        else if (clickedButton == buttonCell10) { row = 1; col = 0; }
-        else if (clickedButton == buttonCell11) { row = 1; col = 1; }
-        else if (clickedButton == buttonCell12) { row = 1; col = 2; }
-        else if (clickedButton == buttonCell20) { row = 2; col = 0; }
-        else if (clickedButton == buttonCell21) { row = 2; col = 1; }
-        else if (clickedButton == buttonCell22) { row = 2; col = 2; }
-        
-        if(isEmptyCell(row, col)){
-            if(gameMode == MULTIPLAYER_ONLINE){
-                /* Update the board state */
+            if (clickedButton == buttonCell00) { row = 0; col = 0; }
+            else if (clickedButton == buttonCell01) { row = 0; col = 1; }
+            else if (clickedButton == buttonCell02) { row = 0; col = 2; }
+            else if (clickedButton == buttonCell10) { row = 1; col = 0; }
+            else if (clickedButton == buttonCell11) { row = 1; col = 1; }
+            else if (clickedButton == buttonCell12) { row = 1; col = 2; }
+            else if (clickedButton == buttonCell20) { row = 2; col = 0; }
+            else if (clickedButton == buttonCell21) { row = 2; col = 1; }
+            else if (clickedButton == buttonCell22) { row = 2; col = 2; }
+
+            if(isEmptyCell(row, col)){
+                if(gameMode == MULTIPLAYER_ONLINE){
+                    /* Update the board state */
+                        currentPlayer = game.getCurrentPlayer();
+                        commitMove(currentPlayer, row, col);
+                        /* Send move to the opponent */
+                        sendMoveOverNetwork(currentPlayer+"", row, col);
+                        isHosting = !isHosting;
+                }else{
                     currentPlayer = game.getCurrentPlayer();
                     commitMove(currentPlayer, row, col);
-                    /* Send move to the opponent */
-                    sendMoveOverNetwork(currentPlayer, row, col);
-                    isHosting = !isHosting;
-            }else{
-                currentPlayer = game.getCurrentPlayer();
-                commitMove(currentPlayer, row, col);
-                currentPlayer = game.getCurrentPlayer();
-                if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-                    if(game.getGameCounter()<9){
-                        Pair<Integer,Integer> move = computer.move(game.getBoard());
-                        commitMove(currentPlayer, move.getKey(), move.getValue());
+                    currentPlayer = game.getCurrentPlayer();
+                    if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+                        if(game.getGameCounter()<9){
+                            Pair<Integer,Integer> move = computer.move(game.getBoard());
+                            commitMove(currentPlayer, move.getKey(), move.getValue());
+                        }
                     }
                 }
+
             }
-            
         }
     }
  
@@ -505,25 +510,33 @@ public class GameBoardFXMLController implements Initializable {
     
      /* Online Game Logic */
     private void recieveMessagesFromServer(){
+                System.out.println("enter recieve function");
                 new Thread(() -> {
                     if(!ClientSocket.checkSocketStat()){
-                        try {
-                            JSONObject recievedMSG = ClientSocket.responses.take();
-                            if(recievedMSG!=null){
-                                int row = recievedMSG.getInt("row");
-                                int col = recievedMSG.getInt("col");
-                                char turn = recievedMSG.getString("turn").charAt(0);
-                                // Button button = getButtonByPosition(row, col);
-                                Platform.runLater(()->{
-                                    commitMove(turn, row, col);
-                                });
-                                isHosting = !isHosting;
-                            }else{
-                                System.out.println("faild msg");
+                        System.out.println("server is connected");
+                        while(true){
+                            try {
+                                JSONObject recievedMSG = ClientSocket.responses.take();
+                                System.out.println("recieve msg move => "+recievedMSG);
+                                if(recievedMSG!=null){
+                                    int row = recievedMSG.getInt("row");
+                                    int col = recievedMSG.getInt("col");
+
+                                    char turn = recievedMSG.getString("turn").charAt(0);
+                                    System.out.println("move => " + row + " " + col + " " + turn);
+                                    // Button button = getButtonByPosition(row, col);
+                                    Platform.runLater(()->{
+                                        commitMove(turn, row, col);
+                                    });
+                                    isHosting = !isHosting;
+                                }else{
+                                    System.out.println("faild msg");
+                                }
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        
                     }else{
                         System.out.println("may be connection faild");
                     }
@@ -535,7 +548,7 @@ public class GameBoardFXMLController implements Initializable {
         playerTwoTV.setText(opponent.getUsername());
     }
     
-    private void sendMoveOverNetwork(char currentPlayer,int row,int col){
+    private void sendMoveOverNetwork(String currentPlayer,int row,int col){
         if(!ClientSocket.checkSocketStat()){
             /* prepare JSON object */
             JSONObject moveJSON = new JSONObject();
@@ -543,7 +556,7 @@ public class GameBoardFXMLController implements Initializable {
             moveJSON.put("turn", currentPlayer);
             moveJSON.put("row", row);
             moveJSON.put("col", col);
-            moveJSON.put("from", CurrentPlayer.getPlayer());
+            moveJSON.put("from", CurrentPlayer.getPlayer().getUsername());
             moveJSON.put("to", opponent.getUsername());
             /* Send it */
             ClientSocket.sendRequest(moveJSON);

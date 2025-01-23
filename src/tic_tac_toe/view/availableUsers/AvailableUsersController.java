@@ -189,6 +189,13 @@ private void photoClicked(MouseEvent event) {
         Player opponentPlayer = new Player(opponentId, opponentUsername, opponentScore);
         Platform.runLater(
             ()->{
+                JSONObject closeThread = new JSONObject();
+                    closeThread.put("type", "closeThread");
+                    try {
+                        ClientSocket.responses.put(closeThread);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AvailableUsersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 navigateToGameBoard(reloadBtn,opponentPlayer,true); 
                 waitingPopup.close();
             }
