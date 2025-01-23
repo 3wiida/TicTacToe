@@ -36,6 +36,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.json.JSONException;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.common.CurrentPlayer;
@@ -55,6 +56,7 @@ import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.utils.ImageRoutes;
+import tic_tac_toe.view.availableUsers.AvailableUsersController;
 import tic_tac_toe.view.popups.popupgamestatus.PopUpGameController;
 
 /**
@@ -473,10 +475,32 @@ public class GameBoardFXMLController implements Initializable {
     @FXML
     private void onClickExitGame(ActionEvent event) {
         try {
-            Navigator.navigateToLandingScreen(event);
+            if(gameMode == MULTIPLAYER_ONLINE){
+                JSONObject closeThread = new JSONObject();
+                closeThread.put("type", "closeThread");
+                try {
+                    ClientSocket.responses.put(closeThread);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                sendWithdrawalRequest();
+            }
+            
+            if(CurrentPlayer.getPlayer() == null){
+                Navigator.navigateToLandingScreen(event);
+            }else{
+                Navigator.navigateToOnlineScreen(event); 
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    private void sendWithdrawalRequest(){
+        JSONObject withdrawalRequest = new JSONObject();
+        withdrawalRequest.put("type", "withdrawal");
+        withdrawalRequest.put("to", opponent.getUsername());
+        ClientSocket.sendRequest(withdrawalRequest);
     }
     
     
@@ -517,23 +541,34 @@ public class GameBoardFXMLController implements Initializable {
                         while(true){
                             try {
                                 JSONObject recievedMSG = ClientSocket.responses.take();
-                                System.out.println("recieve msg move => "+recievedMSG);
-                                if(recievedMSG!=null){
-                                    int row = recievedMSG.getInt("row");
-                                    int col = recievedMSG.getInt("col");
-
-                                    char turn = recievedMSG.getString("turn").charAt(0);
-                                    System.out.println("move => " + row + " " + col + " " + turn);
-                                    // Button button = getButtonByPosition(row, col);
-                                    Platform.runLater(()->{
-                                        commitMove(turn, row, col);
-                                    });
-                                    isHosting = !isHosting;
-                                }else{
-                                    System.out.println("faild msg");
+                                if (recievedMSG == null) {
+                                    break;
+                                }
+                                String responseType = recievedMSG.getString("type");
+                                switch (responseType) {
+                                    case "closeThread":
+                                        Thread.currentThread().interrupt();
+                                        break;
+                                        
+                                    case "withdrawal":{
+                                        System.out.println("recieved withdrawl form the opponent");
+                                        showRematchPopup();
+                                    }
+                                    
+                                    default:
+                                        int row = recievedMSG.getInt("row");
+                                        int col = recievedMSG.getInt("col");
+                                        char turn = recievedMSG.getString("turn").charAt(0);
+                                        Platform.runLater(()->{
+                                            commitMove(turn, row, col);
+                                        });
+                                        isHosting = !isHosting;
+                                        break;
                                 }
                             } catch (InterruptedException ex) {
-                                Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                                break;
+                            } catch (JSONException ex){
+                                break;
                             }
                         }
                         

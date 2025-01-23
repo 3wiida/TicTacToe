@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
@@ -30,8 +32,14 @@ public class Tic_tac_toe extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
-
+        String sound = "/tic_tac_toe/assets/Track 01.mp3"; 
+        Media media = new Media(getClass().getResource(sound).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); 
+        mediaPlayer.setAutoPlay(true);
         primaryStage.show();
+        
+        
     }
 
     @Override

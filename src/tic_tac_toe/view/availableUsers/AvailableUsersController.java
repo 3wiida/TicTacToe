@@ -128,7 +128,6 @@ private void photoClicked(MouseEvent event) {
                         break;
                     }catch (JSONException ex){
                         break;
-                        
                     }
                 }
             }
@@ -189,7 +188,7 @@ private void photoClicked(MouseEvent event) {
         Player opponentPlayer = new Player(opponentId, opponentUsername, opponentScore);
         Platform.runLater(
             ()->{
-                JSONObject closeThread = new JSONObject();
+                    JSONObject closeThread = new JSONObject();
                     closeThread.put("type", "closeThread");
                     try {
                         ClientSocket.responses.put(closeThread);

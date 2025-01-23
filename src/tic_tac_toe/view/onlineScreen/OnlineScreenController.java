@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import tic_tac_toe.navigation.Navigator;
 
 /**
@@ -33,12 +34,7 @@ public class OnlineScreenController implements Initializable {
     private Button btnExit;
     @FXML
     private Label lblLanding;
-    @FXML
     private Label profileName;
-    @FXML
-    private Button profile;
-    @FXML
-    private Button logout;
 
     /**
      * Initializes the controller class.
@@ -74,7 +70,6 @@ public class OnlineScreenController implements Initializable {
         
     }
 
-    @FXML
     private void onProfileClicked(ActionEvent event) {
         try {
             Navigator.navigateToProfileScreen(event);
@@ -83,7 +78,6 @@ public class OnlineScreenController implements Initializable {
         }
     }
 
-    @FXML
     private void onLogoutClicked(ActionEvent event) {
         try {
             /* Send request to server and based on respone will logout and return to offline screen */
@@ -96,6 +90,15 @@ public class OnlineScreenController implements Initializable {
     
     public void setProfileName(String userName){
         profileName.setText(userName);
+    }
+
+    @FXML
+    private void OnProfilePhotoClicked(MouseEvent event) {
+         try {
+            Navigator.navigateToProfileScreen(event);
+        } catch (IOException ex) {
+            Logger.getLogger(OnlineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
