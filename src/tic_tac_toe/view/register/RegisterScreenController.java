@@ -97,21 +97,25 @@ public class RegisterScreenController implements Initializable {
     private void handleRegisterResponse(ActionEvent event){
         new Thread(
             ()->{
-                JSONObject registerResponse = ClientSocket.recieveResponse();
-                boolean isOk = registerResponse.getBoolean("isOk");
-                Platform.runLater(
-                    ()->{
-                        if(isOk){
-                            String username = registerResponse.getString("username");
-                            String id = registerResponse.getString("id");
-                            CurrentPlayer.initPlayer(id,username, 0, StatusEnum.AVAILABLE);
-                            navigateToOnlineScreen(event);
-                        }else{
-                            String error = registerResponse.getString("error");
-                            showErrorAlert(error);
-                        }
-                    }
-                );
+                try {
+                    JSONObject registerResponse = ClientSocket.responses.take();
+                    boolean isOk = registerResponse.getBoolean("isOk");
+                    Platform.runLater(
+                            ()->{
+                                if(isOk){
+                                    String username = registerResponse.getString("username");
+                                    String id = registerResponse.getString("id");
+                                    CurrentPlayer.initPlayer(id,username, 0, StatusEnum.AVAILABLE);
+                                    navigateToOnlineScreen(event);
+                                }else{
+                                    String error = registerResponse.getString("error");
+                                    showErrorAlert(error);
+                                }
+                            }
+                    );
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(RegisterScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         ).start();
     }

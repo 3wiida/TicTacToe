@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
@@ -73,24 +72,29 @@ public class ProfileScreenController implements Initializable {
     private void handleLogoutResponse(ActionEvent event){
         new Thread(
             ()->{
-                JSONObject logoutResponse = ClientSocket.recieveResponse();
-                boolean isOk = logoutResponse.getBoolean("isOk");
-                Platform.runLater(
-                    ()->{
-                        if(isOk){
-                            navigateToLandingScreen(event);
-                        }else{
-                            showErrorAlert();
-                        }
-                    }
-                );
-                
+                try {
+                    JSONObject logoutResponse = ClientSocket.responses.take();
+                    boolean isOk = logoutResponse.getBoolean("isOk");
+                    Platform.runLater(
+                            ()->{
+                                if(isOk){
+                                    CurrentPlayer.clear();
+                                    navigateToLandingScreen(event);
+                                }else{
+                                    showErrorAlert();
+                                }
+                            }
+                    );
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ProfileScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                } 
             }
         ).start();
     }
     
     private void navigateToLandingScreen(ActionEvent event){
         try {
+            System.out.println("enter logout navigation");
             Navigator.navigateToLandingScreen(event);
         } catch (IOException ex) {
             Logger.getLogger(ProfileScreenController.class.getName()).log(Level.SEVERE, null, ex);

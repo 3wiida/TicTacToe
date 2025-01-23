@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.model.GameModeEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
@@ -68,7 +69,11 @@ public class OfflineScreenController implements Initializable {
     @FXML
     public void onBackClicked(Event event){
         try {
-            Navigator.navigateToLandingScreen(event);
+            if(CurrentPlayer.getPlayer() == null){
+                Navigator.navigateToLandingScreen(event);
+            }else{
+                Navigator.navigateToOnlineScreen(event);
+            }
         } catch (IOException ex) {
             Logger.getLogger(OfflineScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

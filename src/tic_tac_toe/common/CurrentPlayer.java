@@ -24,4 +24,8 @@ public class CurrentPlayer {
     public static Player getPlayer(){
         return player;
     }
+    
+    public static void clear(){
+        player = null;
+    }
 }
