@@ -507,18 +507,22 @@ public class GameBoardFXMLController implements Initializable {
     private void recieveMessagesFromServer(){
                 new Thread(() -> {
                     if(!ClientSocket.checkSocketStat()){
-                            JSONObject recievedMSG = ClientSocket.recieveResponse();
+                        try {
+                            JSONObject recievedMSG = ClientSocket.responses.take();
                             if(recievedMSG!=null){
                                 int row = recievedMSG.getInt("row");
                                 int col = recievedMSG.getInt("col");
                                 char turn = recievedMSG.getString("turn").charAt(0);
-                               // Button button = getButtonByPosition(row, col);
+                                // Button button = getButtonByPosition(row, col);
                                 Platform.runLater(()->{
                                     commitMove(turn, row, col);
                                 });
-                            isHosting = !isHosting;
-                        }else{
-                            System.out.println("faild msg");
+                                isHosting = !isHosting;
+                            }else{
+                                System.out.println("faild msg");
+                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }else{
                         System.out.println("may be connection faild");
