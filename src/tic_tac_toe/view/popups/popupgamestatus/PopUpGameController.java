@@ -56,6 +56,14 @@ public class PopUpGameController implements Initializable {
             stopVideo();
         });
     }
+    
+    public void setCloseBtnFunc(Runnable func) {
+        btnClosePopup.setOnAction(e -> {
+            func.run();
+            closePopup();
+            stopVideo();
+        });
+    }
      
     public void closePopup() {
         if (popupStage != null) {

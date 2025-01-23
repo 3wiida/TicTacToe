@@ -37,6 +37,14 @@ public class Navigator {
             System.out.println("Can't navigate to landing screen");
         }
     }
+    
+    public static void navigateToLandingScreen(Node node) throws IOException {
+            Stage stage = (Stage) node.getScene().getWindow();
+            Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+    }
 
     public static void navigateToLoginScreen(Event event) throws IOException {
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LOGIN_SCREEN));
@@ -148,6 +156,15 @@ public class Navigator {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
         Parent root = Loader.load();
         Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    public static void navigateToOnlineScreen(Node node) throws IOException {
+        FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
+        Parent root = Loader.load();
+        Stage stage = ((Stage) node.getScene().getWindow());
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

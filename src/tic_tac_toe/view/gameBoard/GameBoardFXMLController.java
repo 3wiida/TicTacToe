@@ -223,9 +223,7 @@ public class GameBoardFXMLController implements Initializable {
     
     @FXML
     private void handleCellClick(ActionEvent event) {
-        if(gameMode == MULTIPLAYER_ONLINE && isHosting){
-            
-        
+
             Button clickedButton = (Button) event.getSource();
 
             int row = -1;
@@ -243,12 +241,12 @@ public class GameBoardFXMLController implements Initializable {
 
             if(isEmptyCell(row, col)){
                 if(gameMode == MULTIPLAYER_ONLINE){
-                    /* Update the board state */
+                    if(isHosting){
                         currentPlayer = game.getCurrentPlayer();
                         commitMove(currentPlayer, row, col);
-                        /* Send move to the opponent */
                         sendMoveOverNetwork(currentPlayer+"", row, col);
-                        isHosting = !isHosting;
+                        isHosting = !isHosting;  
+                    }
                 }else{
                     currentPlayer = game.getCurrentPlayer();
                     commitMove(currentPlayer, row, col);
@@ -262,7 +260,7 @@ public class GameBoardFXMLController implements Initializable {
                 }
 
             }
-        }
+        
     }
  
     private void commitMove(char currentPlayer, int row, int col){
@@ -295,7 +293,7 @@ public class GameBoardFXMLController implements Initializable {
                 }
                 disableBoard();
                 if (gameMode != GameModeEnum.REPLAY_GAME) {
-                    showRematchPopup();
+                    showRematchPopup(boardAnchorPane);
                 }
             }
         }
@@ -371,13 +369,13 @@ public class GameBoardFXMLController implements Initializable {
         );
         timeline.setOnFinished(e -> {
             if (gameMode != GameModeEnum.REPLAY_GAME) {
-                showRematchPopup();
+                showRematchPopup(boardAnchorPane);
             }
         });
         timeline.play();
     }
      
-    private void showRematchPopup() {
+    private void showRematchPopup(Node node) {
        Platform.runLater(() -> {
            try {
                FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_GAME_STATUS_ROUTE));
@@ -395,6 +393,22 @@ public class GameBoardFXMLController implements Initializable {
                controller.setPopupStage(gameStatusPopup);
                controller.setPlayAgainBtnFunc(() -> {
                    resetGameBoard();
+               });
+               
+               controller.setCloseBtnFunc(()->{
+                   if(CurrentPlayer.getPlayer() == null){
+                       try {
+                           Navigator.navigateToLandingScreen(node);
+                       } catch (IOException ex) {
+                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }else{
+                       try {
+                           Navigator.navigateToOnlineScreen(node);
+                       } catch (IOException ex) {
+                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }
                });
                String msg = "";
                switch (winner){
@@ -552,7 +566,7 @@ public class GameBoardFXMLController implements Initializable {
                                         
                                     case "withdrawal":{
                                         System.out.println("recieved withdrawl form the opponent");
-                                        showRematchPopup();
+                                        showRematchPopup(boardAnchorPane);
                                     }
                                     
                                     default:
