@@ -9,8 +9,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import org.json.JSONObject;
 
 /**
@@ -22,6 +22,8 @@ public class ClientSocket {
     private static Socket clientSocket;
     private static DataInputStream dis;
     private static PrintStream ps;
+    public static BlockingQueue<JSONObject> responses;
+    
     
     public static boolean initConnection(String ip){
         if(clientSocket == null){
@@ -29,6 +31,7 @@ public class ClientSocket {
                 clientSocket = new Socket(ip,5005);
                 dis = new DataInputStream(clientSocket.getInputStream());
                 ps = new PrintStream(clientSocket.getOutputStream());
+                responses = new LinkedBlockingDeque<>();
                 System.out.println("conection success");
                 return true;
             } catch (IOException ex) {
@@ -47,19 +50,27 @@ public class ClientSocket {
     }
     
     public static void sendRequest(JSONObject msg){
-        System.out.println("enter send msg function  " + msg.toString());
         ps.println(msg.toString());
+        ps.flush();
     }
     
-    public static JSONObject recieveResponse(){
-        try {
-            String response = dis.readLine();
-            JSONObject responseJson = new JSONObject(response);
-            return responseJson;
-        } catch (IOException ex) {
-            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+    public static void recieveResponse(){
+        new Thread(
+            ()->{
+                 while(true){
+                    try {
+                        String response = dis.readLine();
+                        JSONObject responseJson = new JSONObject(response);
+                        responses.put(responseJson);
+                    } catch (IOException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                    } catch (InterruptedException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                    } 
+                }   
+            }
+        ).start();
+        
     }
     
     public static boolean checkSocketStat(){

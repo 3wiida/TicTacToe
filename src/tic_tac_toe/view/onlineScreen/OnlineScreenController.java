@@ -94,7 +94,7 @@ public class OnlineScreenController implements Initializable {
         }
     }
     
-       public void setProfileName(String userName){
+    public void setProfileName(String userName){
         profileName.setText(userName);
     }
 

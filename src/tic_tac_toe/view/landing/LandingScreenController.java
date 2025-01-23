@@ -20,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.model.Player;
 import tic_tac_toe.navigation.Navigator;
@@ -110,10 +111,11 @@ public class LandingScreenController {
             serverConnectionPopup.showAndWait();
             boolean isConnected = controller.isConnectionSuccess();
             if(isConnected){
+                ClientSocket.recieveResponse();
                 serverConnectionPopup.setOnCloseRequest(
                     (e)->{
                         System.out.println("enter closed");
-                        showAuthPopup(e);
+                        showAuthPopup(event);
                     }
                 );
                 

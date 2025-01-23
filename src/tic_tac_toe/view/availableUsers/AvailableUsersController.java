@@ -3,10 +3,11 @@ package tic_tac_toe.view.availableUsers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,9 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -24,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.common.CurrentPlayer;
@@ -47,6 +47,7 @@ public class AvailableUsersController implements Initializable {
     private Stage invitationPopup;
     private String currentOpponentUsername;
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         sendGetOnlineUsersRequest();
@@ -55,6 +56,7 @@ public class AvailableUsersController implements Initializable {
             sendGetOnlineUsersRequest();
         });
     }
+
 
     private void addUser(String userName) {
         try {
@@ -77,59 +79,63 @@ public class AvailableUsersController implements Initializable {
     }
 
     @FXML
-    private void photoClicked(MouseEvent event) {
+private void photoClicked(MouseEvent event) {
         try {
-            Navigator.navigateToLandingScreen(event);
+            Navigator.navigateToOnlineScreen(event);
+            JSONObject closeThread = new JSONObject();
+            closeThread.put("type", "closeThread");
+            ClientSocket.responses.put(closeThread);
         } catch (IOException ex) {
             Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AvailableUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+}
 
-    private void handleScreenResponses(){
+
+    private void handleScreenResponses() {
         new Thread(
             ()->{
-                while (true) {                    
-                    JSONObject response = ClientSocket.recieveResponse();
-                    String responseType = response.getString("type");
-                    switch(responseType){
-                        case "onlinePlayers": {
-                            updatePlayersList(response);
+                while (true) {
+                    try {
+                        JSONObject response = ClientSocket.responses.take();
+                        if (response == null) {
                             break;
                         }
+                        String responseType = response.getString("type");
+                        switch (responseType) {
+                            case "onlinePlayers":
+                                updatePlayersList(response);
+                                break;
+                            case "invitationRecieved":
+                                handleRecievedInvitation(response);
+                                break;
+                            case "invitationRejected":
+                                Platform.runLater(() -> waitingPopup.close());
+                                break;
+                            case "invitationAccecpted":
+                                handleInvitationAccepted(response);
+                                break;
+                            case "invitationCanceled":
+                                System.out.println("hey, invitation canceled");
+                                Platform.runLater(() -> invitationPopup.close());
+                                break;
+                            case "closeThread":
+                                Thread.currentThread().interrupt();
+                                break;
+                        }   
+                    } catch (InterruptedException ex) {
+                        break;
+                    }catch (JSONException ex){
+                        break;
                         
-                        case "invitationRecieved": {
-                            handleRecievedInvitation(response);
-                            break;
-                        }
-                        
-                        case "invitationRejected": {
-                            Platform.runLater(
-                                ()->{
-                                    waitingPopup.close();
-                                }
-                            );
-                            break;
-                        }
-                        
-                        case "invitationAccecpted": {
-                            handleInvitationAccepted(response);
-                            break;
-                        }
-                        
-                        case "invitationCanceled":{
-                            System.out.println("hey, invitation canceled");
-                            Platform.runLater(
-                                ()->{
-                                    invitationPopup.close();
-                                }
-                            );
-                            break;
-                        }
                     }
                 }
             }
-        ).start();
+        ).start();  
     }
+
+
     
     private void sendGetOnlineUsersRequest(){
         JSONObject request = new JSONObject();
@@ -160,6 +166,13 @@ public class AvailableUsersController implements Initializable {
                 boolean isInvitaionAccecpted = showInvitationPopup(hostUsername);
                 if(isInvitaionAccecpted){
                     sendAccecptInvitation(hostUsername);
+                    JSONObject closeThread = new JSONObject();
+                    closeThread.put("type", "closeThread");
+                    try {
+                        ClientSocket.responses.put(closeThread);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AvailableUsersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     navigateToGameBoard(reloadBtn, opponent, false);
                 }else{
                     sendRejectInvitation(hostUsername);
@@ -270,4 +283,6 @@ public class AvailableUsersController implements Initializable {
             Logger.getLogger(AvailableUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 }
