@@ -61,4 +61,8 @@ public class ClientSocket {
             return null;
         }
     }
+    
+    public static boolean checkSocketStat(){
+        return clientSocket.isClosed();
+    }
 }

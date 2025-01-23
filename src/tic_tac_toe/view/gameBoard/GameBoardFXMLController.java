@@ -36,6 +36,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
@@ -152,6 +155,9 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
+        if(gameMode == MULTIPLAYER_ONLINE){
+            recieveMessagesFromServer();
+        } 
 
     }    
     
@@ -230,15 +236,25 @@ public class GameBoardFXMLController implements Initializable {
         else if (clickedButton == buttonCell22) { row = 2; col = 2; }
         
         if(isEmptyCell(row, col)){
-            currentPlayer = game.getCurrentPlayer();
-            commitMove(currentPlayer, row, col);
-            currentPlayer = game.getCurrentPlayer();
-            if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-                if(game.getGameCounter()<9){
-                    Pair<Integer,Integer> move = computer.move(game.getBoard());
-                    commitMove(currentPlayer, move.getKey(), move.getValue());
+            if(gameMode == MULTIPLAYER_ONLINE){
+                /* Update the board state */
+                    currentPlayer = game.getCurrentPlayer();
+                    commitMove(currentPlayer, row, col);
+                    /* Send move to the opponent */
+                    sendMoveOverNetwork(currentPlayer, row, col);
+                    isHosting = !isHosting;
+            }else{
+                currentPlayer = game.getCurrentPlayer();
+                commitMove(currentPlayer, row, col);
+                currentPlayer = game.getCurrentPlayer();
+                if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+                    if(game.getGameCounter()<9){
+                        Pair<Integer,Integer> move = computer.move(game.getBoard());
+                        commitMove(currentPlayer, move.getKey(), move.getValue());
+                    }
                 }
             }
+            
         }
     }
  
@@ -485,5 +501,51 @@ public class GameBoardFXMLController implements Initializable {
             index[0]++;
         }
         timeline.play();
+    }
+    
+     /* Online Game Logic */
+    private void recieveMessagesFromServer(){
+                new Thread(() -> {
+                    if(!ClientSocket.checkSocketStat()){
+                            JSONObject recievedMSG = ClientSocket.recieveResponse();
+                            if(recievedMSG!=null){
+                                int row = recievedMSG.getInt("row");
+                                int col = recievedMSG.getInt("col");
+                                char turn = recievedMSG.getString("turn").charAt(0);
+                               // Button button = getButtonByPosition(row, col);
+                                Platform.runLater(()->{
+                                    commitMove(turn, row, col);
+                                });
+                            isHosting = !isHosting;
+                        }else{
+                            System.out.println("faild msg");
+                        }
+                    }else{
+                        System.out.println("may be connection faild");
+                    }
+                }).start();
+        }
+    
+    private void setupBoardForOnlineMultiplayerGame(){
+        playerOneTV.setText(CurrentPlayer.getPlayer().getUsername());
+        playerTwoTV.setText(opponent.getUsername());
+    }
+    
+    private void sendMoveOverNetwork(char currentPlayer,int row,int col){
+        if(!ClientSocket.checkSocketStat()){
+            /* prepare JSON object */
+            JSONObject moveJSON = new JSONObject();
+            moveJSON.put("type", "move");
+            moveJSON.put("turn", currentPlayer);
+            moveJSON.put("row", row);
+            moveJSON.put("col", col);
+            moveJSON.put("from", CurrentPlayer.getPlayer());
+            moveJSON.put("to", opponent.getUsername());
+            /* Send it */
+            ClientSocket.sendRequest(moveJSON);
+        }else{
+            /* Handle for testing */
+            System.out.println("Error in sending move, may be connection is faild");
+        }
     }
 }
