@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,29 +16,24 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="105.0" fitWidth="117.0" layoutX="729.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/logo.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="lblSignUp" layoutX="308.0" layoutY="231.0" prefHeight="70.0" prefWidth="227.0" text="SIGN UP" textAlignment="RIGHT">
+      <Label id="lblSignUp" layoutX="317.0" layoutY="210.0" prefHeight="70.0" prefWidth="227.0" text="SIGN UP" textAlignment="RIGHT">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldFullName" layoutX="271.0" layoutY="308.0" promptText="Full Name" />
-      <TextField fx:id="txtFieldUserName" layoutX="271.0" layoutY="381.0" promptText="User Name" />
-      <Button fx:id="btnSignUp" layoutX="321.0" layoutY="526.0" mnemonicParsing="false" onAction="#SignUpClicked" text="SIGN UP" />
-      <TextField fx:id="txtFieldUserPassword" layoutX="271.0" layoutY="450.0" promptText="Password" />
-      <ImageView fitHeight="217.0" fitWidth="347.0" layoutX="312.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <TextField id="usernameTF" fx:id="usernameTF" layoutX="271.0" layoutY="308.0" promptText="Username" stylesheets="@registerscreen.css" />
+      <Button id="btnSignUp" layoutX="321.0" layoutY="526.0" mnemonicParsing="false" onAction="#onSignUpClicked" text="SIGN UP" />
+      <ImageView fitHeight="193.0" fitWidth="184.0" layoutX="329.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/signUp.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="backPhoto" fitHeight="65.0" fitWidth="61.0" layoutX="14.0" layoutY="18.0" onMouseClicked="#photoClicked" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="backBtn" fitHeight="45.0" fitWidth="45.0" layoutX="32.0" layoutY="23.0" onMouseClicked="#onBackClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/ic_back.png" />
          </image>
       </ImageView>
+      <PasswordField fx:id="passwordTF" layoutX="271.0" layoutY="381.0" prefHeight="50.0" prefWidth="307.0" promptText="Password" />
+      <PasswordField fx:id="confirmPasswordTF" layoutX="272.0" layoutY="450.0" prefHeight="50.0" prefWidth="307.0" promptText="ConfirmPassword" />
    </children>
 </AnchorPane>

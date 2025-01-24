@@ -26,25 +26,22 @@ btnOffline btnSignUp  btnExit  lblLanding
     -fx-cursor: hand;
     -fx-background-color: #1A1B49;
 }
-
-#profile{
-    -fx-pref-width: 300px;
-    -fx-pref-height: 50px;
-    -fx-border-radius: 25px;
-    -fx-background-radius: 25px;
-    -fx-font-size: 25px;
-    -fx-font-weight: bold;
-    -fx-text-fill: transparent;
-    -fx-cursor: hand;
-    -fx-background-color: transparent;
+#btnSignUp{
+    -fx-background-color: #009999;
+}
+#btnExit{
+    -fx-background-color: #D02823;
 }
 
-#btnOffline:hover, #btnExit:hover, #btnSignUp:hover{
+#btnOffline:hover{
     -fx-background-color: #507a96;
 }
-
-
-
+#btnExit:hover{    
+    -fx-background-color: #941e1b;
+}
+#btnSignUp:hover{
+    -fx-background-color: #174242;
+}
 #lblLanding {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 60px;

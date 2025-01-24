@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import tic_tac_toe.model.GameModeEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.utils.ImageRoutes;
@@ -34,6 +35,10 @@ public class ModeSelectionScreenController implements Initializable {
     
     @FXML
     private Button hardBtn;
+    @FXML
+    private ImageView backBrn;
+    @FXML
+    private Text selectModeTxt;
 
     /**
      * Initializes the controller class.

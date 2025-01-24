@@ -15,14 +15,9 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="173.0" fitWidth="182.0" layoutX="664.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/logo.png" />
-         </image>
-      </ImageView>
-      <TextField fx:id="txtFieldUserName" layoutX="245.0" layoutY="370.0" promptText="Username" />
-      <Button fx:id="btnLogin" layoutX="320.0" layoutY="513.0" mnemonicParsing="false" onAction="#LoginClicked" text="LOGIN" />
-      <ImageView fitHeight="262.0" fitWidth="237.0" layoutX="291.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+      <TextField fx:id="txtFieldUserName" layoutX="269.0" layoutY="376.0" promptText="Username" />
+      <Button fx:id="btnLogin" layoutX="344.0" layoutY="522.0" mnemonicParsing="false" onAction="#LoginClicked" text="LOGIN" />
+      <ImageView fitHeight="276.0" fitWidth="297.0" layoutX="292.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/login%20(2).png" />
          </image>
@@ -32,7 +27,7 @@
             <Image url="@../../assets/ic_back.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblLogin" layoutX="325.0" layoutY="278.0" text="LOGIN" />
-      <PasswordField fx:id="txtFieldUserPassword" layoutX="245.0" layoutY="447.0" promptText="Password" />
+      <Label fx:id="lblLogin" layoutX="335.0" layoutY="294.0" text="LOGIN" />
+      <PasswordField fx:id="txtFieldUserPassword" layoutX="269.0" layoutY="447.0" promptText="Password" />
    </children>
 </AnchorPane>

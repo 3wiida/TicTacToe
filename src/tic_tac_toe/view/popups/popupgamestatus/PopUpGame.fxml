@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
 
-<AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="620.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.popups.popupgamestatus.PopUpGameController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.view.popups.popupgamestatus.PopUpGameController">
     <stylesheets>
         <URL value="@popupgame.css" />
     </stylesheets>
    <children>
-      <ImageView fitHeight="439.0" fitWidth="655.0" layoutX="-10.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
          <image>
             <Image url="@../../../assets/background.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblStatus" layoutX="127.0" layoutY="59.0" prefHeight="35.0" prefWidth="354.0" text="OOPS YOU LOSE!" />
-      <Button fx:id="btnNewGame" layoutX="35.0" layoutY="336.0" mnemonicParsing="false" onAction="#newGameClicked" text="NEW GAME" />
-      <Button fx:id="btnPlayAgain" layoutX="421.0" layoutY="336.0" mnemonicParsing="false" onAction="#playAgainClicked" text="PLAY AGAIN" />
-      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="400.0" layoutX="118.0" layoutY="116.0" />
+      <Label fx:id="lblStatus" layoutX="3.0" layoutY="14.0" prefHeight="65.0" prefWidth="590.0" text="OOPS! YOU LOSE!" textAlignment="CENTER" />
+      <Button fx:id="btnClosePopup" layoutX="37.0" layoutY="316.0" mnemonicParsing="false" onAction="#closePopupBtnHandler" text="Close Popup" />
+      <Button fx:id="btnPlayAgain" layoutX="414.0" layoutY="316.0" mnemonicParsing="false" text="PLAY AGAIN" />
+      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="400.0" layoutX="100.0" layoutY="100.0" preserveRatio="false" />
    </children>
 </AnchorPane>

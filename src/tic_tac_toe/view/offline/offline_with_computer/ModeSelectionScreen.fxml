@@ -23,7 +23,7 @@
          <children>
             <ImageView fx:id="modeAvatar" fitHeight="156.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../assets/easy_avatar.png" />
+                  <Image url="@../../../assets/images/medium_avatar.png" />
                </image>
             </ImageView>
             <Text fx:id="selectModeTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Mode" />

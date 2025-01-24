@@ -13,21 +13,19 @@
             <Image url="@../../assets/background.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="138.0" fitWidth="156.0" layoutX="682.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="138.0" fitWidth="156.0" layoutX="354.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../assets/logo.png" />
+            <Image url="@../../assets/images/logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnWithPC" layoutX="279.0" layoutY="330.0" mnemonicParsing="false" onAction="#ComputerClicked" prefHeight="54.0" prefWidth="482.0" text="WITH COMPUTER" />
-      <Button fx:id="btnOnline" layoutX="279.0" layoutY="421.0" mnemonicParsing="false" onAction="#onlineClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY ONLINE" />
+      <Button fx:id="btnWithPC" layoutX="279.0" layoutY="330.0" mnemonicParsing="false" onAction="#onOfflineClicked" prefHeight="54.0" prefWidth="482.0" text="PLAY OFFLINE" />
+      <Button fx:id="btnOnline" layoutX="279.0" layoutY="421.0" mnemonicParsing="false" onAction="#onOnlineClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY ONLINE" />
       <Button fx:id="btnExit" layoutX="279.0" layoutY="507.0" mnemonicParsing="false" onAction="#ExitClicked" prefHeight="45.0" prefWidth="230.0" text="EXIT" />
-      <Label fx:id="lblLanding" layoutX="233.0" layoutY="197.0" prefHeight="148.0" prefWidth="412.0" stylesheets="@onlinescreen.css" text="Tic Tac Toe" />
-      <Label fx:id="profileName" layoutX="72.0" layoutY="152.0" />
-      <ImageView fitHeight="138.0" fitWidth="87.0" layoutX="81.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+      <Label fx:id="lblLanding" layoutX="216.0" layoutY="172.0" prefHeight="154.0" prefWidth="539.0" stylesheets="@onlinescreen.css" text="Tic Tac Toe" />
+      <ImageView fitHeight="138.0" fitWidth="87.0" layoutX="51.0" layoutY="44.0" onMouseClicked="#OnProfilePhotoClicked" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../assets/maleAvatar.png" />
+            <Image url="@../../assets/profile%20(2).png" />
          </image>
       </ImageView>
-      <Button fx:id="profile" layoutX="10.0" layoutY="197.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="223.0" text="PROFILE" />
    </children>
 </AnchorPane>

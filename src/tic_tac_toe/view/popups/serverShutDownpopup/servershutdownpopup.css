@@ -1,0 +1,33 @@
+
+
+
+#oopsLbl , #playorexitLbl{
+    
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 27px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold; 
+    -fx-effect: dropshadow(gaussian, #225577, 10, 0.5, 2, 2);
+}
+
+
+#exitBtn{
+    -fx-background-color: #D02823;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    /*-fx-padding: 10 20;*/
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}
+#offlineBtn {
+    -fx-background-color: #1D9E78;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    /*-fx-padding: 10 20;*/
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 2, 2);
+}

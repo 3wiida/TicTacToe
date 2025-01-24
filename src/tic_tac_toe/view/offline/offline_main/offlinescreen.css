@@ -1,11 +1,12 @@
-
 .mainBtn{
-    -fx-background-color: #FCD015;
+    -fx-background-color: #1A1B49;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 5, 0.5, 2, 2);
 }
 
 #backBtn {
@@ -15,6 +16,9 @@
     -fx-font-weight: bold;
     -fx-font-family: "Poppins";
     -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 5, 0.5, 2, 2);
+
 }
 
 #offlineModeTxt{
@@ -26,29 +30,10 @@
 }
 
 .mainBtn:hover {
-    -fx-background-color: #FFE576;
+    -fx-background-color: #507a96;
 }
 
 #backBtn:hover{
     -fx-background-color: #F4AB97;
 }
 
-
-/*
-#withComputerBtn, 
-#withFriendBtn, 
-#backBtn{
-    -fx-pref-width: 300px;
-    -fx-pref-height: 50px;
-    -fx-border-radius: 25px;
-    -fx-background-radius: 25px;
-    -fx-font-size: 25px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-cursor: hand;
-    -fx-background-color: #1A1B49;
-}
-
-#withComputerBtn:hover, #withFriendBtn:hover, #backBtn:hover{
-    -fx-background-color: #507a96;
-}*/

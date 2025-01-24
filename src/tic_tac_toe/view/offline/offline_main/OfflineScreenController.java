@@ -22,6 +22,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import tic_tac_toe.common.CurrentPlayer;
+import tic_tac_toe.model.GameModeEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.view.popups.multiplayer_names_popup.MultiplayerNamesPopupController;
@@ -48,18 +50,30 @@ public class OfflineScreenController implements Initializable {
     }
     
     @FXML
-    public void onPlayWithFriendClicked(){
+    public void onPlayWithFriendClicked(ActionEvent event){
         Pair<String, String> playersNames = showNamesPopup();
         if(!playersNames.getKey().isEmpty()){
-            System.out.println(playersNames.getKey());
-            System.out.println(playersNames.getValue());
+            try {
+                Navigator.naviagteToGameBoardScreen(
+                    event,
+                    GameModeEnum.MULIPLAYER_OFFLINE,
+                    playersNames.getKey(),
+                    playersNames.getValue()
+                );
+            } catch (IOException ex) {
+                Logger.getLogger(OfflineScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     @FXML
     public void onBackClicked(Event event){
         try {
-            Navigator.navigateToLandingScreen(event);
+            if(CurrentPlayer.getPlayer() == null){
+                Navigator.navigateToLandingScreen(event);
+            }else{
+                Navigator.navigateToOnlineScreen(event);
+            }
         } catch (IOException ex) {
             Logger.getLogger(OfflineScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,6 +84,7 @@ public class OfflineScreenController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.MULTIPLAYER_NAMES_POPUP_ROUTE));
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
             MultiplayerNamesPopupController controller = loader.getController();
             Stage multiplayerNamesPopup = new Stage();
             multiplayerNamesPopup.setTitle("Enter Players Names");
@@ -77,7 +92,6 @@ public class OfflineScreenController implements Initializable {
             multiplayerNamesPopup.initStyle(StageStyle.TRANSPARENT);
             multiplayerNamesPopup.setScene(scene);
             multiplayerNamesPopup.showAndWait();
-           
             Pair<String, String> playersNames = new Pair(controller.getPlayerOneName(),controller.getPlayerTwoName());
             return playersNames;
         } catch (IOException ex) {

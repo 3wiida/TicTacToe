@@ -1,0 +1,38 @@
+.mainFxmlClass {
+
+}
+
+#scoreTV,
+#usernameTV {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+}
+
+#scoreTV {
+    -fx-font-size: 20px;
+    -fx-font-weight: normal;
+}
+
+#recordsBtn {
+    -fx-background-color: #1A1B49;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 5, 0.5, 2, 2);
+}
+
+#logoutBtn {
+    -fx-background-color: #F17D5D;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Poppins";
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 5, 0.5, 2, 2);
+}

@@ -4,33 +4,60 @@
  */
 package tic_tac_toe.view.gameBoard;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.PauseTransition;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import tic_tac_toe.controller.computergamemodecontroller.EasyComputerModeController;
-import tic_tac_toe.controller.computergamemodecontroller.HardComputerModeController;
+import org.json.JSONException;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
+import tic_tac_toe.controller.computergamemodecontroller.ComputerPlayerFactory;
 import tic_tac_toe.model.ComputerMove;
 import tic_tac_toe.model.Game;
 import tic_tac_toe.model.GameModeEnum;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_EASY;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_HARD;
 import static tic_tac_toe.model.GameModeEnum.COMPUTER_MEDIUM;
+import static tic_tac_toe.model.GameModeEnum.MULIPLAYER_OFFLINE;
+import static tic_tac_toe.model.GameModeEnum.MULTIPLAYER_ONLINE;
+import tic_tac_toe.model.GameMove;
+import tic_tac_toe.model.GameRecorder;
+import tic_tac_toe.model.Player;
 import tic_tac_toe.model.WinningLaneEnum;
+import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.utils.ImageRoutes;
+import tic_tac_toe.view.availableUsers.AvailableUsersController;
+import tic_tac_toe.view.popups.popupgamestatus.PopUpGameController;
 
 /**
  * FXML Controller class
@@ -40,11 +67,7 @@ import tic_tac_toe.utils.ImageRoutes;
 public class GameBoardFXMLController implements Initializable {
 
     @FXML
-    private ImageView player1Image;
-    @FXML
     private GridPane gridPane;
-    @FXML
-    private ImageView player2Image;
     @FXML
     private ImageView imageCell00;
     @FXML
@@ -81,45 +104,44 @@ public class GameBoardFXMLController implements Initializable {
     private Button buttonCell21;
     @FXML
     private Button buttonCell22;
-    
-    
+    @FXML
+    private ImageView player1Image;
+    @FXML
+    private ImageView player2Image;
+    @FXML
+    private Label playerOneTV;
+    @FXML
+    private Label playerTwoTV;
     @FXML
     private Label player1Score;
     @FXML
     private Label player2Score;
-
+    @FXML
+    private AnchorPane boardAnchorPane;
+    @FXML
+    private Button recordGameBtn;
+    
     private Button[][] buttonsArray;
     private ImageView[][] imageArray;
 
     private Game game;
-    
+    private char currentPlayer;
+    private Player playerOne;
+    private Player playerTwo;
     private GameModeEnum gameMode;
     private ComputerMove computer;
-    
-    public void setGameMode(GameModeEnum mode){
-        gameMode = mode;
-        switch(gameMode){
-            case COMPUTER_EASY:{
-                computer = new EasyComputerModeController();
-                break;
-            }
-            
-            case COMPUTER_HARD : {
-                computer = new HardComputerModeController();
-                break;
-            }
-            
-            default:{
-                computer = new EasyComputerModeController();
-                break;
-            }
-        }
-    }
+    private int winner;
+    private Line line;
+    private GameRecorder gameRecorder = new GameRecorder();
+    private boolean isGameRecording = false;
     
     
-    /**
-     * Initializes the controller class.
-     */
+    private String fileName;
+    
+    /* online parameters */
+    private boolean isHosting;
+    private boolean isMyTurn;
+    private Player opponent;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -136,104 +158,177 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
+        if(gameMode == MULTIPLAYER_ONLINE){
+            System.out.println("game mode is online");
+            recieveMessagesFromServer();
+        } 
+
     }    
+    
+    public void setOnlineParameters(Player opponent, boolean isHosting){
+        this.opponent = opponent;
+        this.isHosting = isHosting;
+        this.gameMode = MULTIPLAYER_ONLINE;
+        isMyTurn = isHosting;
+        currentPlayer = isHosting? 'X' : 'O';
+    }
+    
+    public void setGameMode(GameModeEnum mode){
+        gameMode = mode;
+        if(null != gameMode){
+            switch (gameMode) {
+                case COMPUTER_EASY:
+                case COMPUTER_MEDIUM:
+                case COMPUTER_HARD:
+                    computer = ComputerPlayerFactory.createCmputer(gameMode);
+                    setupBoardForComputerGame();
+                    break;
+                case MULIPLAYER_OFFLINE:
+                    setupBoardForOfflineMultiplayerGame();
+                    break;
+                case MULTIPLAYER_ONLINE:
+                    recieveMessagesFromServer();
+                    setupBoardForOnlieMultiplayerGame();
+                    break;
+                case REPLAY_GAME:
+                    replaySavedGame();
+                    break;
+                default:
+                    break;
+            }
+        }    
+    }
+    
+    private void setupBoardForOfflineMultiplayerGame(){
+        playerOneTV.setText(playerOne.getUsername());
+        playerTwoTV.setText(playerTwo.getUsername());
+    }  
+    
+    
+    private void setupBoardForComputerGame(){
+        playerOneTV.setText("You");
+        playerTwoTV.setText("PC");
+        player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
+    }
+    
+    private void setupBoardForOnlieMultiplayerGame(){
+        
+    }
+    
+    public void setPlayersNames(String playerOneName, String playerTwoName){
+        playerOne = new Player(playerOneName);
+        playerTwo = new Player(playerTwoName);
+    }
+    
+    public void setFileNameForGameReplay(String fileName){
+        this.fileName = fileName;
+    }
     
     @FXML
     private void handleCellClick(ActionEvent event) {
-        
-        Button clickedButton = (Button) event.getSource();
 
-        int row = -1;
-        int col = -1;
+            Button clickedButton = (Button) event.getSource();
 
-        if (clickedButton == buttonCell00) { row = 0; col = 0; }
-        else if (clickedButton == buttonCell01) { row = 0; col = 1; }
-        else if (clickedButton == buttonCell02) { row = 0; col = 2; }
-        else if (clickedButton == buttonCell10) { row = 1; col = 0; }
-        else if (clickedButton == buttonCell11) { row = 1; col = 1; }
-        else if (clickedButton == buttonCell12) { row = 1; col = 2; }
-        else if (clickedButton == buttonCell20) { row = 2; col = 0; }
-        else if (clickedButton == buttonCell21) { row = 2; col = 1; }
-        else if (clickedButton == buttonCell22) { row = 2; col = 2; }
+            int row = -1;
+            int col = -1;
 
-        char currentPlayer = game.getCurrentPlayer();
+            if (clickedButton == buttonCell00) { row = 0; col = 0; }
+            else if (clickedButton == buttonCell01) { row = 0; col = 1; }
+            else if (clickedButton == buttonCell02) { row = 0; col = 2; }
+            else if (clickedButton == buttonCell10) { row = 1; col = 0; }
+            else if (clickedButton == buttonCell11) { row = 1; col = 1; }
+            else if (clickedButton == buttonCell12) { row = 1; col = 2; }
+            else if (clickedButton == buttonCell20) { row = 2; col = 0; }
+            else if (clickedButton == buttonCell21) { row = 2; col = 1; }
+            else if (clickedButton == buttonCell22) { row = 2; col = 2; }
+
+            if(isEmptyCell(row, col)){
+                if(gameMode == MULTIPLAYER_ONLINE){
+                    if(isMyTurn){
+                        System.out.println(currentPlayer);
+                        //currentPlayer = game.getCurrentPlayer();
+                        commitMove(currentPlayer, row, col);
+                        sendMoveOverNetwork(currentPlayer+"", row, col);
+                        isMyTurn = !isMyTurn;  
+                    }
+                }else{
+                    currentPlayer = game.getCurrentPlayer();
+                    commitMove(currentPlayer, row, col);
+                    currentPlayer = game.getCurrentPlayer();
+                    if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+                        if(game.getGameCounter()<9){
+                            Pair<Integer,Integer> move = computer.move(game.getBoard());
+                            commitMove(currentPlayer, move.getKey(), move.getValue());
+                        }
+                    }
+                }
+
+            }
         
-        
-        if (game.makeMove(row, col)) {
+    }
+ 
+    private void commitMove(char currentPlayer, int row, int col){
+         if (game.makeMove(row, col)) {
+            if (gameMode != GameModeEnum.REPLAY_GAME) {
+                gameRecorder.recordMove(row, col, currentPlayer);
+            }
             if (currentPlayer == 'X') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.xImage));
             } else if (currentPlayer == 'O') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.oImage));
             }
-            if (game.isGameOver()) {
-                System.out.println("Player " + currentPlayer + " wins!");
+            
+            if (game.isGameOver() && !game.getDidDraw()) {
+                if(gameMode == MULTIPLAYER_ONLINE){
+                    if(isHosting == isMyTurn){
+                        winner = 1;
+                    }else {
+                        winner = 2;
+                    }
+                }else{
+                    if (currentPlayer == 'X') {
+                        winner = 1;
+                    } else if (currentPlayer == 'O'){
+                        winner = 2;
+                    }
+                }
+                
+                if (isGameRecording) {
+                    recordGame();
+                }
                 disableBoard();
-                enableWinningCells();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            } else if (game.getGameCounter() == 9) {
-                System.out.println("players draw");
+                drawWinningLine();
+                
+            } else if (game.getDidDraw()) {
+                winner = 0;
+                if (isGameRecording) {
+                    recordGame();
+                }
                 disableBoard();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
+                if (gameMode != GameModeEnum.REPLAY_GAME) {
+                    showRematchPopup(boardAnchorPane);
+                }
             }
+            
+            
         }
-        
-        currentPlayer = game.getCurrentPlayer();
-        
-        if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-            if(game.getGameCounter()<9){
-                makeComputerMove(currentPlayer);
-            }
-        }
-        
     }
     
-    private void makeComputerMove(char currentPlayer){
-        Pair<Integer,Integer> move = computer.move(game.getBoard());
-        if (game.makeMove(move.getKey(), move.getValue())) {
-            if (currentPlayer == 'X') {
-                imageArray[move.getKey()][move.getValue()].setImage(new Image(ImageRoutes.xImage));
-            } else if (currentPlayer == 'O') {
-                imageArray[move.getKey()][move.getValue()].setImage(new Image(ImageRoutes.oImage));
-            }
-            if (game.isGameOver()) {
-                System.out.println("Player " + currentPlayer + " wins!");
-                disableBoard();
-                enableWinningCells();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            } else if (game.getGameCounter() == 9) {
-                System.out.println("players draw");
-                disableBoard();
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(e -> {
-                    showRematchPopup();
-                });
-                pause.play();
-            }
-        }
-        
+    private boolean isEmptyCell(int row, int col){
+        return game.getBoard()[row][col] == '\0';
     }
     
     private void disableBoard() {
         for (Node node : gridPane.getChildren()) {
-            if (node instanceof ImageView) {
+            if (node instanceof Button) {
                 node.setDisable(true);
             }
         }
     }
     
-     private void enableWinningCells() {
+     private void drawWinningLine() {
+        double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+        Button currentButton;
         boolean colWinning = game.getWinningLane() == WinningLaneEnum.first_column
                 || game.getWinningLane() == WinningLaneEnum.second_column
                 || game.getWinningLane() == WinningLaneEnum.third_column;
@@ -243,66 +338,303 @@ public class GameBoardFXMLController implements Initializable {
                 || game.getWinningLane() == WinningLaneEnum.third_row;
         
         if (colWinning ) {
-            System.out.println("col winning" + game.getWinningLane().getCode());
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][game.getWinningLane().getCode()].setDisable(false);
-            }
+            System.out.println("col winning " + game.getWinningLane().getCode());
+            currentButton = buttonsArray[0][game.getWinningLane().getCode()];
+            x1 = currentButton.getLayoutX() + currentButton.getWidth()/2;
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][game.getWinningLane().getCode()];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth()/2;
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
         else if (rowWinning) {
-            System.out.println("row winning" + game.getWinningLane().getCode());
-            for (int i = 0; i < 3; i++) {
-                imageArray[game.getWinningLane().getCode()][i].setDisable(false);
-            }
+            System.out.println("row winning " + game.getWinningLane().getCode());
+            currentButton = buttonsArray[game.getWinningLane().getCode()][0];
+            x1 = currentButton.getLayoutX();
+            y1 = currentButton.getLayoutY() + currentButton.getHeight()/2;
+            currentButton = buttonsArray[game.getWinningLane().getCode()][2];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight()/2; 
         }
         else if (game.getWinningLane() == WinningLaneEnum.first_diagonal) {
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][i].setDisable(false);
-            }
+            currentButton = buttonsArray[0][0];
+            x1 = currentButton.getLayoutX();
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][2];
+            x2 = currentButton.getLayoutX() + currentButton.getWidth();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
         else if (game.getWinningLane() == WinningLaneEnum.second_diagonal) {
-            for (int i = 0; i < 3; i++) {
-                imageArray[i][2-i].setDisable(false);
-            }
+            currentButton = buttonsArray[0][2];
+            x1 = currentButton.getLayoutX() + currentButton.getWidth();
+            y1 = currentButton.getLayoutY();
+            currentButton = buttonsArray[2][0];
+            x2 = currentButton.getLayoutX();
+            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
         }
-    }
-     private void showRematchPopup() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Rematch");
-        alert.setHeaderText("Game Over");
-        alert.setContentText("Do you want to play a rematch?");
+        line = new Line(x1, y1, x1, y1);
+        line.setStroke(Color.BLACK);
+        line.setStrokeWidth(5.0);
+        line.setOpacity(0);
+        boardAnchorPane.getChildren().add(line);
         
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-        alert.show();
-        alert.setOnHidden(dialogEvent -> {
-            if (alert.getResult() == ButtonType.YES) {
-                resetGameBoard();
-            } else {
-                System.out.println("No rematch. Game ended.");
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endXProperty(), x2)),
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endYProperty(), y2)),
+            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.opacityProperty(), 1))
+        );
+        timeline.setOnFinished(e -> {
+            if (gameMode != GameModeEnum.REPLAY_GAME) {
+                System.out.println(currentPlayer);
+                showRematchPopup(boardAnchorPane);
             }
         });
+        timeline.play();
     }
      
+    private void showRematchPopup(Node node) {
+       Platform.runLater(() -> {
+           try {
+               FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_GAME_STATUS_ROUTE));
+               Parent root = loader.load();
+               Scene scene = new Scene(root,600,400);
+               scene.setFill(Color.TRANSPARENT);
+
+               Stage  gameStatusPopup = new Stage();
+               gameStatusPopup.initModality(Modality.APPLICATION_MODAL);
+               gameStatusPopup.setScene(scene);
+               gameStatusPopup.initStyle(StageStyle.TRANSPARENT);
+
+               PopUpGameController controller = loader.getController();
+               controller.setPlayAgainVisablility(gameMode != MULTIPLAYER_ONLINE);
+               controller.setPopupStage(gameStatusPopup);
+               controller.setPlayAgainBtnFunc(() -> {
+                   resetGameBoard();
+               });
+               
+               controller.setCloseBtnFunc(()->{
+                   if(CurrentPlayer.getPlayer() == null){
+                       try {
+                           Navigator.navigateToLandingScreen(node);
+                       } catch (IOException ex) {
+                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }else{
+                       try {
+                           Navigator.navigateToOnlineScreen(node);
+                       } catch (IOException ex) {
+                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }
+               });
+               String msg = "";
+               
+               
+                switch (winner){
+                    case 0:
+                        msg = "Draw, play again and fight to win"; 
+                        break;
+                    case 1:
+                        msg = "You Won, Congratulations"; 
+                        break;
+                    case 2:
+                        msg = "unfortunately you lost, Better luck next Time <3 ";
+                        break;
+                }
+                
+               controller.setPopupStatusMsg(msg);
+               gameStatusPopup.showAndWait();
+
+           } catch (IOException ex) {
+               Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       });
+   }
+
     private void resetGameBoard() {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
                 ((ImageView) node).setImage(null);
-                
+            }
+            else if (node instanceof Button) {
                 node.setDisable(false);
             }
         }
+        
+        if (line != null) {
+            boardAnchorPane.getChildren().remove(line);
+            line = null;
+        }
+        
         player1Score.setText(""+game.getPlayer1Score());
         player2Score.setText(""+game.getPlayer2Score());
-
+        winner = Integer.MAX_VALUE;
+        if (!gameRecorder.isEmpty()) {
+            gameRecorder = null;
+            gameRecorder = new GameRecorder();
+        }
+        
+        if (isGameRecording) {
+            onClickRecordGame(new ActionEvent());
+        }
         game.resetBoard();
     }
     
     @FXML
     private void onClickRecordGame(ActionEvent event) {
-    }
-
-    @FXML
-    private void onClickExitGame(ActionEvent event) {
+        isGameRecording = (isGameRecording == false) ? true : false;
+        if (isGameRecording) {
+            recordGameBtn.setStyle("-fx-background-color: red;");
+        } else {
+            recordGameBtn.setStyle("-fx-background-color: black;");
+        }
     }
     
+    private  void recordGame(){
+        String p1Name;
+        String p2Name;
+        if(gameMode==COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+            p1Name = "You";
+            p2Name = "PC";
+        }else{
+            p2Name = playerTwoTV.getText();
+            p1Name = playerOneTV.getText();
+        }
+        
+        
+        gameRecorder.setPlayers(p1Name, p2Name);
+      
+        gameRecorder.saveGameToFile(p1Name + "Vs" + p2Name + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)+ LocalDateTime.now().getSecond() + ".json");
+    }
+    @FXML
+    private void onClickExitGame(ActionEvent event) {
+        try {
+            if(gameMode == MULTIPLAYER_ONLINE){
+                JSONObject closeThread = new JSONObject();
+                closeThread.put("type", "closeThread");
+                try {
+                    ClientSocket.responses.put(closeThread);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                sendWithdrawalRequest();
+            }
+            
+            if(CurrentPlayer.getPlayer() == null){
+                Navigator.navigateToLandingScreen(event);
+            }else{
+                Navigator.navigateToOnlineScreen(event); 
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private void sendWithdrawalRequest(){
+        JSONObject withdrawalRequest = new JSONObject();
+        withdrawalRequest.put("type", "withdrawal");
+        withdrawalRequest.put("to", opponent.getUsername());
+        ClientSocket.sendRequest(withdrawalRequest);
+        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()-10);
+    }
+    
+    
+    private void replaySavedGame() {
+       
+        recordGameBtn.setDisable(true);
+        recordGameBtn.setOpacity(0);
+        disableBoard();
+        
+        List<GameMove> replayedMoves = gameRecorder.replayGameFromFile(fileName);
+        setPlayersNames(gameRecorder.getPlayerOneName(), gameRecorder.getPlayerTwoName());
+        playerOneTV.setText(playerOne.getUsername());
+        playerTwoTV.setText(playerTwo.getUsername());
+        
+        Timeline timeline = new Timeline();
+        int[] index = {0};
+
+        for (GameMove replayedMove : replayedMoves) {
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(index[0]), event -> {
+                char player = replayedMove.getPlayer();
+                int row = replayedMove.getRow();
+                int col = replayedMove.getCol();
+
+                commitMove(player, row, col);
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            index[0]++;
+        }
+        timeline.play();
+    }
+    
+     /* Online Game Logic */
+    private void recieveMessagesFromServer(){
+                System.out.println("enter recieve function");
+                new Thread(() -> {
+                    if(!ClientSocket.checkSocketStat()){
+                        System.out.println("server is connected");
+                        while(true){
+                            try {
+                                JSONObject recievedMSG = ClientSocket.responses.take();
+                                if (recievedMSG == null) {
+                                    break;
+                                }
+                                String responseType = recievedMSG.getString("type");
+                                switch (responseType) {
+                                    case "closeThread":
+                                        Thread.currentThread().interrupt();
+                                        break;
+                                        
+                                    case "withdrawal":{
+                                        System.out.println("recieved withdrawl form the opponent");
+                                        winner = 1;
+                                        showRematchPopup(boardAnchorPane);
+                                        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()+10);
+                                        break;
+                                    }
+                                    
+                                    default:
+                                        int row = recievedMSG.getInt("row");
+                                        int col = recievedMSG.getInt("col");
+                                        char turn = recievedMSG.getString("turn").charAt(0);
+                                        Platform.runLater(()->{
+                                            commitMove(turn, row, col);
+                                        });
+                                        isMyTurn = !isMyTurn;  
+                                        break;
+                                }
+                            } catch (InterruptedException ex) {
+                                break;
+                            } catch (JSONException ex){
+                                break;
+                            }
+                        }
+                        
+                    }else{
+                        System.out.println("may be connection faild");
+                    }
+                }).start();
+        }
+    
+    private void setupBoardForOnlineMultiplayerGame(){
+        playerOneTV.setText(CurrentPlayer.getPlayer().getUsername());
+        playerTwoTV.setText(opponent.getUsername());
+    }
+    
+    private void sendMoveOverNetwork(String currentPlayer,int row,int col){
+        if(!ClientSocket.checkSocketStat()){
+            /* prepare JSON object */
+            JSONObject moveJSON = new JSONObject();
+            moveJSON.put("type", "move");
+            moveJSON.put("turn", currentPlayer);
+            moveJSON.put("row", row);
+            moveJSON.put("col", col);
+            moveJSON.put("from", CurrentPlayer.getPlayer().getUsername());
+            moveJSON.put("to", opponent.getUsername());
+            /* Send it */
+            ClientSocket.sendRequest(moveJSON);
+        }else{
+            /* Handle for testing */
+            System.out.println("Error in sending move, may be connection is faild");
+        }
+    }
 }
