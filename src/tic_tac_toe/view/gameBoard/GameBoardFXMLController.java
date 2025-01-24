@@ -188,7 +188,7 @@ public class GameBoardFXMLController implements Initializable {
                     break;
                 case MULTIPLAYER_ONLINE:
                     recieveMessagesFromServer();
-                    setupBoardForOnlieMultiplayerGame();
+                    setupBoardForOnlineMultiplayerGame();
                     break;
                 case REPLAY_GAME:
                     replaySavedGame();
@@ -282,12 +282,12 @@ public class GameBoardFXMLController implements Initializable {
                 if(gameMode == MULTIPLAYER_ONLINE){
                     if(isHosting == isMyTurn){
                         sendUpdateScore(CurrentPlayer.getPlayer());
-                        sendDecreaseScore(opponent);
                         CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())+10);
-                        
                         winner = 1;
                     }else {
                         winner = 2;
+                        sendDecreaseScore(opponent);
+                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())-10);
                     }
                 }else{
                     if (currentPlayer == 'X') {
@@ -622,6 +622,9 @@ public class GameBoardFXMLController implements Initializable {
     private void setupBoardForOnlineMultiplayerGame(){
         playerOneTV.setText(CurrentPlayer.getPlayer().getUsername());
         playerTwoTV.setText(opponent.getUsername());
+        player1Score.setText(CurrentPlayer.getPlayer().getScore()+"");
+        player2Score.setText(opponent.getScore()+"");
+        
     }
     
     private void sendMoveOverNetwork(String currentPlayer,int row,int col){

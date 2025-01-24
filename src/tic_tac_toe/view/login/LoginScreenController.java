@@ -88,7 +88,7 @@ public class LoginScreenController implements Initializable {
                             String id = loginResponse.getString("id");
                             String username = loginResponse.getString("username");
                             int score = loginResponse.getInt("score");
-                            
+                            System.out.println("score => " + score);
                             CurrentPlayer.initPlayer(id, username, score, StatusEnum.AVAILABLE);
                             navigateToOnlineScreen(event);
                     } else {
