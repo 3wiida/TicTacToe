@@ -43,3 +43,17 @@
 {
     -fx-cursor: hand;
 }
+
+#searchField {
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #999;
+     -fx-text-fill: white;
+    -fx-border-radius: 15;    
+    -fx-background-color: #1A1B49;
+    -fx-background-radius: 15;    
+  /*  -fx-border-color: transparent; */
+    -fx-padding: 10;       
+}
+
+
+
