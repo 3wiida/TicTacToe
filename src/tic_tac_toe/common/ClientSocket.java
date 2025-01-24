@@ -68,7 +68,7 @@ public class ClientSocket {
                         System.out.println(ex.getLocalizedMessage());
                     } 
                 }   
-            }
+            }   
         ).start();
         
     }

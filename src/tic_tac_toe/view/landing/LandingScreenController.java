@@ -124,7 +124,7 @@ public class LandingScreenController {
                     closeRequestHandler.handle(new WindowEvent(serverConnectionPopup, WindowEvent.WINDOW_CLOSE_REQUEST));
                 }
                 serverConnectionPopup.close();
-                
+                         
             }
         } catch (IOException ex) {
             Logger.getLogger(LandingScreenController.class.getName()).log(Level.SEVERE, null, ex);
