@@ -281,6 +281,10 @@ public class GameBoardFXMLController implements Initializable {
             if (game.isGameOver() && !game.getDidDraw()) {
                 if(gameMode == MULTIPLAYER_ONLINE){
                     if(isHosting == isMyTurn){
+                        sendUpdateScore(CurrentPlayer.getPlayer());
+                        sendDecreaseScore(opponent);
+                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())+10);
+                        
                         winner = 1;
                     }else {
                         winner = 2;
@@ -635,6 +639,30 @@ public class GameBoardFXMLController implements Initializable {
         }else{
             /* Handle for testing */
             System.out.println("Error in sending move, may be connection is faild");
+        }
+    }
+    
+    private void sendUpdateScore(Player player){
+        if(!ClientSocket.checkSocketStat()){
+            JSONObject scoreJson = new JSONObject();
+            scoreJson.put("type", "increase_score");
+            scoreJson.put("name", player.getUsername());
+            scoreJson.put("id", player.getId());
+            ClientSocket.sendRequest(scoreJson);
+        }else{
+            System.out.println("error in send increase score");
+        }
+    }
+    
+    private void sendDecreaseScore(Player opponent){
+        if(!ClientSocket.checkSocketStat()){
+            JSONObject scoreJson = new JSONObject();
+            scoreJson.put("type", "decrease_score");
+            scoreJson.put("name", opponent.getUsername());
+            scoreJson.put("id", opponent.getId());
+            ClientSocket.sendRequest(scoreJson);
+        }else{
+            System.out.println("error in send increase score");
         }
     }
 }
