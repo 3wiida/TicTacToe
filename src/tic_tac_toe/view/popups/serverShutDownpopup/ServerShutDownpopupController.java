@@ -14,9 +14,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.view.login.LoginScreenController;
 
@@ -49,7 +51,9 @@ public class ServerShutDownpopupController implements Initializable {
     @FXML
     private void offlineBtn(MouseEvent event) {
          try {
-            Navigator.navigateToOfflineScreen(event);
+            Navigator.navigateToLandingScreen();
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.close();
         } catch (IOException ex) {
             Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }

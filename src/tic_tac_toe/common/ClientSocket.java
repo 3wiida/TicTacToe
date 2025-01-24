@@ -72,7 +72,11 @@ public class ClientSocket {
                            System.out.println("recieve server closed");
                            CurrentPlayer.clear();
                            Platform.runLater(()->{
-                               showServerClosedAlert();
+                               try {
+                                   Navigator.navigateToServerShutdownScreen();
+                               } catch (IOException ex) {
+                                   Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+                               }
                            });
                            closeServerSocket();
                            break;

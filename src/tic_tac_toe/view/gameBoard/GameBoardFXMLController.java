@@ -496,8 +496,8 @@ public class GameBoardFXMLController implements Initializable {
             p1Name = "You";
             p2Name = "PC";
         }else{
-            p2Name = playerTwo.getUsername();
-            p1Name = playerOne.getUsername();
+            p2Name = playerTwoTV.getText();
+            p1Name = playerOneTV.getText();
         }
         
         
