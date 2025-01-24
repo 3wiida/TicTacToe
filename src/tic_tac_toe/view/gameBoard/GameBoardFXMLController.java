@@ -140,6 +140,7 @@ public class GameBoardFXMLController implements Initializable {
     
     /* online parameters */
     private boolean isHosting;
+    private boolean isMyTurn;
     private Player opponent;
     
     @Override
@@ -168,6 +169,8 @@ public class GameBoardFXMLController implements Initializable {
         this.opponent = opponent;
         this.isHosting = isHosting;
         this.gameMode = MULTIPLAYER_ONLINE;
+        isMyTurn = isHosting;
+        currentPlayer = isHosting? 'X' : 'O';
     }
     
     public void setGameMode(GameModeEnum mode){
@@ -241,11 +244,12 @@ public class GameBoardFXMLController implements Initializable {
 
             if(isEmptyCell(row, col)){
                 if(gameMode == MULTIPLAYER_ONLINE){
-                    if(isHosting){
-                        currentPlayer = game.getCurrentPlayer();
+                    if(isMyTurn){
+                        System.out.println(currentPlayer);
+                        //currentPlayer = game.getCurrentPlayer();
                         commitMove(currentPlayer, row, col);
                         sendMoveOverNetwork(currentPlayer+"", row, col);
-                        isHosting = !isHosting;  
+                        isMyTurn = !isMyTurn;  
                     }
                 }else{
                     currentPlayer = game.getCurrentPlayer();
@@ -275,11 +279,20 @@ public class GameBoardFXMLController implements Initializable {
             }
             
             if (game.isGameOver() && !game.getDidDraw()) {
-                if (currentPlayer == 'X') {
-                    winner = 1;
-                } else if (currentPlayer == 'O'){
-                    winner = 2;
+                if(gameMode == MULTIPLAYER_ONLINE){
+                    if(isHosting == isMyTurn){
+                        winner = 1;
+                    }else {
+                        winner = 2;
+                    }
+                }else{
+                    if (currentPlayer == 'X') {
+                        winner = 1;
+                    } else if (currentPlayer == 'O'){
+                        winner = 2;
+                    }
                 }
+                
                 if (isGameRecording) {
                     recordGame();
                 }
@@ -296,6 +309,8 @@ public class GameBoardFXMLController implements Initializable {
                     showRematchPopup(boardAnchorPane);
                 }
             }
+            
+            
         }
     }
     
@@ -369,6 +384,7 @@ public class GameBoardFXMLController implements Initializable {
         );
         timeline.setOnFinished(e -> {
             if (gameMode != GameModeEnum.REPLAY_GAME) {
+                System.out.println(currentPlayer);
                 showRematchPopup(boardAnchorPane);
             }
         });
@@ -389,7 +405,7 @@ public class GameBoardFXMLController implements Initializable {
                gameStatusPopup.initStyle(StageStyle.TRANSPARENT);
 
                PopUpGameController controller = loader.getController();
-
+               controller.setPlayAgainVisablility(gameMode != MULTIPLAYER_ONLINE);
                controller.setPopupStage(gameStatusPopup);
                controller.setPlayAgainBtnFunc(() -> {
                    resetGameBoard();
@@ -411,17 +427,20 @@ public class GameBoardFXMLController implements Initializable {
                    }
                });
                String msg = "";
-               switch (winner){
-                   case 0:
-                       msg = "Draw, play again and fight to win"; 
-                       break;
-                   case 1:
-                       msg = "You Won, Congratulations"; 
-                       break;
-                   case 2:
-                       msg = "unfortunately you lost, Better luck next Time <3 ";
-                       break;
-               }
+               
+               
+                switch (winner){
+                    case 0:
+                        msg = "Draw, play again and fight to win"; 
+                        break;
+                    case 1:
+                        msg = "You Won, Congratulations"; 
+                        break;
+                    case 2:
+                        msg = "unfortunately you lost, Better luck next Time <3 ";
+                        break;
+                }
+                
                controller.setPopupStatusMsg(msg);
                gameStatusPopup.showAndWait();
 
@@ -515,6 +534,7 @@ public class GameBoardFXMLController implements Initializable {
         withdrawalRequest.put("type", "withdrawal");
         withdrawalRequest.put("to", opponent.getUsername());
         ClientSocket.sendRequest(withdrawalRequest);
+        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()-10);
     }
     
     
@@ -566,7 +586,10 @@ public class GameBoardFXMLController implements Initializable {
                                         
                                     case "withdrawal":{
                                         System.out.println("recieved withdrawl form the opponent");
+                                        winner = 1;
                                         showRematchPopup(boardAnchorPane);
+                                        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()+10);
+                                        break;
                                     }
                                     
                                     default:
@@ -576,7 +599,7 @@ public class GameBoardFXMLController implements Initializable {
                                         Platform.runLater(()->{
                                             commitMove(turn, row, col);
                                         });
-                                        isHosting = !isHosting;
+                                        isMyTurn = !isMyTurn;  
                                         break;
                                 }
                             } catch (InterruptedException ex) {

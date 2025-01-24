@@ -48,6 +48,10 @@ public class PopUpGameController implements Initializable {
     public void setPopupStage(Stage stage) {
         this.popupStage = stage;
     }
+    
+    public void setPlayAgainVisablility(boolean isVisible){
+        btnPlayAgain.setVisible(isVisible);
+    }
      
     public void setPlayAgainBtnFunc(Runnable func) {
         btnPlayAgain.setOnAction(e -> {

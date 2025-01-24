@@ -6,7 +6,10 @@
 package tic_tac_toe;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +19,7 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
 import tic_tac_toe.common.CurrentPlayer;
+import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 
 /**
@@ -27,11 +31,15 @@ public class Tic_tac_toe extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
-
-        Scene scene = new Scene(root,860,600);
+        Navigator.setMainStage(primaryStage);
+        
         primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
+        Scene scene = new Scene(root,860,600);
+        
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+        
         String sound = "/tic_tac_toe/assets/Track 01.mp3"; 
         Media media = new Media(getClass().getResource(sound).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -48,6 +56,19 @@ public class Tic_tac_toe extends Application {
             JSONObject logutRequest = new JSONObject();
             logutRequest.put("type", "logout");
             ClientSocket.sendRequest(logutRequest);
+            new Thread(
+                ()->{
+                    try {
+                        JSONObject logoutResponse = ClientSocket.responses.take();
+                        boolean isOk = logoutResponse.getBoolean("isOk");
+                        if(isOk){
+                            ClientSocket.closeServerSocket();
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    } 
+                }
+            ).start();
         } 
     }
     

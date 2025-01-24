@@ -19,7 +19,7 @@
          </image>
       </ImageView>
       <Button fx:id="btnOffline" layoutX="279.0" layoutY="283.0" mnemonicParsing="false" onAction="#OffilneClicked" prefHeight="45.0" prefWidth="230.0" text="PLAY OFFLINE" />
-      <Button fx:id="btnSignUp" layoutX="279.0" layoutY="383.0" mnemonicParsing="false" onAction="#SignUpClicked" prefHeight="45.0" prefWidth="230.0" text="SIGN UP" />
+      <Button fx:id="btnSignUp" layoutX="279.0" layoutY="383.0" mnemonicParsing="false" onAction="#SignUpClicked" prefHeight="45.0" prefWidth="230.0" text="LOGIN / SIGN UP" />
       <Button fx:id="btnExit" layoutX="279.0" layoutY="476.0" mnemonicParsing="false" onAction="#ExitClicked" prefHeight="45.0" prefWidth="230.0" text="EXIT" />
       <Label fx:id="lblLanding" layoutX="233.0" layoutY="145.0" prefHeight="148.0" prefWidth="412.0" text="Tic Tac Toe" />
    </children>

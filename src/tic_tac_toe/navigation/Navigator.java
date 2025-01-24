@@ -24,6 +24,11 @@ import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
  * @author 3wiida
  */
 public class Navigator {
+    private static Stage mainStage;
+
+    public static void setMainStage(Stage stage) {
+        mainStage = stage;
+    }
 
     public static void navigateToLandingScreen(Event event) throws IOException {
         if (event.getSource() instanceof Node) {
@@ -36,6 +41,13 @@ public class Navigator {
         }else{
             System.out.println("Can't navigate to landing screen");
         }
+    }
+    
+    public static void navigateToLandingScreen() throws IOException {
+        Parent landingRoot =  FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+        Scene landingScene = new Scene(landingRoot);
+        mainStage.setScene(landingScene);
+        mainStage.show();
     }
     
     public static void navigateToLandingScreen(Node node) throws IOException {
