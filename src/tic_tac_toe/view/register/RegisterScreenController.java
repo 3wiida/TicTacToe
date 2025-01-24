@@ -42,7 +42,6 @@ public class RegisterScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ClientSocket.initConnection("127.0.0.1");
     }    
 
     @FXML

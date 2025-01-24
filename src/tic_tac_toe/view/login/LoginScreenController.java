@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.json.JSONObject;
 import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
+import tic_tac_toe.model.StatusEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.view.onlineScreen.OnlineScreenController;
@@ -48,7 +50,6 @@ public class LoginScreenController implements Initializable {
     @FXML
     private ImageView backPhoto;
     
-    String regex = "^[a-zA-Z0-9]+$"; 
     @FXML
     private Label lblLogin;
     
@@ -59,23 +60,46 @@ public class LoginScreenController implements Initializable {
     @FXML
     void LoginClicked(ActionEvent event) {
         Pair<String, String> userData = getUserData();
-        if(!userData.getKey().isEmpty() && !userData.getValue().isEmpty()){
+        String username = userData.getKey();
+        String password = userData.getValue();
+        if(!username.isEmpty() && !password.isEmpty()){
+            sendLoginRequest(username, password);
+            handleLoginResponse(event);
+        }else{
+            showErrorAlert("Please fill in all fields to log in.");
+        }
+    }
+    private void sendLoginRequest(String username, String password) {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("type", "login");
+        loginRequest.put("username", username);
+        loginRequest.put("password", password);
+        ClientSocket.sendRequest(loginRequest);
+    }
+    
+    private void handleLoginResponse(ActionEvent event) {
+        new Thread(() -> {
             try {
-//                System.err.println("Login Done");
-//                System.err.println(userData.getKey());
-//                System.out.println(userData.getValue());
-                /* Network code  */
+                JSONObject loginResponse = ClientSocket.responses.take();
+                boolean isOk = loginResponse.getBoolean("isOk");
                 
-                
-              
-                Navigator.navigateToOnlineScreen(event);
-              //  transferUserNameToOnlineScreen(userData.getKey(), event);
-            } catch (IOException ex) {
+                Platform.runLater(() -> {
+                    if (isOk) {
+                            String id = loginResponse.getString("id");
+                            String username = loginResponse.getString("username");
+                            int score = loginResponse.getInt("score");
+                            
+                            CurrentPlayer.initPlayer(id, username, score, StatusEnum.AVAILABLE);
+                            navigateToOnlineScreen(event);
+                    } else {
+                        String error = loginResponse.getString("error");
+                        showErrorAlert(error);
+                    }
+                });
+            } catch (InterruptedException ex) {
                 Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
-            showerrorAlert();
-        }
+        }).start();
     }
     /* Navigate to Landing Screen */
     @FXML
@@ -104,41 +128,48 @@ public class LoginScreenController implements Initializable {
          Pair<String, String> userData = new Pair(getUserName(), getUserPassword());
          return userData;
     }
-    private  void  showerrorAlert(){
+    private  void  showErrorAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Please Fill All Information to Login!");
-            alert.setHeaderText("Login Error");
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.setStyle(
-                    "-fx-background-color: #ffcccc;" + 
-                    "-fx-border-color: #ff0000;" +    
-                    "-fx-border-width: 2px;" +       
-                    "-fx-padding: 10px;"             
-            );
-            dialogPane.lookup(".header-panel").setStyle(
-                    "-fx-font-size: 16px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-text-fill: #800000;" 
-            );
-            dialogPane.lookup(".content").setStyle(
-                    "-fx-font-size: 16px;" +
-                    "-fx-text-fill: #333333;" 
-            );
-            alert.showAndWait();
+        alert.setHeaderText("Login Error");
+        alert.setContentText(message);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle(
+            "-fx-background-color: #ffcccc;" + 
+            "-fx-border-color: #ff0000;" +    
+            "-fx-border-width: 2px;" +       
+            "-fx-padding: 10px;"             
+        );
+        dialogPane.lookup(".header-panel").setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: #800000;" 
+        );
+        dialogPane.lookup(".content").setStyle(
+            "-fx-font-size: 16px;" +
+            "-fx-text-fill: #333333;" 
+        );
+        alert.showAndWait();
     }
     
-    private void transferUserNameToOnlineScreen(String name, ActionEvent event){
+//    private void transferUserNameToOnlineScreen(String name, ActionEvent event){
+//        try {
+//           FXMLLoader Loader = new  FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
+//            Parent root = Loader.load();
+//            OnlineScreenController controller = Loader.getController();
+//            controller.setProfileName(name);
+//            Stage stage = ((Stage)((Node) event.getSource()).getScene().getWindow());        
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.show();
+//        } catch (IOException ex) {
+//            System.out.println("Error in transfer");
+//        }
+//    }
+    private void navigateToOnlineScreen(ActionEvent event) {
         try {
-           FXMLLoader Loader = new  FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
-            Parent root = Loader.load();
-            OnlineScreenController controller = Loader.getController();
-            controller.setProfileName(name);
-            Stage stage = ((Stage)((Node) event.getSource()).getScene().getWindow());        
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            Navigator.navigateToOnlineScreen(event);
         } catch (IOException ex) {
-            System.out.println("Error in transfer");
+            Logger.getLogger(LoginScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
