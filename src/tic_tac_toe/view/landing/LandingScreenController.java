@@ -114,7 +114,6 @@ public class LandingScreenController {
                 ClientSocket.recieveResponse();
                 serverConnectionPopup.setOnCloseRequest(
                     (e)->{
-                        System.out.println("enter closed");
                         showAuthPopup(event);
                     }
                 );

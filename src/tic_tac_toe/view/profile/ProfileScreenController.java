@@ -80,6 +80,7 @@ public class ProfileScreenController implements Initializable {
                                 if(isOk){
                                     CurrentPlayer.clear();
                                     navigateToLandingScreen(event);
+                                    ClientSocket.closeServerSocket();
                                 }else{
                                     showErrorAlert();
                                 }

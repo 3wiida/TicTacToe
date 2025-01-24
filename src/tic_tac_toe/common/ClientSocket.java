@@ -11,6 +11,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONObject;
 
 /**
@@ -64,8 +66,10 @@ public class ClientSocket {
                         responses.put(responseJson);
                     } catch (IOException ex) {
                         System.out.println(ex.getLocalizedMessage());
+                        break;
                     } catch (InterruptedException ex) {
                         System.out.println(ex.getLocalizedMessage());
+                        break;
                     } 
                 }   
             }
@@ -75,5 +79,16 @@ public class ClientSocket {
     
     public static boolean checkSocketStat(){
         return clientSocket.isClosed();
+    }
+    
+    public static void closeServerSocket() {
+        try {
+            clientSocket.close();
+            dis.close();
+            ps.close();
+            clientSocket = null;
+        } catch (IOException ex) {
+            Logger.getLogger(ClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
