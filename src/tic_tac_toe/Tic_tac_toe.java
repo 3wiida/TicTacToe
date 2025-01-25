@@ -33,11 +33,11 @@ public class Tic_tac_toe extends Application {
         Parent root = FXMLLoader.load(getClass().getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
         Navigator.setMainStage(primaryStage);
         
-        primaryStage.setResizable(false);
         primaryStage.setTitle("Tic Tac Toe");
         Scene scene = new Scene(root,860,600);
         
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         
         String sound = "/tic_tac_toe/assets/Track 01.mp3"; 

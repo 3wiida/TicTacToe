@@ -14,6 +14,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tic_tac_toe.navigation.Navigator;
+import tic_tac_toe.utils.ImageRoutes;
 
 /**
  * FXML Controller class
@@ -35,14 +36,14 @@ public class PopUpGameController implements Initializable {
     private Button btnClosePopup;
     
     private Stage popupStage;
-
+    Media media;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Media media = new Media(getClass().getResource("/tic_tac_toe/assets/tempVideo.mp4").toExternalForm());
-        mediaPlayer = new MediaPlayer(media);
-        mediaView.setMediaPlayer(mediaPlayer);
-        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.seconds(1)));
-        mediaPlayer.setAutoPlay(true);
+//        media = new Media(getClass().getResource(ImageRoutes.WIN_VIDEO).toExternalForm());
+//        mediaPlayer = new MediaPlayer(media);
+//        mediaView.setMediaPlayer(mediaPlayer);
+//        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.seconds(1)));
+//        mediaPlayer.setAutoPlay(true);
     }    
 
     public void setPopupStage(Stage stage) {
@@ -82,6 +83,18 @@ public class PopUpGameController implements Initializable {
     
     public void setPopupStatusMsg(String msg){
         lblStatus.setText(msg);
+        if (msg.contains("lose") || msg.contains("lost")) {
+            media = new Media(getClass().getResource(ImageRoutes.LOSE_VIDEO).toExternalForm());
+            
+        } else if(msg.contains("Draw") || msg.contains("draw")){
+            media = new Media(getClass().getResource(ImageRoutes.DRAW_VIDEO).toExternalForm());
+        } else if (msg.contains("won") || msg.contains("Won") || msg.contains("win") || msg.contains("Win")){
+            media = new Media(getClass().getResource(ImageRoutes.WIN_VIDEO).toExternalForm());
+        }
+        mediaPlayer = new MediaPlayer(media);
+        mediaView.setMediaPlayer(mediaPlayer);
+        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.seconds(1)));
+        mediaPlayer.setAutoPlay(true);
     }
     @FXML
     private void closePopupBtnHandler(ActionEvent event) {
