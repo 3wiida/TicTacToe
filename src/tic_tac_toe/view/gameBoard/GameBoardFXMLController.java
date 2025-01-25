@@ -17,6 +17,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -157,10 +158,6 @@ public class GameBoardFXMLController implements Initializable {
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
-        if(gameMode == MULTIPLAYER_ONLINE){
-            System.out.println("game mode is online");
-            recieveMessagesFromServer();
-        } 
 
     }    
     
@@ -188,6 +185,7 @@ public class GameBoardFXMLController implements Initializable {
                 case MULTIPLAYER_ONLINE:
                     recieveMessagesFromServer();
                     setupBoardForOnlineMultiplayerGame();
+                    
                     break;
                 case REPLAY_GAME:
                     replaySavedGame();
@@ -522,6 +520,10 @@ public class GameBoardFXMLController implements Initializable {
     }
     @FXML
     private void onClickExitGame(ActionEvent event) {
+        doExitFunction(event);
+    }
+    
+    private void doExitFunction(Event event){
         try {
             if(gameMode == MULTIPLAYER_ONLINE){
                 JSONObject closeThread = new JSONObject();
@@ -635,7 +637,10 @@ public class GameBoardFXMLController implements Initializable {
         playerTwoTV.setText(opponent.getUsername());
         player1Score.setText(CurrentPlayer.getPlayer().getScore()+"");
         player2Score.setText(opponent.getScore()+"");
-        
+        Navigator.getMainStage().setOnCloseRequest((event)->{
+                System.out.println("window closed");
+                doExitFunction(event);
+        });
     }
     
     private void sendMoveOverNetwork(String currentPlayer,int row,int col){

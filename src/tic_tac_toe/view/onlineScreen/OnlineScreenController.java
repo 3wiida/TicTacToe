@@ -17,6 +17,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import org.json.JSONObject;
+import tic_tac_toe.common.ClientSocket;
+import tic_tac_toe.common.CurrentPlayer;
 import tic_tac_toe.navigation.Navigator;
 
 /**
@@ -41,7 +44,27 @@ public class OnlineScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Navigator.getMainStage().setOnCloseRequest((event)->{
+            if(CurrentPlayer.getPlayer() != null){
+                JSONObject logutRequest = new JSONObject();
+                logutRequest.put("type", "logout");
+                ClientSocket.sendRequest(logutRequest);
+                new Thread(
+                    ()->{
+                        try {
+                            JSONObject logoutResponse = ClientSocket.responses.take();
+                            boolean isOk = logoutResponse.getBoolean("isOk");
+                            if(isOk){
+                                ClientSocket.closeServerSocket();
+                                Platform.exit();
+                            }
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        } 
+                    }
+                ).start();
+            } 
+        });
     }    
 
 
