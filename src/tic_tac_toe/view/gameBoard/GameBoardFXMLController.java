@@ -56,7 +56,6 @@ import tic_tac_toe.model.WinningLaneEnum;
 import tic_tac_toe.navigation.Navigator;
 import tic_tac_toe.navigation.ScreensRoutes;
 import tic_tac_toe.utils.ImageRoutes;
-import tic_tac_toe.view.availableUsers.AvailableUsersController;
 import tic_tac_toe.view.popups.popupgamestatus.PopUpGameController;
 
 /**
@@ -208,6 +207,8 @@ public class GameBoardFXMLController implements Initializable {
     private void setupBoardForComputerGame(){
         playerOneTV.setText("You");
         playerTwoTV.setText("PC");
+        playerOne = new Player("YOU");
+        playerTwo = new Player("PC");
         player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
     }
     
