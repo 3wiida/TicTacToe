@@ -40,11 +40,11 @@ public class Tic_tac_toe extends Application {
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         
-        String sound = "/tic_tac_toe/assets/Track 01.mp3"; 
-        Media media = new Media(getClass().getResource(sound).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); 
-        mediaPlayer.setAutoPlay(true);
+//        String sound = "/tic_tac_toe/assets/Track 01.mp3"; 
+//        Media media = new Media(getClass().getResource(sound).toExternalForm());
+//        MediaPlayer mediaPlayer = new MediaPlayer(media);
+//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); 
+//        mediaPlayer.setAutoPlay(true);
         primaryStage.show();
         
         
