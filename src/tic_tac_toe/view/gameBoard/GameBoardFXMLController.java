@@ -246,7 +246,6 @@ public class GameBoardFXMLController implements Initializable {
                 if(gameMode == MULTIPLAYER_ONLINE){
                     if(isMyTurn){
                         System.out.println(currentPlayer);
-                        //currentPlayer = game.getCurrentPlayer();
                         commitMove(currentPlayer, row, col);
                         sendMoveOverNetwork(currentPlayer+"", row, col);
                         isMyTurn = !isMyTurn;  
@@ -280,13 +279,17 @@ public class GameBoardFXMLController implements Initializable {
             
             if (game.isGameOver() && !game.getDidDraw()) {
                 if(gameMode == MULTIPLAYER_ONLINE){
-                    if(isHosting == isMyTurn){
+                    System.out.println("host => " +  isHosting);
+                    System.out.println("my turn => " +  isMyTurn);
+                    if(isMyTurn){
+                        System.out.println("I won");
                         sendUpdateScore(CurrentPlayer.getPlayer());
                         CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())+10);
                         winner = 1;
                     }else {
-                        winner = 2;
+                        System.out.println("I lose");
                         sendDecreaseScore(opponent);
+                        winner = 2;
                         CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())-10);
                     }
                 }else{
@@ -424,6 +427,7 @@ public class GameBoardFXMLController implements Initializable {
                        }
                    }else{
                        try {
+                           sendOnlineGameFinishedToServer();
                            Navigator.navigateToOnlineScreen(node);
                        } catch (IOException ex) {
                            Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
@@ -453,6 +457,12 @@ public class GameBoardFXMLController implements Initializable {
            }
        });
    }
+    
+    private void sendOnlineGameFinishedToServer(){
+        JSONObject gameFinished = new JSONObject();
+        gameFinished.put("type", "onlineGameFinished");
+        ClientSocket.sendRequest(gameFinished);
+    }
 
     private void resetGameBoard() {
         for (Node node : gridPane.getChildren()) {
@@ -602,8 +612,8 @@ public class GameBoardFXMLController implements Initializable {
                                         char turn = recievedMSG.getString("turn").charAt(0);
                                         Platform.runLater(()->{
                                             commitMove(turn, row, col);
+                                            isMyTurn = !isMyTurn;  
                                         });
-                                        isMyTurn = !isMyTurn;  
                                         break;
                                 }
                             } catch (InterruptedException ex) {
@@ -658,6 +668,7 @@ public class GameBoardFXMLController implements Initializable {
     }
     
     private void sendDecreaseScore(Player opponent){
+        System.out.println("I lost sent decrease to server");
         if(!ClientSocket.checkSocketStat()){
             JSONObject scoreJson = new JSONObject();
             scoreJson.put("type", "decrease_score");

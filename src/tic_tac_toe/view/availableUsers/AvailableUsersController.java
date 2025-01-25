@@ -134,6 +134,7 @@ private void filterUsers(String searchText) {
                 () -> {
                     while (true) {
                         try {
+                            System.out.println("Thread init in available players");
                             JSONObject response = ClientSocket.responses.take();
                             if (response == null) {
                                 break;
@@ -141,6 +142,7 @@ private void filterUsers(String searchText) {
                             String responseType = response.getString("type");
                             switch (responseType) {
                                 case "onlinePlayers":
+                                    System.out.println("users is here");
                                     updatePlayersList(response);
                                     break;
                                 case "invitationRecieved":
@@ -174,6 +176,7 @@ private void filterUsers(String searchText) {
         JSONObject request = new JSONObject();
         request.put("type", "get Avaliable users");
         ClientSocket.sendRequest(request);
+        System.out.println("get players request sent");
     }
 
     private void updatePlayersList(JSONObject response) {
@@ -194,6 +197,7 @@ private void filterUsers(String searchText) {
         String hostUsername = response.getString("hostUsername");
         String hostId = response.getString("hostId");
         int hostScore = response.getInt("hostScore");
+        System.out.println("invitation recieved socre => " + hostScore);
         Player opponent = new Player(hostId, hostUsername, hostScore);
         Platform.runLater(
                 () -> {
@@ -237,6 +241,7 @@ private void filterUsers(String searchText) {
     }
 
     private void sendInvitation(String opponentUsername) {
+        System.out.println("invitation sent to opponent => "+ opponentUsername);
         JSONObject invitationRequest = new JSONObject();
         invitationRequest.put("type", "invite");
         invitationRequest.put("opponentUsername", opponentUsername);
