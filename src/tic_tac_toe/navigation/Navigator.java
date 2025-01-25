@@ -29,6 +29,10 @@ public class Navigator {
     public static void setMainStage(Stage stage) {
         mainStage = stage;
     }
+    
+    public static Stage getMainStage() {
+        return mainStage;
+    }
 
     public static void navigateToLandingScreen(Event event) throws IOException {
         if (event.getSource() instanceof Node) {
@@ -167,7 +171,7 @@ public class Navigator {
     public static void navigateToOnlineScreen(Event event) throws IOException {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
         Parent root = Loader.load();
-        Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
+        Stage stage = mainStage;
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
