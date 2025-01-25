@@ -15,4 +15,8 @@ public class ImageRoutes {
     public static final String MEDIUM_AVATAR = "/tic_tac_toe/assets/images/medium_avatar.png";
     public static final String HARD_AVATAR = "/tic_tac_toe/assets/images/hard_avatar.png";
     public static final String COMPUTER_AVATAR = "/tic_tac_toe/assets/images/computer_avatar.png";
+    public static final String WIN_VIDEO = "/tic_tac_toe/assets/Win.mp4";
+    public static final String LOSE_VIDEO = "/tic_tac_toe/assets/Lose.mp4";
+    public static final String DRAW_VIDEO = "/tic_tac_toe/assets/Draw.mp4";
+
 }
