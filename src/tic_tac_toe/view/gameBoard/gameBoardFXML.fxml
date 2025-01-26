@@ -40,7 +40,7 @@
             </Label>
             <HBox alignment="CENTER">
                <children>
-                  <Label text="Score: " textFill="WHITE">
+                  <Label fx:id="scoreLabel1" text="Score: " textFill="WHITE">
                      <font>
                         <Font size="36.0" />
                      </font>
@@ -109,7 +109,7 @@
             </Label>
             <HBox alignment="CENTER">
                <children>
-                  <Label text="Score: " textFill="WHITE">
+                  <Label fx:id="scoreLabel2" text="Score: " textFill="WHITE">
                      <font>
                         <Font size="36.0" />
                      </font>

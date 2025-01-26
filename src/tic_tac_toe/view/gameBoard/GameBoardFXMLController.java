@@ -142,6 +142,10 @@ public class GameBoardFXMLController implements Initializable {
     private boolean isHosting;
     private boolean isMyTurn;
     private Player opponent;
+    @FXML
+    private Label scoreLabel1;
+    @FXML
+    private Label scoreLabel2;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -558,6 +562,10 @@ public class GameBoardFXMLController implements Initializable {
     private void replaySavedGame() {
        
         recordGameBtn.setDisable(true);
+        player1Score.setVisible(false);
+        player2Score.setVisible(false);
+        scoreLabel1.setVisible(false);
+        scoreLabel2.setVisible(false);
         recordGameBtn.setOpacity(0);
         disableBoard();
         
