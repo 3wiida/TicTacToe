@@ -74,26 +74,44 @@ public class AvailableUsersController implements Initializable {
     }
 
     private void addUser(String userName) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
-            HBox userItem = loader.load();
-            userController = loader.getController();
-            userController.setUserName(userName);
-            userController.inviteBtn.setOnAction(
-                    (event) -> {
-                        String opponentUsername = userController.userNameLabel.getText();
-                        currentOpponentUsername = opponentUsername;
-                        sendInvitation(opponentUsername);
-                        waitingPopup = showWaitingPopup();
-                    }
-            );
-            allUsers.add(userItem);
-            usersListView.getItems().add(userItem);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
+        HBox userItem = loader.load();
+        User_itemController userController = loader.getController(); // Make userController local
+        userController.setUserName(userName);
+        userController.inviteBtn.setOnAction(event -> {
+            String opponentUsername = userController.userNameLabel.getText();
+            currentOpponentUsername = opponentUsername;
+            sendInvitation(opponentUsername);
+            waitingPopup = showWaitingPopup();
+        });
+        allUsers.add(userItem);
+        usersListView.getItems().add(userItem);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+//    private void addUser(String userName) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
+//            HBox userItem = loader.load();
+//            userController = loader.getController();
+//            userController.setUserName(userName);
+//            userController.inviteBtn.setOnAction(
+//                    (event) -> {
+//                        String opponentUsername = userController.userNameLabel.getText();
+//                        currentOpponentUsername = opponentUsername;
+//                        sendInvitation(opponentUsername);
+//                        waitingPopup = showWaitingPopup();
+//                    }
+//            );
+//            allUsers.add(userItem);
+//            usersListView.getItems().add(userItem);
+//            
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 private void filterUsers(String searchText) {
     ObservableList<HBox> filteredUsers = FXCollections.observableArrayList();
