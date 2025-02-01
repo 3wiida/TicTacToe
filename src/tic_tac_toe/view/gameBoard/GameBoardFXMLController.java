@@ -120,7 +120,7 @@ public class GameBoardFXMLController implements Initializable {
     private AnchorPane boardAnchorPane;
     @FXML
     private Button recordGameBtn;
-    
+
     private Button[][] buttonsArray;
     private ImageView[][] imageArray;
 
@@ -134,10 +134,9 @@ public class GameBoardFXMLController implements Initializable {
     private Line line;
     private GameRecorder gameRecorder = new GameRecorder();
     private boolean isGameRecording = false;
-    
-    
+
     private String fileName;
-    
+
     /* online parameters */
     private boolean isHosting;
     private boolean isMyTurn;
@@ -146,36 +145,36 @@ public class GameBoardFXMLController implements Initializable {
     private Label scoreLabel1;
     @FXML
     private Label scoreLabel2;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         game = new Game();
-        
+
         imageArray = new ImageView[][]{
             {imageCell00, imageCell01, imageCell02},
             {imageCell10, imageCell11, imageCell12},
             {imageCell20, imageCell21, imageCell22}
         };
-        
+
         buttonsArray = new Button[][]{
             {buttonCell00, buttonCell01, buttonCell02},
             {buttonCell10, buttonCell11, buttonCell12},
             {buttonCell20, buttonCell21, buttonCell22}
         };
 
-    }    
-    
-    public void setOnlineParameters(Player opponent, boolean isHosting){
+    }
+
+    public void setOnlineParameters(Player opponent, boolean isHosting) {
         this.opponent = opponent;
         this.isHosting = isHosting;
         this.gameMode = MULTIPLAYER_ONLINE;
         isMyTurn = isHosting;
-        currentPlayer = isHosting? 'X' : 'O';
+        currentPlayer = isHosting ? 'X' : 'O';
     }
-    
-    public void setGameMode(GameModeEnum mode){
+
+    public void setGameMode(GameModeEnum mode) {
         gameMode = mode;
-        if(null != gameMode){
+        if (null != gameMode) {
             switch (gameMode) {
                 case COMPUTER_EASY:
                 case COMPUTER_MEDIUM:
@@ -189,7 +188,7 @@ public class GameBoardFXMLController implements Initializable {
                 case MULTIPLAYER_ONLINE:
                     recieveMessagesFromServer();
                     setupBoardForOnlineMultiplayerGame();
-                    
+
                     break;
                 case REPLAY_GAME:
                     replaySavedGame();
@@ -197,80 +196,98 @@ public class GameBoardFXMLController implements Initializable {
                 default:
                     break;
             }
-        }    
+        }
     }
-    
-    private void setupBoardForOfflineMultiplayerGame(){
+
+    private void setupBoardForOfflineMultiplayerGame() {
         playerOneTV.setText(playerOne.getUsername());
         playerTwoTV.setText(playerTwo.getUsername());
-    }  
-    
-    
-    private void setupBoardForComputerGame(){
+    }
+
+    private void setupBoardForComputerGame() {
         playerOneTV.setText("You");
         playerTwoTV.setText("PC");
         playerOne = new Player("YOU");
         playerTwo = new Player("PC");
         player2Image.setImage(new Image(ImageRoutes.COMPUTER_AVATAR));
     }
-    
-    private void setupBoardForOnlieMultiplayerGame(){
-        
+
+    private void setupBoardForOnlieMultiplayerGame() {
+
     }
-    
-    public void setPlayersNames(String playerOneName, String playerTwoName){
+
+    public void setPlayersNames(String playerOneName, String playerTwoName) {
         playerOne = new Player(playerOneName);
         playerTwo = new Player(playerTwoName);
     }
-    
-    public void setFileNameForGameReplay(String fileName){
+
+    public void setFileNameForGameReplay(String fileName) {
         this.fileName = fileName;
     }
-    
+
     @FXML
     private void handleCellClick(ActionEvent event) {
 
-            Button clickedButton = (Button) event.getSource();
+        Button clickedButton = (Button) event.getSource();
 
-            int row = -1;
-            int col = -1;
+        int row = -1;
+        int col = -1;
 
-            if (clickedButton == buttonCell00) { row = 0; col = 0; }
-            else if (clickedButton == buttonCell01) { row = 0; col = 1; }
-            else if (clickedButton == buttonCell02) { row = 0; col = 2; }
-            else if (clickedButton == buttonCell10) { row = 1; col = 0; }
-            else if (clickedButton == buttonCell11) { row = 1; col = 1; }
-            else if (clickedButton == buttonCell12) { row = 1; col = 2; }
-            else if (clickedButton == buttonCell20) { row = 2; col = 0; }
-            else if (clickedButton == buttonCell21) { row = 2; col = 1; }
-            else if (clickedButton == buttonCell22) { row = 2; col = 2; }
+        if (clickedButton == buttonCell00) {
+            row = 0;
+            col = 0;
+        } else if (clickedButton == buttonCell01) {
+            row = 0;
+            col = 1;
+        } else if (clickedButton == buttonCell02) {
+            row = 0;
+            col = 2;
+        } else if (clickedButton == buttonCell10) {
+            row = 1;
+            col = 0;
+        } else if (clickedButton == buttonCell11) {
+            row = 1;
+            col = 1;
+        } else if (clickedButton == buttonCell12) {
+            row = 1;
+            col = 2;
+        } else if (clickedButton == buttonCell20) {
+            row = 2;
+            col = 0;
+        } else if (clickedButton == buttonCell21) {
+            row = 2;
+            col = 1;
+        } else if (clickedButton == buttonCell22) {
+            row = 2;
+            col = 2;
+        }
 
-            if(isEmptyCell(row, col)){
-                if(gameMode == MULTIPLAYER_ONLINE){
-                    if(isMyTurn){
-                        System.out.println(currentPlayer);
-                        commitMove(currentPlayer, row, col);
-                        sendMoveOverNetwork(currentPlayer+"", row, col);
-                        isMyTurn = !isMyTurn;  
-                    }
-                }else{
-                    currentPlayer = game.getCurrentPlayer();
+        if (isEmptyCell(row, col)) {
+            if (gameMode == MULTIPLAYER_ONLINE) {
+                if (isMyTurn) {
+                    System.out.println(currentPlayer);
                     commitMove(currentPlayer, row, col);
-                    currentPlayer = game.getCurrentPlayer();
-                    if(gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
-                        if(game.getGameCounter()<9){
-                            Pair<Integer,Integer> move = computer.move(game.getBoard());
-                            commitMove(currentPlayer, move.getKey(), move.getValue());
-                        }
+                    sendMoveOverNetwork(currentPlayer + "", row, col);
+                    isMyTurn = !isMyTurn;
+                }
+            } else {
+                currentPlayer = game.getCurrentPlayer();
+                commitMove(currentPlayer, row, col);
+                currentPlayer = game.getCurrentPlayer();
+                if (gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD) {
+                    if (game.getGameCounter() < 9) {
+                        Pair<Integer, Integer> move = computer.move(game.getBoard());
+                        commitMove(currentPlayer, move.getKey(), move.getValue());
                     }
                 }
-
             }
-        
+
+        }
+
     }
- 
-    private void commitMove(char currentPlayer, int row, int col){
-         if (game.makeMove(row, col)) {
+
+    private void commitMove(char currentPlayer, int row, int col) {
+        if (game.makeMove(row, col)) {
             if (gameMode != GameModeEnum.REPLAY_GAME) {
                 gameRecorder.recordMove(row, col, currentPlayer);
             }
@@ -279,36 +296,36 @@ public class GameBoardFXMLController implements Initializable {
             } else if (currentPlayer == 'O') {
                 imageArray[row][col].setImage(new Image(ImageRoutes.oImage));
             }
-            
+
             if (game.isGameOver() && !game.getDidDraw()) {
-                if(gameMode == MULTIPLAYER_ONLINE){
-                    System.out.println("host => " +  isHosting);
-                    System.out.println("my turn => " +  isMyTurn);
-                    if(isMyTurn){
+                if (gameMode == MULTIPLAYER_ONLINE) {
+                    System.out.println("host => " + isHosting);
+                    System.out.println("my turn => " + isMyTurn);
+                    if (isMyTurn) {
                         System.out.println("I won");
                         sendUpdateScore(CurrentPlayer.getPlayer());
-                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())+10);
+                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore()) + 10);
                         winner = 1;
-                    }else {
+                    } else {
                         System.out.println("I lose");
                         sendDecreaseScore(opponent);
                         winner = 2;
-                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore())-10);
+                        CurrentPlayer.getPlayer().setScore((CurrentPlayer.getPlayer().getScore()) - 10);
                     }
-                }else{
+                } else {
                     if (currentPlayer == 'X') {
                         winner = 1;
-                    } else if (currentPlayer == 'O'){
+                    } else if (currentPlayer == 'O') {
                         winner = 2;
                     }
                 }
-                
+
                 if (isGameRecording) {
                     recordGame();
                 }
                 disableBoard();
                 drawWinningLine();
-                
+
             } else if (game.getDidDraw()) {
                 winner = 0;
                 if (isGameRecording) {
@@ -316,18 +333,17 @@ public class GameBoardFXMLController implements Initializable {
                 }
                 disableBoard();
                 if (gameMode != GameModeEnum.REPLAY_GAME) {
-                    showRematchPopup(boardAnchorPane);
+                    showRematchPopup(boardAnchorPane,Navigator.getMainStage());
                 }
             }
-            
-            
+
         }
     }
-    
-    private boolean isEmptyCell(int row, int col){
+
+    private boolean isEmptyCell(int row, int col) {
         return game.getBoard()[row][col] == '\0';
     }
-    
+
     private void disableBoard() {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof Button) {
@@ -335,133 +351,145 @@ public class GameBoardFXMLController implements Initializable {
             }
         }
     }
-    
-     private void drawWinningLine() {
+
+    private void drawWinningLine() {
         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
         Button currentButton;
         boolean colWinning = game.getWinningLane() == WinningLaneEnum.first_column
                 || game.getWinningLane() == WinningLaneEnum.second_column
                 || game.getWinningLane() == WinningLaneEnum.third_column;
-        
-        boolean rowWinning = game.getWinningLane() == WinningLaneEnum.first_row 
+
+        boolean rowWinning = game.getWinningLane() == WinningLaneEnum.first_row
                 || game.getWinningLane() == WinningLaneEnum.second_row
                 || game.getWinningLane() == WinningLaneEnum.third_row;
-        
-        if (colWinning ) {
+
+        if (colWinning) {
             System.out.println("col winning " + game.getWinningLane().getCode());
             currentButton = buttonsArray[0][game.getWinningLane().getCode()];
-            x1 = currentButton.getLayoutX() + currentButton.getWidth()/2;
+            x1 = currentButton.getLayoutX() + currentButton.getWidth() / 2;
             y1 = currentButton.getLayoutY();
             currentButton = buttonsArray[2][game.getWinningLane().getCode()];
-            x2 = currentButton.getLayoutX() + currentButton.getWidth()/2;
-            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
-        }
-        else if (rowWinning) {
+            x2 = currentButton.getLayoutX() + currentButton.getWidth() / 2;
+            y2 = currentButton.getLayoutY() + currentButton.getHeight();
+        } else if (rowWinning) {
             System.out.println("row winning " + game.getWinningLane().getCode());
             currentButton = buttonsArray[game.getWinningLane().getCode()][0];
             x1 = currentButton.getLayoutX();
-            y1 = currentButton.getLayoutY() + currentButton.getHeight()/2;
+            y1 = currentButton.getLayoutY() + currentButton.getHeight() / 2;
             currentButton = buttonsArray[game.getWinningLane().getCode()][2];
             x2 = currentButton.getLayoutX() + currentButton.getWidth();
-            y2 = currentButton.getLayoutY() + currentButton.getHeight()/2; 
-        }
-        else if (game.getWinningLane() == WinningLaneEnum.first_diagonal) {
+            y2 = currentButton.getLayoutY() + currentButton.getHeight() / 2;
+        } else if (game.getWinningLane() == WinningLaneEnum.first_diagonal) {
             currentButton = buttonsArray[0][0];
             x1 = currentButton.getLayoutX();
             y1 = currentButton.getLayoutY();
             currentButton = buttonsArray[2][2];
             x2 = currentButton.getLayoutX() + currentButton.getWidth();
-            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
-        }
-        else if (game.getWinningLane() == WinningLaneEnum.second_diagonal) {
+            y2 = currentButton.getLayoutY() + currentButton.getHeight();
+        } else if (game.getWinningLane() == WinningLaneEnum.second_diagonal) {
             currentButton = buttonsArray[0][2];
             x1 = currentButton.getLayoutX() + currentButton.getWidth();
             y1 = currentButton.getLayoutY();
             currentButton = buttonsArray[2][0];
             x2 = currentButton.getLayoutX();
-            y2 = currentButton.getLayoutY() + currentButton.getHeight(); 
+            y2 = currentButton.getLayoutY() + currentButton.getHeight();
         }
         line = new Line(x1, y1, x1, y1);
         line.setStroke(Color.BLACK);
         line.setStrokeWidth(5.0);
         line.setOpacity(0);
         boardAnchorPane.getChildren().add(line);
-        
+
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endXProperty(), x2)),
-            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endYProperty(), y2)),
-            new KeyFrame(Duration.seconds(0.5), new KeyValue(line.opacityProperty(), 1))
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endXProperty(), x2)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(line.endYProperty(), y2)),
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(line.opacityProperty(), 1))
         );
         timeline.setOnFinished(e -> {
             if (gameMode != GameModeEnum.REPLAY_GAME) {
                 System.out.println(currentPlayer);
-                showRematchPopup(boardAnchorPane);
+                showRematchPopup(boardAnchorPane,Navigator.getMainStage());
             }
         });
         timeline.play();
     }
-     
-    private void showRematchPopup(Node node) {
-       Platform.runLater(() -> {
-           try {
-               FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_GAME_STATUS_ROUTE));
-               Parent root = loader.load();
-               Scene scene = new Scene(root,600,400);
-               scene.setFill(Color.TRANSPARENT);
 
-               Stage  gameStatusPopup = new Stage();
-               gameStatusPopup.initModality(Modality.APPLICATION_MODAL);
-               gameStatusPopup.setScene(scene);
-               gameStatusPopup.initStyle(StageStyle.TRANSPARENT);
+    private void showRematchPopup(Node node, Stage parentStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.POPUP_GAME_STATUS_ROUTE));
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 600, 400);
+                scene.setFill(Color.TRANSPARENT);
 
-               PopUpGameController controller = loader.getController();
-               controller.setPlayAgainVisablility(gameMode != MULTIPLAYER_ONLINE);
-               controller.setPopupStage(gameStatusPopup);
-               controller.setPlayAgainBtnFunc(() -> {
-                   resetGameBoard();
-               });
-               
-               controller.setCloseBtnFunc(()->{
-                   if(CurrentPlayer.getPlayer() == null){
-                       try {
-                           Navigator.navigateToLandingScreen(node);
-                       } catch (IOException ex) {
-                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                   }else{
-                       try {
-                           sendOnlineGameFinishedToServer();
-                           Navigator.navigateToOnlineScreen(node);
-                       } catch (IOException ex) {
-                           Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                   }
-               });
-               String msg = "";
-               
-               
-                switch (winner){
+                Stage gameStatusPopup = new Stage();
+                gameStatusPopup.initOwner(parentStage); // Set the parent stage
+                gameStatusPopup.initModality(Modality.WINDOW_MODAL); // Make the popup modal
+                gameStatusPopup.initStyle(StageStyle.TRANSPARENT); // Optional: Transparent background
+                gameStatusPopup.setScene(scene);
+
+                PopUpGameController controller = loader.getController();
+                controller.setPlayAgainVisablility(gameMode != MULTIPLAYER_ONLINE);
+                controller.setPopupStage(gameStatusPopup);
+                controller.setPlayAgainBtnFunc(this::resetGameBoard);
+
+                controller.setCloseBtnFunc(() -> {
+                    if (CurrentPlayer.getPlayer() == null) {
+                        try {
+                            Navigator.navigateToLandingScreen(node);
+                        } catch (IOException ex) {
+                            Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        try {
+                            sendOnlineGameFinishedToServer();
+                            Navigator.navigateToOnlineScreen(node);
+                        } catch (IOException ex) {
+                            Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+
+                String msg;
+                switch (winner) {
                     case 0:
-                        msg = "Draw, play again and fight to win"; 
+                        msg = "Draw, play again and fight to win";
                         break;
                     case 1:
-                        msg = "You Won, Congratulations"; 
+                        msg = "You Won, Congratulations";
                         break;
                     case 2:
-                        msg = "unfortunately you lost, Better luck next Time <3 ";
+                        msg = "Unfortunately, you lost. Better luck next time <3";
+                        break;
+                    default:
+                        msg = "Game Over";
                         break;
                 }
-                
-               controller.setPopupStatusMsg(msg);
-               gameStatusPopup.showAndWait();
+                controller.setPopupStatusMsg(msg);
 
-           } catch (IOException ex) {
-               Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
-           }
-       });
-   }
-    
-    private void sendOnlineGameFinishedToServer(){
+                // Center the popup relative to the parent stage
+                gameStatusPopup.setOnShowing(event -> {
+                    double parentX = parentStage.getX();
+                    double parentY = parentStage.getY();
+                    double parentWidth = parentStage.getWidth();
+                    double parentHeight = parentStage.getHeight();
+
+                    double popupWidth = gameStatusPopup.getWidth();
+                    double popupHeight = gameStatusPopup.getHeight();
+
+                    gameStatusPopup.setX(parentX + (parentWidth - 600) / 2);
+                    gameStatusPopup.setY(parentY + (parentHeight - 400) / 2);
+                });
+
+                gameStatusPopup.showAndWait();
+
+            } catch (IOException ex) {
+                Logger.getLogger(GameBoardFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
+    private void sendOnlineGameFinishedToServer() {
         JSONObject gameFinished = new JSONObject();
         gameFinished.put("type", "onlineGameFinished");
         ClientSocket.sendRequest(gameFinished);
@@ -471,31 +499,30 @@ public class GameBoardFXMLController implements Initializable {
         for (Node node : gridPane.getChildren()) {
             if (node instanceof ImageView) {
                 ((ImageView) node).setImage(null);
-            }
-            else if (node instanceof Button) {
+            } else if (node instanceof Button) {
                 node.setDisable(false);
             }
         }
-        
+
         if (line != null) {
             boardAnchorPane.getChildren().remove(line);
             line = null;
         }
-        
-        player1Score.setText(""+game.getPlayer1Score());
-        player2Score.setText(""+game.getPlayer2Score());
+
+        player1Score.setText("" + game.getPlayer1Score());
+        player2Score.setText("" + game.getPlayer2Score());
         winner = Integer.MAX_VALUE;
         if (!gameRecorder.isEmpty()) {
             gameRecorder = null;
             gameRecorder = new GameRecorder();
         }
-        
+
         if (isGameRecording) {
             onClickRecordGame(new ActionEvent());
         }
         game.resetBoard();
     }
-    
+
     @FXML
     private void onClickRecordGame(ActionEvent event) {
         isGameRecording = (isGameRecording == false) ? true : false;
@@ -505,31 +532,31 @@ public class GameBoardFXMLController implements Initializable {
             recordGameBtn.setStyle("-fx-background-color: black;");
         }
     }
-    
-    private  void recordGame(){
+
+    private void recordGame() {
         String p1Name;
         String p2Name;
-        if(gameMode==COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD){
+        if (gameMode == COMPUTER_EASY || gameMode == COMPUTER_MEDIUM || gameMode == COMPUTER_HARD) {
             p1Name = "You";
             p2Name = "PC";
-        }else{
+        } else {
             p2Name = playerTwoTV.getText();
             p1Name = playerOneTV.getText();
         }
-        
-        
+
         gameRecorder.setPlayers(p1Name, p2Name);
-      
-        gameRecorder.saveGameToFile(p1Name + "Vs" + p2Name + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)+ LocalDateTime.now().getSecond() + ".json");
+
+        gameRecorder.saveGameToFile(p1Name + "Vs" + p2Name + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE) + LocalDateTime.now().getSecond() + ".json");
     }
+
     @FXML
     private void onClickExitGame(ActionEvent event) {
         doExitFunction(event);
     }
-    
-    private void doExitFunction(Event event){
+
+    private void doExitFunction(Event event) {
         try {
-            if(gameMode == MULTIPLAYER_ONLINE){
+            if (gameMode == MULTIPLAYER_ONLINE) {
                 JSONObject closeThread = new JSONObject();
                 closeThread.put("type", "closeThread");
                 try {
@@ -539,28 +566,27 @@ public class GameBoardFXMLController implements Initializable {
                 }
                 sendWithdrawalRequest();
             }
-            
-            if(CurrentPlayer.getPlayer() == null){
+
+            if (CurrentPlayer.getPlayer() == null) {
                 Navigator.navigateToLandingScreen(event);
-            }else{
-                Navigator.navigateToOnlineScreen(event); 
+            } else {
+                Navigator.navigateToOnlineScreen(event);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-    
-    private void sendWithdrawalRequest(){
+
+    private void sendWithdrawalRequest() {
         JSONObject withdrawalRequest = new JSONObject();
         withdrawalRequest.put("type", "withdrawal");
         withdrawalRequest.put("to", opponent.getUsername());
         ClientSocket.sendRequest(withdrawalRequest);
-        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()-10);
+        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore() - 10);
     }
-    
-    
+
     private void replaySavedGame() {
-       
+
         recordGameBtn.setDisable(true);
         player1Score.setVisible(false);
         player2Score.setVisible(false);
@@ -568,12 +594,12 @@ public class GameBoardFXMLController implements Initializable {
         scoreLabel2.setVisible(false);
         recordGameBtn.setOpacity(0);
         disableBoard();
-        
+
         List<GameMove> replayedMoves = gameRecorder.replayGameFromFile(fileName);
         setPlayersNames(gameRecorder.getPlayerOneName(), gameRecorder.getPlayerTwoName());
         playerOneTV.setText(playerOne.getUsername());
         playerTwoTV.setText(playerTwo.getUsername());
-        
+
         Timeline timeline = new Timeline();
         int[] index = {0};
 
@@ -590,69 +616,69 @@ public class GameBoardFXMLController implements Initializable {
         }
         timeline.play();
     }
-    
-     /* Online Game Logic */
-    private void recieveMessagesFromServer(){
-                System.out.println("enter recieve function");
-                new Thread(() -> {
-                    if(!ClientSocket.checkSocketStat()){
-                        System.out.println("server is connected");
-                        while(true){
-                            try {
-                                JSONObject recievedMSG = ClientSocket.responses.take();
-                                if (recievedMSG == null) {
-                                    break;
-                                }
-                                String responseType = recievedMSG.getString("type");
-                                switch (responseType) {
-                                    case "closeThread":
-                                        Thread.currentThread().interrupt();
-                                        break;
-                                        
-                                    case "withdrawal":{
-                                        System.out.println("recieved withdrawl form the opponent");
-                                        winner = 1;
-                                        showRematchPopup(boardAnchorPane);
-                                        CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore()+10);
-                                        break;
-                                    }
-                                    
-                                    default:
-                                        int row = recievedMSG.getInt("row");
-                                        int col = recievedMSG.getInt("col");
-                                        char turn = recievedMSG.getString("turn").charAt(0);
-                                        Platform.runLater(()->{
-                                            commitMove(turn, row, col);
-                                            isMyTurn = !isMyTurn;  
-                                        });
-                                        break;
-                                }
-                            } catch (InterruptedException ex) {
+
+    /* Online Game Logic */
+    private void recieveMessagesFromServer() {
+        System.out.println("enter recieve function");
+        new Thread(() -> {
+            if (!ClientSocket.checkSocketStat()) {
+                System.out.println("server is connected");
+                while (true) {
+                    try {
+                        JSONObject recievedMSG = ClientSocket.responses.take();
+                        if (recievedMSG == null) {
+                            break;
+                        }
+                        String responseType = recievedMSG.getString("type");
+                        switch (responseType) {
+                            case "closeThread":
+                                Thread.currentThread().interrupt();
                                 break;
-                            } catch (JSONException ex){
+
+                            case "withdrawal": {
+                                System.out.println("recieved withdrawl form the opponent");
+                                winner = 1;
+                                showRematchPopup(boardAnchorPane,Navigator.getMainStage());
+                                CurrentPlayer.getPlayer().setScore(CurrentPlayer.getPlayer().getScore() + 10);
                                 break;
                             }
+
+                            default:
+                                int row = recievedMSG.getInt("row");
+                                int col = recievedMSG.getInt("col");
+                                char turn = recievedMSG.getString("turn").charAt(0);
+                                Platform.runLater(() -> {
+                                    commitMove(turn, row, col);
+                                    isMyTurn = !isMyTurn;
+                                });
+                                break;
                         }
-                        
-                    }else{
-                        System.out.println("may be connection faild");
+                    } catch (InterruptedException ex) {
+                        break;
+                    } catch (JSONException ex) {
+                        break;
                     }
-                }).start();
-        }
-    
-    private void setupBoardForOnlineMultiplayerGame(){
+                }
+
+            } else {
+                System.out.println("may be connection faild");
+            }
+        }).start();
+    }
+
+    private void setupBoardForOnlineMultiplayerGame() {
         playerOneTV.setText(CurrentPlayer.getPlayer().getUsername());
         playerTwoTV.setText(opponent.getUsername());
-        player1Score.setText(CurrentPlayer.getPlayer().getScore()+"");
-        player2Score.setText(opponent.getScore()+"");
-        Navigator.getMainStage().setOnCloseRequest((event)->{
-                System.out.println("window closed");
-                doExitFunction(event);
+        player1Score.setText(CurrentPlayer.getPlayer().getScore() + "");
+        player2Score.setText(opponent.getScore() + "");
+        Navigator.getMainStage().setOnCloseRequest((event) -> {
+            System.out.println("window closed");
+            doExitFunction(event);
         });
     }
-    
-    private void sendMoveOverNetwork(String currentPlayer,int row,int col){
-        if(!ClientSocket.checkSocketStat()){
+
+    private void sendMoveOverNetwork(String currentPlayer, int row, int col) {
+        if (!ClientSocket.checkSocketStat()) {
             /* prepare JSON object */
             JSONObject moveJSON = new JSONObject();
             moveJSON.put("type", "move");
@@ -663,33 +689,33 @@ public class GameBoardFXMLController implements Initializable {
             moveJSON.put("to", opponent.getUsername());
             /* Send it */
             ClientSocket.sendRequest(moveJSON);
-        }else{
+        } else {
             /* Handle for testing */
             System.out.println("Error in sending move, may be connection is faild");
         }
     }
-    
-    private void sendUpdateScore(Player player){
-        if(!ClientSocket.checkSocketStat()){
+
+    private void sendUpdateScore(Player player) {
+        if (!ClientSocket.checkSocketStat()) {
             JSONObject scoreJson = new JSONObject();
             scoreJson.put("type", "increase_score");
             scoreJson.put("name", player.getUsername());
             scoreJson.put("id", player.getId());
             ClientSocket.sendRequest(scoreJson);
-        }else{
+        } else {
             System.out.println("error in send increase score");
         }
     }
-    
-    private void sendDecreaseScore(Player opponent){
+
+    private void sendDecreaseScore(Player opponent) {
         System.out.println("I lost sent decrease to server");
-        if(!ClientSocket.checkSocketStat()){
+        if (!ClientSocket.checkSocketStat()) {
             JSONObject scoreJson = new JSONObject();
             scoreJson.put("type", "decrease_score");
             scoreJson.put("name", opponent.getUsername());
             scoreJson.put("id", opponent.getId());
             ClientSocket.sendRequest(scoreJson);
-        }else{
+        } else {
             System.out.println("error in send increase score");
         }
     }

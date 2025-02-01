@@ -68,29 +68,29 @@ public class AvailableUsersController implements Initializable {
         });
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-        String searchText = newValue.trim().toLowerCase(); 
-        filterUsers(searchText); 
-    });
+            String searchText = newValue.trim().toLowerCase();
+            filterUsers(searchText);
+        });
     }
 
     private void addUser(String userName) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
-        HBox userItem = loader.load();
-        User_itemController userController = loader.getController(); // Make userController local
-        userController.setUserName(userName);
-        userController.inviteBtn.setOnAction(event -> {
-            String opponentUsername = userController.userNameLabel.getText();
-            currentOpponentUsername = opponentUsername;
-            sendInvitation(opponentUsername);
-            waitingPopup = showWaitingPopup();
-        });
-        allUsers.add(userItem);
-        usersListView.getItems().add(userItem);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
+            HBox userItem = loader.load();
+            User_itemController userController = loader.getController(); // Make userController local
+            userController.setUserName(userName);
+            userController.inviteBtn.setOnAction(event -> {
+                String opponentUsername = userController.userNameLabel.getText();
+                currentOpponentUsername = opponentUsername;
+                sendInvitation(opponentUsername);
+                waitingPopup = showWaitingPopup(Navigator.getMainStage());
+            });
+            allUsers.add(userItem);
+            usersListView.getItems().add(userItem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 //    private void addUser(String userName) {
 //        try {
 //            FXMLLoader loader = new FXMLLoader(getClass().getResource("user_item.fxml"));
@@ -113,25 +113,25 @@ public class AvailableUsersController implements Initializable {
 //        }
 //    }
 
-private void filterUsers(String searchText) {
-    ObservableList<HBox> filteredUsers = FXCollections.observableArrayList();
+    private void filterUsers(String searchText) {
+        ObservableList<HBox> filteredUsers = FXCollections.observableArrayList();
 
-    if (searchText.isEmpty()) {
-        usersListView.setItems(allUsers);
-        return;
-    }
+        if (searchText.isEmpty()) {
+            usersListView.setItems(allUsers);
+            return;
+        }
 
-    for (HBox userItem : allUsers) {
-        Label userNameLabel = (Label) userItem.lookup("#userNameLabel"); 
-        if (userNameLabel != null) {
-            String userName = userNameLabel.getText().toLowerCase();
-            if (userName.contains(searchText)) {
-                filteredUsers.add(userItem);
+        for (HBox userItem : allUsers) {
+            Label userNameLabel = (Label) userItem.lookup("#userNameLabel");
+            if (userNameLabel != null) {
+                String userName = userNameLabel.getText().toLowerCase();
+                if (userName.contains(searchText)) {
+                    filteredUsers.add(userItem);
+                }
             }
         }
+        usersListView.setItems(filteredUsers);
     }
-    usersListView.setItems(filteredUsers);
-}
 
     @FXML
     private void photoClicked(MouseEvent event) {
@@ -219,7 +219,7 @@ private void filterUsers(String searchText) {
         Player opponent = new Player(hostId, hostUsername, hostScore);
         Platform.runLater(
                 () -> {
-                    boolean isInvitaionAccecpted = showInvitationPopup(hostUsername);
+                    boolean isInvitaionAccecpted = showInvitationPopup(hostUsername,Navigator.getMainStage());
                     if (isInvitaionAccecpted) {
                         sendAccecptInvitation(hostUsername);
                         JSONObject closeThread = new JSONObject();
@@ -259,7 +259,7 @@ private void filterUsers(String searchText) {
     }
 
     private void sendInvitation(String opponentUsername) {
-        System.out.println("invitation sent to opponent => "+ opponentUsername);
+        System.out.println("invitation sent to opponent => " + opponentUsername);
         JSONObject invitationRequest = new JSONObject();
         invitationRequest.put("type", "invite");
         invitationRequest.put("opponentUsername", opponentUsername);
@@ -293,18 +293,38 @@ private void filterUsers(String searchText) {
         ClientSocket.sendRequest(cancelRequest);
     }
 
-    private boolean showInvitationPopup(String hostUsername) {
+    private boolean showInvitationPopup(String hostUsername, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.INVTATION_POPUP_ROUTE));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
+
             InvitationPopupController controller = loader.getController();
             controller.setRequestLabel(hostUsername + " is inviting you to play");
+
             Stage invitationStage = new Stage();
-            invitationStage.initModality(Modality.APPLICATION_MODAL);
-            invitationStage.initStyle(StageStyle.TRANSPARENT);
+            invitationStage.initOwner(parentStage); // Set parent stage
+            invitationStage.initModality(Modality.WINDOW_MODAL); // Ensure modal behavior
+            invitationStage.initStyle(StageStyle.TRANSPARENT); // Optional: Transparent style
+
             invitationStage.setScene(scene);
+            invitationStage.sizeToScene();
+
+            // Center the popup relative to the parent stage
+            invitationStage.setOnShowing(event -> {
+                double parentX = parentStage.getX();
+                double parentY = parentStage.getY();
+                double parentWidth = parentStage.getWidth();
+                double parentHeight = parentStage.getHeight();
+
+                double popupWidth = invitationStage.getWidth();
+                double popupHeight = invitationStage.getHeight();
+
+                invitationStage.setX(parentX + (parentWidth - 500) / 2);
+                invitationStage.setY(parentY + (parentHeight - 200) / 2);
+            });
+
             invitationPopup = invitationStage;
             invitationStage.showAndWait();
             return controller.isInvitaitonAccepted();
@@ -315,23 +335,41 @@ private void filterUsers(String searchText) {
         return false;
     }
 
-    private Stage showWaitingPopup() {
+    private Stage showWaitingPopup(Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ScreensRoutes.WAITING_POPUP_ROUTE));
             Parent root = loader.load();
             WaitingRequestPopupController controller = loader.getController();
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
+
             Stage waitingStage = new Stage();
-            waitingStage.initModality(Modality.APPLICATION_MODAL);
-            waitingStage.initStyle(StageStyle.TRANSPARENT);
+            waitingStage.initOwner(parentStage); // Set parent stage
+            waitingStage.initModality(Modality.WINDOW_MODAL); // Ensure it's modal
+            waitingStage.initStyle(StageStyle.TRANSPARENT); // Optional: Transparent background
+
             waitingStage.setScene(scene);
-            controller.cancelBtn.setOnAction(
-                    (event) -> {
-                        sendCancelInvitation(currentOpponentUsername);
-                        waitingPopup.close();
-                    }
-            );
+            waitingStage.sizeToScene();
+
+            // Center the popup relative to its parent
+            waitingStage.setOnShowing(event -> {
+                double parentX = parentStage.getX();
+                double parentY = parentStage.getY();
+                double parentWidth = parentStage.getWidth();
+                double parentHeight = parentStage.getHeight();
+
+                double popupWidth = waitingStage.getWidth();
+                double popupHeight = waitingStage.getHeight();
+
+                waitingStage.setX(parentX + (parentWidth - 600) / 2);
+                waitingStage.setY(parentY + (parentHeight - 200) / 2);
+            });
+
+            controller.cancelBtn.setOnAction((event) -> {
+                sendCancelInvitation(currentOpponentUsername);
+                waitingStage.close();
+            });
+
             waitingStage.show();
             return waitingStage;
         } catch (IOException ex) {
