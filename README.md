@@ -8,12 +8,12 @@ This comes as the final project of Java course at ITI.<br><br><br><br>
 ## Screenshots
 
 <div>
-    <img src="github_images/client_landing_page.png" width="450" height="300" alt="Screenshot 1">
-    <img src="github_images/computer_mode.png" width="450" height="300" alt="Screenshot 2">
-    <img src="github_images/game_board.png" width="450" height="300" alt="Screenshot 3">
-    <img src="github_images/available_players.png" width="450" height="300" alt="Screenshot 4">
-    <img src="github_images/invitation.png" width="450" height="300" alt="Screenshot 5">
-    <img src="github_images/profile.png" width="450" height="300" alt="Screenshot 6">
+    <img src="github_images/client_landing_page.png" width="350" height="250" alt="Screenshot 1">
+    <img src="github_images/computer_mode.png" width="350" height="250" alt="Screenshot 2">
+    <img src="github_images/game_board.png" width="350" height="250" alt="Screenshot 3">
+    <img src="github_images/available_players.png" width="350" height="250" alt="Screenshot 4">
+    <img src="github_images/invitation.png" width="350" height="250" alt="Screenshot 5">
+    <img src="github_images/profile.png" width="350" height="250" alt="Screenshot 6">
 </div>
 
 ### 🧑🏻‍💻 Tech Stack
