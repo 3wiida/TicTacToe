@@ -18,7 +18,7 @@ This comes as the final project of Java course at ITI.<br><br><br><br>
 
 ### 🧑🏻‍💻 Tech Stack
 
-- Application is entirely written in [JavaFX](https://openjfx.io/)
+- Application view is entirely written in [JavaFX](https://openjfx.io/) and [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS).
 - [Java Sockets](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html) for online communication.
 - Asynchronous processing using [Java Threads](https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html)
 - [Json](https://www.json.org/json-en.html) for passing messages between the client and server.
