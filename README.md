@@ -55,5 +55,4 @@ It was an incredible journey working together—debugging, brainstorming, and br
 
 
 ## Find this repository useful? :heart:
-Support it by putting a star for this repository. :star: <br>
-Also, __[follow me](https://github.com/3wiida)__ on GitHub for my next creations! 🤩
+Support it by putting a star for this repository. :star:
