@@ -24,12 +24,13 @@ import tic_tac_toe.view.gameBoard.GameBoardFXMLController;
  * @author 3wiida
  */
 public class Navigator {
+
     private static Stage mainStage;
 
     public static void setMainStage(Stage stage) {
         mainStage = stage;
     }
-    
+
     public static Stage getMainStage() {
         return mainStage;
     }
@@ -42,24 +43,24 @@ public class Navigator {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-        }else{
+        } else {
             System.out.println("Can't navigate to landing screen");
         }
     }
-    
+
     public static void navigateToLandingScreen() throws IOException {
-        Parent landingRoot =  FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+        Parent landingRoot = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
         Scene landingScene = new Scene(landingRoot);
         mainStage.setScene(landingScene);
         mainStage.show();
     }
-    
+
     public static void navigateToLandingScreen(Node node) throws IOException {
-            Stage stage = (Stage) node.getScene().getWindow();
-            Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.LANDING_SCREEN_ROUTE));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void navigateToLoginScreen(Event event) throws IOException {
@@ -98,8 +99,8 @@ public class Navigator {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-    
-     public static void naviagteToGameBoardScreen(ActionEvent event, GameModeEnum gameMode, String recordName) throws IOException {
+
+    public static void naviagteToGameBoardScreen(ActionEvent event, GameModeEnum gameMode, String recordName) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
         Parent root = loader.load();
         GameBoardFXMLController controller = loader.getController();
@@ -108,13 +109,13 @@ public class Navigator {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-     
+
     public static void naviagteToGameBoardScreen(
-            ActionEvent event, 
-            GameModeEnum gameMode, 
-            String playerOneName, 
+            ActionEvent event,
+            GameModeEnum gameMode,
+            String playerOneName,
             String playerTwoName
-    ) throws IOException{
+    ) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
         Parent root = loader.load();
         GameBoardFXMLController controller = loader.getController();
@@ -123,13 +124,13 @@ public class Navigator {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-    
+
     public static void naviagteToGameBoardScreen(
-            Node node, 
-            GameModeEnum gameMode, 
+            Node node,
+            GameModeEnum gameMode,
             Player opponent,
             boolean isHosting
-    ) throws IOException{
+    ) throws IOException {
         FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.GAME_BOARD_SCREEN_ROUTE));
         Parent root = loader.load();
         GameBoardFXMLController controller = loader.getController();
@@ -138,8 +139,8 @@ public class Navigator {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-   
-    public static void navigateToOfflineScreen(Event event) throws IOException{
+
+    public static void navigateToOfflineScreen(Event event) throws IOException {
 
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.OFFLINE_SCREEN_ROUTE));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -159,7 +160,6 @@ public class Navigator {
         return popupStage;
     }
 
-
     public static void navigateToModeSelectionScreen(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.MODE_SELECTION_SCREEN));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -176,7 +176,7 @@ public class Navigator {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public static void navigateToOnlineScreen(Node node) throws IOException {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.ONLINE_SCREEN_ROUTE));
         Parent root = Loader.load();
@@ -224,8 +224,7 @@ public class Navigator {
         popupStage.show();
     }
 
-
-    public static void navigateToProfileScreen(Event event) throws IOException{
+    public static void navigateToProfileScreen(Event event) throws IOException {
         FXMLLoader Loader = new FXMLLoader(Navigator.class.getResource(ScreensRoutes.PROFILE_SCREEN_ROUTE));
         Parent root = Loader.load();
         Stage stage = ((Stage) ((Node) event.getSource()).getScene().getWindow());
@@ -233,17 +232,35 @@ public class Navigator {
         stage.setScene(scene);
         stage.show();
     }
-    
-      public static Stage navigateToServerShutdownScreen() throws IOException {
+
+    public static Stage navigateToServerShutdownScreen(Stage parentStage) throws IOException {
+        // Load the FXML for the server shutdown popup
         Parent root = FXMLLoader.load(Navigator.class.getResource(ScreensRoutes.SERVER_SHUTDOWN_POPUP_ROUTE));
         Scene scene = new Scene(root);
+
         Stage popupStage = new Stage();
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initModality(Modality.APPLICATION_MODAL);  // Block interaction with parent stage
+        popupStage.initStyle(StageStyle.UNDECORATED);         // No default stage decorations
         popupStage.setScene(scene);
+
+        // Center the popup on the parent stage
+        popupStage.setOnShowing(event -> {
+            if (parentStage != null) {
+                double parentX = parentStage.getX();
+                double parentY = parentStage.getY();
+                double parentWidth = parentStage.getWidth();
+                double parentHeight = parentStage.getHeight();
+
+                double popupWidth = popupStage.getWidth();
+                double popupHeight = popupStage.getHeight();
+
+                popupStage.setX(parentX + (parentWidth - 700) / 2);
+                popupStage.setY(parentY + (parentHeight - 200) / 2);
+            }
+        });
+
         popupStage.show();
         return popupStage;
     }
-    
 
 }
